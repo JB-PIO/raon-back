@@ -1,0 +1,10 @@
+services:
+  raon-back:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: junhyeokshin/raon-back
+    container_name: raon-back
+    ports:
+      - "4000:4000"
+
