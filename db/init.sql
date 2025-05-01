@@ -1,10 +1,12 @@
 CREATE TABLE location
 (
     location_id BIGINT      NOT NULL AUTO_INCREMENT COMMENT '지역 고유 ID',
-    city        VARCHAR(30) NOT NULL COMMENT '시/도',
-    district    VARCHAR(30) NOT NULL COMMENT '구/군',
+    code        BIGINT      NOT NULL COMMENT '읍면동 코드',
+    name        VARCHAR(10) NOT NULL COMMENT '읍면동명',
+    address     VARCHAR(50) NOT NULL COMMENT '전체 주소',
+    coordinates POINT       NOT NULL COMMENT '좌표(위도/경도)',
     PRIMARY KEY (location_id),
-    UNIQUE KEY (city, district)
+    UNIQUE KEY (code, name, address)
 );
 
 CREATE TABLE user
@@ -162,3 +164,16 @@ CREATE TABLE block
     FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,
     FOREIGN KEY (blocked_user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
+
+LOAD DATA INFILE '/var/lib/mysql-files/location.csv'
+    INTO TABLE location
+    FIELDS TERMINATED BY ','
+    ENCLOSED BY '"'
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES
+    (@code, @name, @address, @coordinates)
+    SET
+        code = @code,
+        name = @name,
+        address = @address,
+        coordinates = ST_GeomFromText(@coordinates);
