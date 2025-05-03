@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Point;
 
 @Getter
 @NoArgsConstructor
@@ -15,7 +16,9 @@ public class LocationEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long locationId;
-  private String city;
-  private String district;
+  private Long code;
+  private String name;
+  private String address;
+  private Point coordinates;
 
 }

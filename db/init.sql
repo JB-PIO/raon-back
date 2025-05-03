@@ -1,10 +1,10 @@
 CREATE TABLE location
 (
-    location_id BIGINT      NOT NULL AUTO_INCREMENT COMMENT '지역 고유 ID',
-    code        BIGINT      NOT NULL COMMENT '읍면동 코드',
-    name        VARCHAR(10) NOT NULL COMMENT '읍면동명',
-    address     VARCHAR(50) NOT NULL COMMENT '전체 주소',
-    coordinates POINT       NOT NULL COMMENT '좌표(위도/경도)',
+    location_id BIGINT          NOT NULL AUTO_INCREMENT COMMENT '지역 고유 ID',
+    code        BIGINT          NOT NULL COMMENT '읍면동 코드',
+    name        VARCHAR(10)     NOT NULL COMMENT '읍면동명',
+    address     VARCHAR(50)     NOT NULL COMMENT '전체 주소',
+    coordinates POINT SRID 4326 NOT NULL COMMENT '좌표(WGS84)',
     PRIMARY KEY (location_id),
     UNIQUE KEY (code, name, address)
 );
@@ -176,4 +176,4 @@ LOAD DATA INFILE '/var/lib/mysql-files/location.csv'
         code = @code,
         name = @name,
         address = @address,
-        coordinates = ST_GeomFromText(@coordinates);
+        coordinates = ST_GeomFromText(@coordinates, 4326);
