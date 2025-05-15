@@ -1,9 +1,14 @@
 package com.pio.raonback.entity;
 
+import com.pio.raonback.dto.request.auth.SignUpRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -26,5 +31,17 @@ public class UserEntity {
   private String updatedAt;
   private String deletedAt;
   private String suspendedAt;
+
+  public UserEntity(SignUpRequestDto dto) {
+    Date now = Date.from(Instant.now());
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String createdAt = simpleDateFormat.format(now);
+
+    this.nickname = dto.getNickname();
+    this.email = dto.getEmail();
+    this.password = dto.getPassword();
+    this.locationId = dto.getLocationId();
+    this.createdAt = createdAt;
+  }
 
 }
