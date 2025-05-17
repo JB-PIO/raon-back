@@ -1,9 +1,12 @@
 package com.pio.raonback.service.implement;
 
+import com.pio.raonback.dto.request.auth.SignInRequestDto;
 import com.pio.raonback.dto.request.auth.SignUpRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
+import com.pio.raonback.dto.response.auth.SignInResponseDto;
 import com.pio.raonback.dto.response.auth.SignUpResponseDto;
 import com.pio.raonback.entity.UserEntity;
+import com.pio.raonback.provider.JwtProvider;
 import com.pio.raonback.repository.UserRepository;
 import com.pio.raonback.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImplement implements AuthService {
 
   private final UserRepository userRepository;
+  private final JwtProvider jwtProvider;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
@@ -42,6 +46,29 @@ public class AuthServiceImplement implements AuthService {
     }
 
     return SignUpResponseDto.success();
+  }
+
+  @Override
+  public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
+    String token = null;
+
+    try {
+      String email = dto.getEmail();
+      UserEntity userEntity = userRepository.findByEmail(email);
+      if (userEntity == null) return SignInResponseDto.signInFailed();
+
+      String password = dto.getPassword();
+      String encodedPassword = userEntity.getPassword();
+      boolean isMatched = bCryptPasswordEncoder.matches(password, encodedPassword);
+      if (!isMatched) return SignInResponseDto.signInFailed();
+
+      token = jwtProvider.create(email);
+    } catch (Exception exception) {
+      exception.printStackTrace();
+      return ResponseDto.databaseError();
+    }
+
+    return SignInResponseDto.success(token);
   }
 
 }

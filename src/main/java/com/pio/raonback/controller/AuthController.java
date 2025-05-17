@@ -1,6 +1,8 @@
 package com.pio.raonback.controller;
 
+import com.pio.raonback.dto.request.auth.SignInRequestDto;
 import com.pio.raonback.dto.request.auth.SignUpRequestDto;
+import com.pio.raonback.dto.response.auth.SignInResponseDto;
 import com.pio.raonback.dto.response.auth.SignUpResponseDto;
 import com.pio.raonback.service.AuthService;
 import jakarta.validation.Valid;
@@ -21,6 +23,12 @@ public class AuthController {
   @PostMapping("/sign-up")
   public ResponseEntity<? super SignUpResponseDto> signUp(@RequestBody @Valid SignUpRequestDto requestBody) {
     ResponseEntity<? super SignUpResponseDto> response = authService.signUp(requestBody);
+    return response;
+  }
+
+  @PostMapping("/sign-in")
+  public ResponseEntity<? super SignInResponseDto> signIn(@RequestBody @Valid SignInRequestDto requestBody) {
+    ResponseEntity<? super SignInResponseDto> response = authService.signIn(requestBody);
     return response;
   }
 
