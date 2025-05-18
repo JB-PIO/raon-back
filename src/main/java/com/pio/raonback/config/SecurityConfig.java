@@ -37,7 +37,7 @@ public class SecurityConfig {
     http.formLogin(AbstractHttpConfigurer::disable);
     http.httpBasic(AbstractHttpConfigurer::disable);
     http.authorizeHttpRequests((auth) -> auth
-        .requestMatchers("/api/v1/auth/**").permitAll()
+        .requestMatchers("/api/v1/auth/**", "/api/v1/location/**").permitAll()
         .anyRequest().authenticated());
     http.sessionManagement((session) -> session
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
