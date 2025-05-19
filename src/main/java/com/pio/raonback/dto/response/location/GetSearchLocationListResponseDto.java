@@ -21,16 +21,16 @@ public class GetSearchLocationListResponseDto extends ResponseDto {
   private long totalElements;
 
   private GetSearchLocationListResponseDto(Page<LocationEntity> locationEntitiesPage) {
-    super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    super(ResponseCode.OK, ResponseMessage.OK);
     this.searchLocationList = LocationListItem.copyList(locationEntitiesPage);
     this.currentPage = locationEntitiesPage.getNumber();
     this.totalPages = locationEntitiesPage.getTotalPages();
     this.totalElements = locationEntitiesPage.getTotalElements();
   }
 
-  public static ResponseEntity<GetSearchLocationListResponseDto> success(Page<LocationEntity> locationEntitiesPage) {
-    GetSearchLocationListResponseDto result = new GetSearchLocationListResponseDto(locationEntitiesPage);
-    return ResponseEntity.status(HttpStatus.OK).body(result);
+  public static ResponseEntity<GetSearchLocationListResponseDto> ok(Page<LocationEntity> locationEntitiesPage) {
+    GetSearchLocationListResponseDto responseBody = new GetSearchLocationListResponseDto(locationEntitiesPage);
+    return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 
 }

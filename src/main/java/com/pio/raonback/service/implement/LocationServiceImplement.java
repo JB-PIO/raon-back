@@ -27,9 +27,9 @@ public class LocationServiceImplement implements LocationService {
       locationEntitiesPage = locationRepository.findAll(pageable);
     } catch (Exception exception) {
       exception.printStackTrace();
-      return ResponseDto.databaseError();
+      return ResponseDto.serverError();
     }
-    return GetLocationListResponseDto.success(locationEntitiesPage);
+    return GetLocationListResponseDto.ok(locationEntitiesPage);
   }
 
   @Override
@@ -40,9 +40,9 @@ public class LocationServiceImplement implements LocationService {
       locationEntitiesPage = locationRepository.findAllByAddressContains(keyword, pageable);
     } catch (Exception exception) {
       exception.printStackTrace();
-      return ResponseDto.databaseError();
+      return ResponseDto.serverError();
     }
-    return GetSearchLocationListResponseDto.success(locationEntitiesPage);
+    return GetSearchLocationListResponseDto.ok(locationEntitiesPage);
   }
 
 }

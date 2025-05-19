@@ -3,18 +3,20 @@ package com.pio.raonback.common;
 public interface ResponseCode {
 
   // HTTP Status 200
-  String SUCCESS = "SU";
+  String OK = "OK";
 
   // HTTP Status 400
-  String VALIDATION_FAILED = "VF";
-  String DUPLICATE_EMAIL = "DE";
-  String DUPLICATE_NICKNAME = "DN";
+  String BAD_REQUEST = "BAD_REQ";
+  String INVALID_INPUT = "INV_INPUT";
+  String EMAIL_EXISTS = "EMAIL_DUP";
+  String NICKNAME_EXISTS = "NICK_DUP";
+  String LOCATION_NOT_FOUND = "LOC_404";
 
   // HTTP Status 401
-  String SIGN_IN_FAILED = "SF";
-  String AUTHORIZATION_FAILED = "AF";
+  String SIGN_IN_FAILED = "SIGN_FAIL";
+  String AUTH_FAILED = "AUTH_FAIL";
 
   // HTTP Status 500
-  String DATABASE_ERROR = "DBE";
+  String SERVER_ERROR = "SRV_ERR";
 
 }

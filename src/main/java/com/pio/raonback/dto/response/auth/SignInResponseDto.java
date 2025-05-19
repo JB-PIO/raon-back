@@ -14,19 +14,19 @@ public class SignInResponseDto extends ResponseDto {
   private int expirationTime;
 
   private SignInResponseDto(String token) {
-    super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    super(ResponseCode.OK, ResponseMessage.OK);
     this.token = token;
     this.expirationTime = 3600;
   }
 
-  public static ResponseEntity<SignInResponseDto> success(String token) {
-    SignInResponseDto result = new SignInResponseDto(token);
-    return ResponseEntity.status(HttpStatus.OK).body(result);
+  public static ResponseEntity<SignInResponseDto> ok(String token) {
+    SignInResponseDto responseBody = new SignInResponseDto(token);
+    return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 
   public static ResponseEntity<ResponseDto> signInFailed() {
-    ResponseDto result = new ResponseDto(ResponseCode.SIGN_IN_FAILED, ResponseMessage.SIGN_IN_FAILED);
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+    ResponseDto responseBody = new ResponseDto(ResponseCode.SIGN_IN_FAILED, ResponseMessage.SIGN_IN_FAILED);
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
   }
 
 }

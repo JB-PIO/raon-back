@@ -7,6 +7,7 @@ import com.pio.raonback.dto.response.auth.SignInResponseDto;
 import com.pio.raonback.dto.response.auth.SignUpResponseDto;
 import com.pio.raonback.entity.UserEntity;
 import com.pio.raonback.provider.JwtProvider;
+import com.pio.raonback.repository.LocationRepository;
 import com.pio.raonback.repository.UserRepository;
 import com.pio.raonback.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImplement implements AuthService {
 
   private final UserRepository userRepository;
+  private final LocationRepository locationRepository;
   private final JwtProvider jwtProvider;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -27,25 +29,28 @@ public class AuthServiceImplement implements AuthService {
   public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto) {
     try {
       String email = dto.getEmail();
-      boolean existedEmail = userRepository.existsByEmail(email);
-      if (existedEmail) return SignUpResponseDto.duplicateEmail();
+      boolean isEmailTaken = userRepository.existsByEmail(email);
+      if (isEmailTaken) return SignUpResponseDto.emailExists();
 
       String nickname = dto.getNickname();
-      boolean existedNickname = userRepository.existsByNickname(nickname);
-      if (existedNickname) return SignUpResponseDto.duplicateNickname();
+      boolean isNicknameTaken = userRepository.existsByNickname(nickname);
+      if (isNicknameTaken) return SignUpResponseDto.nicknameExists();
 
-      String password = dto.getPassword();
-      String encodedPassword = bCryptPasswordEncoder.encode(password);
-      dto.setPassword(encodedPassword);
+      boolean isLocationValid = locationRepository.existsById(dto.getLocationId());
+      if (!isLocationValid) return SignUpResponseDto.locationNotFound();
+
+      String rawPassword = dto.getPassword();
+      String hashedPassword = bCryptPasswordEncoder.encode(rawPassword);
+      dto.setPassword(hashedPassword);
 
       UserEntity userEntity = new UserEntity(dto);
       userRepository.save(userEntity);
     } catch (Exception exception) {
       exception.printStackTrace();
-      return ResponseDto.databaseError();
+      return ResponseDto.serverError();
     }
 
-    return SignUpResponseDto.success();
+    return SignUpResponseDto.ok();
   }
 
   @Override
@@ -57,18 +62,18 @@ public class AuthServiceImplement implements AuthService {
       UserEntity userEntity = userRepository.findByEmail(email);
       if (userEntity == null) return SignInResponseDto.signInFailed();
 
-      String password = dto.getPassword();
-      String encodedPassword = userEntity.getPassword();
-      boolean isMatched = bCryptPasswordEncoder.matches(password, encodedPassword);
-      if (!isMatched) return SignInResponseDto.signInFailed();
+      String inputPassword = dto.getPassword();
+      String storedPassword = userEntity.getPassword();
+      boolean isPasswordValid = bCryptPasswordEncoder.matches(inputPassword, storedPassword);
+      if (!isPasswordValid) return SignInResponseDto.signInFailed();
 
       token = jwtProvider.create(email);
     } catch (Exception exception) {
       exception.printStackTrace();
-      return ResponseDto.databaseError();
+      return ResponseDto.serverError();
     }
 
-    return SignInResponseDto.success(token);
+    return SignInResponseDto.ok(token);
   }
 
 }
