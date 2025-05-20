@@ -15,7 +15,9 @@ public class CategoryEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long categoryId;
+  private Long level;
+  private Long parentId;
   private String name;
-  private String createdAt;
-  
+  private boolean isLeaf;
+
 }

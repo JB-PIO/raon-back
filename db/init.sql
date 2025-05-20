@@ -30,9 +30,12 @@ CREATE TABLE user
 CREATE TABLE category
 (
     category_id BIGINT      NOT NULL AUTO_INCREMENT COMMENT '카테고리 고유 ID',
-    name        VARCHAR(30) NOT NULL UNIQUE COMMENT '카테고리 이름',
-    created_at  DATETIME    NOT NULL COMMENT '카테고리 생성 일시',
-    PRIMARY KEY (category_id)
+    level       BIGINT      NOT NULL DEFAULT 1 COMMENT '카테고리 레벨',
+    parent_id   BIGINT      NULL COMMENT '상위 카테고리 ID',
+    name        VARCHAR(30) NOT NULL COMMENT '카테고리 이름',
+    is_leaf     BOOLEAN     NOT NULL DEFAULT FALSE COMMENT '최하위 카테고리 여부',
+    PRIMARY KEY (category_id),
+    FOREIGN KEY (parent_id) REFERENCES category (category_id) ON DELETE CASCADE
 );
 
 CREATE TABLE product
@@ -177,3 +180,17 @@ LOAD DATA INFILE '/var/lib/mysql-files/location.csv'
         name = @name,
         address = @address,
         coordinates = ST_GeomFromText(@coordinates, 4326);
+
+LOAD DATA INFILE '/var/lib/mysql-files/category.csv'
+    INTO TABLE category
+    FIELDS TERMINATED BY ','
+    ENCLOSED BY '"'
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES
+    (@category_id, @level, @parent_id, @name, @is_leaf)
+    SET
+        category_id = @category_id,
+        level = @level,
+        parent_id = NULLIF(@parent_id, ''),
+        name = @name,
+        is_leaf = @is_leaf;
