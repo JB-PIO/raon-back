@@ -43,7 +43,7 @@ CREATE TABLE product
     product_id     BIGINT                              NOT NULL AUTO_INCREMENT COMMENT '상품 고유 ID',
     user_id        BIGINT                              NOT NULL COMMENT '등록자 ID',
     category_id    BIGINT                              NOT NULL COMMENT '카테고리 ID',
-    location_id    BIGINT                              NULL COMMENT '거래 지역 ID',
+    location_id    BIGINT                              NOT NULL COMMENT '거래 지역 ID',
     title          VARCHAR(100)                        NOT NULL COMMENT '상품 제목',
     description    TEXT                                NULL COMMENT '상품 설명',
     price          BIGINT                              NOT NULL COMMENT '가격(원)',
@@ -60,19 +60,16 @@ CREATE TABLE product
     PRIMARY KEY (product_id),
     FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE RESTRICT,
-    FOREIGN KEY (location_id) REFERENCES location (location_id) ON DELETE SET NULL
+    FOREIGN KEY (location_id) REFERENCES location (location_id) ON DELETE RESTRICT
 );
 
 CREATE TABLE product_image
 (
-    image_id      BIGINT       NOT NULL AUTO_INCREMENT COMMENT '이미지 고유 ID',
-    product_id    BIGINT       NOT NULL COMMENT '상품 ID',
-    display_order BIGINT       NOT NULL DEFAULT 0 COMMENT '표시 순서',
-    image_url     VARCHAR(255) NOT NULL COMMENT '이미지 URL',
-    uploaded_at   DATETIME     NOT NULL COMMENT '업로드 일시',
+    image_id   BIGINT       NOT NULL AUTO_INCREMENT COMMENT '이미지 고유 ID',
+    product_id BIGINT       NOT NULL COMMENT '상품 ID',
+    image_url  VARCHAR(255) NOT NULL COMMENT '이미지 URL',
     PRIMARY KEY (image_id),
-    FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE CASCADE,
-    UNIQUE KEY (product_id, display_order)
+    FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE CASCADE
 );
 
 CREATE TABLE favorite

@@ -25,8 +25,8 @@ public class UserEntity {
   private String password;
   private String profileImage;
   private Long locationId;
-  private boolean isDeleted;
-  private boolean isSuspended;
+  private boolean isDeleted = false;
+  private boolean isSuspended = false;
   private String createdAt;
   private String updatedAt;
   private String deletedAt;

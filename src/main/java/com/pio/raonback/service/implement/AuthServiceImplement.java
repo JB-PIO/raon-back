@@ -49,14 +49,12 @@ public class AuthServiceImplement implements AuthService {
       exception.printStackTrace();
       return ResponseDto.serverError();
     }
-
     return SignUpResponseDto.ok();
   }
 
   @Override
   public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
     String token = null;
-
     try {
       String email = dto.getEmail();
       UserEntity userEntity = userRepository.findByEmail(email);
@@ -72,7 +70,6 @@ public class AuthServiceImplement implements AuthService {
       exception.printStackTrace();
       return ResponseDto.serverError();
     }
-
     return SignInResponseDto.ok(token);
   }
 

@@ -16,8 +16,11 @@ public class ProductImageEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long imageId;
   private Long productId;
-  private Long displayOrder;
   private String imageUrl;
-  private String uploadedAt;
+
+  public ProductImageEntity(Long productId, String imageUrl) {
+    this.productId = productId;
+    this.imageUrl = imageUrl;
+  }
 
 }

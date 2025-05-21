@@ -31,7 +31,7 @@ public class SignUpResponseDto extends ResponseDto {
 
   public static ResponseEntity<ResponseDto> locationNotFound() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.LOCATION_NOT_FOUND, ResponseMessage.LOCATION_NOT_FOUND);
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
   }
 
 }
