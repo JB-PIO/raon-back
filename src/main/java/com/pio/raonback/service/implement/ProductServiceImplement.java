@@ -32,7 +32,7 @@ public class ProductServiceImplement implements ProductService {
     try {
       UserEntity userEntity = userRepository.findByEmail(email);
       if (userEntity == null) return PostProductResponseDto.authFailed();
-      Long userId = userEntity.getUserId();
+      Long sellerId = userEntity.getUserId();
 
       Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
       if (optionalCategoryEntity.isEmpty()) return PostProductResponseDto.categoryNotFound();
@@ -42,7 +42,7 @@ public class ProductServiceImplement implements ProductService {
       boolean isLocationExist = locationRepository.existsById(dto.getLocationId());
       if (!isLocationExist) return PostProductResponseDto.locationNotFound();
 
-      ProductEntity productEntity = new ProductEntity(dto, userId);
+      ProductEntity productEntity = new ProductEntity(dto, sellerId);
       productRepository.save(productEntity);
 
       List<String> imageUrls = dto.getImageUrls();

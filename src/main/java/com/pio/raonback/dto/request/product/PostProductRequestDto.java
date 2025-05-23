@@ -2,10 +2,7 @@ package com.pio.raonback.dto.request.product;
 
 import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.entity.enums.TradeType;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,6 +38,7 @@ public class PostProductRequestDto {
   @NotNull(message = "거래 방식을 선택해주세요.")
   private TradeType tradeType;
 
+  @NotEmpty(message = "한 개 이상의 이미지 주소를 입력해주세요.")
   private List<@NotBlank(message = "이미지 주소를 입력해주세요.") @URL(message = "올바른 URL 형식이 아닙니다.") String> imageUrls;
 
 }

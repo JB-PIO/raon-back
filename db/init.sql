@@ -41,7 +41,7 @@ CREATE TABLE category
 CREATE TABLE product
 (
     product_id     BIGINT                              NOT NULL AUTO_INCREMENT COMMENT '상품 고유 ID',
-    user_id        BIGINT                              NOT NULL COMMENT '등록자 ID',
+    seller_id      BIGINT                              NOT NULL COMMENT '등록자 ID',
     category_id    BIGINT                              NOT NULL COMMENT '카테고리 ID',
     location_id    BIGINT                              NOT NULL COMMENT '거래 지역 ID',
     title          VARCHAR(100)                        NOT NULL COMMENT '상품 제목',
@@ -58,7 +58,7 @@ CREATE TABLE product
     updated_at     DATETIME                            NULL COMMENT '상품 수정 일시',
     deleted_at     DATETIME                            NULL COMMENT '상품 삭제 일시',
     PRIMARY KEY (product_id),
-    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (seller_id) REFERENCES user (user_id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE RESTRICT,
     FOREIGN KEY (location_id) REFERENCES location (location_id) ON DELETE RESTRICT
 );
@@ -164,6 +164,37 @@ CREATE TABLE block
     FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,
     FOREIGN KEY (blocked_user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
+
+CREATE VIEW product_detail_view AS
+SELECT p.product_id,
+       p.seller_id,
+       u.nickname      AS seller_nickname,
+       u.email         AS seller_email,
+       u.profile_image AS seller_profile_image,
+       p.category_id,
+       p.location_id,
+       l.address,
+       (SELECT pi.image_url
+        FROM product_image AS pi
+        WHERE pi.product_id = p.product_id
+        ORDER BY pi.image_id ASC
+        LIMIT 1)       AS thumbnail,
+       p.title,
+       p.description,
+       p.price,
+       p.view_count,
+       p.favorite_count,
+       p.status,
+       p.trade_type,
+       p.is_sold,
+       p.is_active,
+       p.is_deleted,
+       p.created_at,
+       p.updated_at,
+       p.deleted_at
+FROM product AS p
+         JOIN user AS u ON p.seller_id = u.user_id
+         JOIN location AS l ON p.location_id = l.location_id;
 
 LOAD DATA INFILE '/var/lib/mysql-files/location.csv'
     INTO TABLE location

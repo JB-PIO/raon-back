@@ -22,7 +22,7 @@ public class ProductEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long productId;
-  private Long userId;
+  private Long sellerId;
   private Long categoryId;
   private Long locationId;
   private String title;
@@ -39,12 +39,12 @@ public class ProductEntity {
   private String updatedAt;
   private String deletedAt;
 
-  public ProductEntity(PostProductRequestDto dto, Long userId) {
+  public ProductEntity(PostProductRequestDto dto, Long sellerId) {
     Date now = Date.from(Instant.now());
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String createdAt = simpleDateFormat.format(now);
 
-    this.userId = userId;
+    this.sellerId = sellerId;
     this.categoryId = dto.getCategoryId();
     this.locationId = dto.getLocationId();
     this.title = dto.getTitle();
