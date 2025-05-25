@@ -30,11 +30,13 @@ public class ProductEntity {
   private Long price;
   private Long viewCount = 0L;
   private Long favoriteCount = 0L;
+  @Enumerated(EnumType.STRING)
   private ProductStatus status;
+  @Enumerated(EnumType.STRING)
   private TradeType tradeType;
-  private boolean isSold = false;
-  private boolean isActive = true;
-  private boolean isDeleted = false;
+  private Boolean isSold = false;
+  private Boolean isActive = true;
+  private Boolean isDeleted = false;
   private String createdAt;
   private String updatedAt;
   private String deletedAt;

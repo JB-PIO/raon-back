@@ -29,9 +29,14 @@ public class GlobalExceptionHandler {
     return InvalidInputResponseDto.invalidInput(errors);
   }
 
-  @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
-  public ResponseEntity<ResponseDto> HttpMessageNotReadableExceptionHandler(Exception exception) {
+  @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class, IllegalArgumentException.class})
+  public ResponseEntity<ResponseDto> badRequestExceptionHandler(Exception exception) {
     return ResponseDto.badRequest();
+  }
+
+  @ExceptionHandler({Exception.class})
+  public ResponseEntity<ResponseDto> exceptionHandler(Exception exception) {
+    return ResponseDto.serverError();
   }
 
 }

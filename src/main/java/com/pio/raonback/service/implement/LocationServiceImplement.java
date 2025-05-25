@@ -1,6 +1,5 @@
 package com.pio.raonback.service.implement;
 
-import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.location.GetLocationListResponseDto;
 import com.pio.raonback.dto.response.location.GetSearchLocationListResponseDto;
 import com.pio.raonback.entity.LocationEntity;
@@ -21,27 +20,15 @@ public class LocationServiceImplement implements LocationService {
 
   @Override
   public ResponseEntity<? super GetLocationListResponseDto> getLocationList(int page, int size) {
-    Page<LocationEntity> locationEntitiesPage;
-    try {
-      Pageable pageable = PageRequest.of(page, size);
-      locationEntitiesPage = locationRepository.findAll(pageable);
-    } catch (Exception exception) {
-      exception.printStackTrace();
-      return ResponseDto.serverError();
-    }
+    Pageable pageable = PageRequest.of(page, size);
+    Page<LocationEntity> locationEntitiesPage = locationRepository.findAll(pageable);
     return GetLocationListResponseDto.ok(locationEntitiesPage);
   }
 
   @Override
   public ResponseEntity<? super GetSearchLocationListResponseDto> getSearchLocationList(String keyword, int page, int size) {
-    Page<LocationEntity> locationEntitiesPage;
-    try {
-      Pageable pageable = PageRequest.of(page, size);
-      locationEntitiesPage = locationRepository.findAllByAddressContains(keyword, pageable);
-    } catch (Exception exception) {
-      exception.printStackTrace();
-      return ResponseDto.serverError();
-    }
+    Pageable pageable = PageRequest.of(page, size);
+    Page<LocationEntity> locationEntitiesPage = locationRepository.findAllByAddressContains(keyword, pageable);
     return GetSearchLocationListResponseDto.ok(locationEntitiesPage);
   }
 

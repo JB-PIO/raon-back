@@ -18,6 +18,6 @@ public class CategoryEntity {
   private Long level = 1L;
   private Long parentId;
   private String name;
-  private boolean isLeaf = false;
+  private Boolean isLeaf = false;
 
 }

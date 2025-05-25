@@ -19,8 +19,8 @@ public class MessageEntity {
   private Long senderId;
   private String content;
   private String imageUrl;
-  private boolean isRead = false;
-  private boolean isDeleted = false;
+  private Boolean isRead = false;
+  private Boolean isDeleted = false;
   private String sentAt;
   private String deletedAt;
 

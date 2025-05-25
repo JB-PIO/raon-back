@@ -30,7 +30,7 @@ public class PostProductRequestDto {
 
   @NotNull(message = "가격을 입력해주세요.")
   @Min(value = 0, message = "가격은 0원 이상으로 입력해주세요.")
-  private long price;
+  private Long price;
 
   @NotNull(message = "상품 상태를 선택해주세요.")
   private ProductStatus status;

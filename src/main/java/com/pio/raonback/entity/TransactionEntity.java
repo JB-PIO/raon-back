@@ -19,6 +19,7 @@ public class TransactionEntity {
   private Long productId;
   private Long buyerId;
   private Long sellerId;
+  @Enumerated(EnumType.STRING)
   private TransactionStatus status;
   private String createdAt;
   private String completedAt;

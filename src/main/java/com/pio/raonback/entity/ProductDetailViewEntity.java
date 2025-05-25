@@ -2,18 +2,18 @@ package com.pio.raonback.entity;
 
 import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.entity.enums.TradeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Immutable;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "product_detail_view")
 @Table(name = "product_detail_view")
+@Immutable
 public class ProductDetailViewEntity {
 
   @Id
@@ -31,11 +31,13 @@ public class ProductDetailViewEntity {
   private Long price;
   private Long viewCount;
   private Long favoriteCount;
+  @Enumerated(EnumType.STRING)
   private ProductStatus status;
+  @Enumerated(EnumType.STRING)
   private TradeType tradeType;
-  private boolean isSold;
-  private boolean isActive;
-  private boolean isDeleted;
+  private Boolean isSold;
+  private Boolean isActive;
+  private Boolean isDeleted;
   private String createdAt;
   private String updatedAt;
   private String deletedAt;
