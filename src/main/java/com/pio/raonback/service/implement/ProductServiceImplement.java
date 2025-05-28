@@ -1,11 +1,14 @@
 package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
+import com.pio.raonback.dto.request.product.PutProductRequestDto;
 import com.pio.raonback.dto.response.product.GetProductListResponseDto;
 import com.pio.raonback.dto.response.product.PostProductResponseDto;
+import com.pio.raonback.dto.response.product.PutProductResponseDto;
 import com.pio.raonback.entity.*;
 import com.pio.raonback.repository.*;
 import com.pio.raonback.service.ProductService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +39,7 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
+  @Transactional
   public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, String email) {
     UserEntity userEntity = userRepository.findByEmail(email);
     if (userEntity == null) return PostProductResponseDto.authFailed();
@@ -65,6 +69,45 @@ public class ProductServiceImplement implements ProductService {
 
     productImageRepository.saveAll(productImageEntities);
     return PostProductResponseDto.ok();
+  }
+
+  @Override
+  @Transactional
+  public ResponseEntity<? super PutProductResponseDto> updateProduct(Long productId, PutProductRequestDto dto, String email) {
+    UserEntity userEntity = userRepository.findByEmail(email);
+    if (userEntity == null) return PutProductResponseDto.authFailed();
+    Long userId = userEntity.getUserId();
+
+    Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
+    if (optionalProductEntity.isEmpty()) return PutProductResponseDto.productNotFound();
+    ProductEntity productEntity = optionalProductEntity.get();
+
+    if (!productEntity.getSellerId().equals(userId)) return PutProductResponseDto.noPermission();
+
+    Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
+    if (optionalCategoryEntity.isEmpty()) return PutProductResponseDto.categoryNotFound();
+    CategoryEntity categoryEntity = optionalCategoryEntity.get();
+    if (!categoryEntity.getIsLeaf()) return PutProductResponseDto.notLeafCategory();
+
+    boolean isLocationExist = locationRepository.existsById(dto.getLocationId());
+    if (!isLocationExist) return PutProductResponseDto.locationNotFound();
+
+    productEntity.update(dto);
+    productRepository.save(productEntity);
+
+    productImageRepository.deleteAllByProductId(productId);
+
+    List<String> imageUrls = dto.getImageUrls();
+    if (imageUrls == null) return PutProductResponseDto.ok();
+
+    List<ProductImageEntity> productImageEntities = new ArrayList<>();
+    for (String imageUrl : imageUrls) {
+      ProductImageEntity productImageEntity = new ProductImageEntity(productId, imageUrl);
+      productImageEntities.add(productImageEntity);
+    }
+
+    productImageRepository.saveAll(productImageEntities);
+    return PutProductResponseDto.ok();
   }
 
 }

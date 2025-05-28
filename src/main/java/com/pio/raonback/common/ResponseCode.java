@@ -16,10 +16,15 @@ public interface ResponseCode {
   String SIGN_IN_FAILED = "SIGN_FAIL";
   String AUTH_FAILED = "AUTH_FAIL";
 
+  // HTTP Status 403
+  String NO_PERMISSION = "NO_PER";
+
   // HTTP Status 404
+  String NOT_FOUND = "404";
+  String PRODUCT_NOT_FOUND = "PRD_404";
   String LOCATION_NOT_FOUND = "LOC_404";
   String CATEGORY_NOT_FOUND = "CAT_404";
-  
+
   // HTTP Status 500
   String SERVER_ERROR = "SRV_ERR";
 

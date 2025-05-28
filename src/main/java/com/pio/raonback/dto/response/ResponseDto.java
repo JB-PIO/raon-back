@@ -21,6 +21,11 @@ public class ResponseDto {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
   }
 
+  public static ResponseEntity<ResponseDto> notFound() {
+    ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_FOUND, ResponseMessage.NOT_FOUND);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
+  }
+
   public static ResponseEntity<ResponseDto> serverError() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.SERVER_ERROR, ResponseMessage.SERVER_ERROR);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);

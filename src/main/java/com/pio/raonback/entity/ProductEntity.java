@@ -1,6 +1,7 @@
 package com.pio.raonback.entity;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
+import com.pio.raonback.dto.request.product.PutProductRequestDto;
 import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.entity.enums.TradeType;
 import jakarta.persistence.*;
@@ -55,6 +56,21 @@ public class ProductEntity {
     this.status = dto.getStatus();
     this.tradeType = dto.getTradeType();
     this.createdAt = createdAt;
+  }
+
+  public void update(PutProductRequestDto dto) {
+    Date now = Date.from(Instant.now());
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String updatedAt = simpleDateFormat.format(now);
+
+    this.categoryId = dto.getCategoryId();
+    this.locationId = dto.getLocationId();
+    this.title = dto.getTitle();
+    this.description = dto.getDescription();
+    this.price = dto.getPrice();
+    this.status = dto.getStatus();
+    this.tradeType = dto.getTradeType();
+    this.updatedAt = updatedAt;
   }
 
 }

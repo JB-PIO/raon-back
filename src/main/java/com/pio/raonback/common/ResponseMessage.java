@@ -16,7 +16,12 @@ public interface ResponseMessage {
   String SIGN_IN_FAILED = "이메일 또는 비밀번호가 일치하지 않습니다.";
   String AUTH_FAILED = "인증에 실패했습니다.";
 
+  // HTTP Status 403
+  String NO_PERMISSION = "권한이 없습니다.";
+
   // HTTP Status 404
+  String NOT_FOUND = "존재하지 않는 리소스입니다.";
+  String PRODUCT_NOT_FOUND = "존재하지 않는 상품입니다.";
   String LOCATION_NOT_FOUND = "존재하지 않는 지역입니다.";
   String CATEGORY_NOT_FOUND = "존재하지 않는 카테고리입니다.";
 

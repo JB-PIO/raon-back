@@ -1,8 +1,10 @@
 package com.pio.raonback.controller;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
+import com.pio.raonback.dto.request.product.PutProductRequestDto;
 import com.pio.raonback.dto.response.product.GetProductListResponseDto;
 import com.pio.raonback.dto.response.product.PostProductResponseDto;
+import com.pio.raonback.dto.response.product.PutProductResponseDto;
 import com.pio.raonback.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,14 @@ public class ProductController {
   public ResponseEntity<? super PostProductResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
                                                                     @AuthenticationPrincipal String email) {
     ResponseEntity<? super PostProductResponseDto> response = productService.postProduct(requestBody, email);
+    return response;
+  }
+
+  @PutMapping("/{productId}")
+  public ResponseEntity<? super PutProductResponseDto> updateProduct(@PathVariable("productId") Long productId,
+                                                                     @RequestBody @Valid PutProductRequestDto requestBody,
+                                                                     @AuthenticationPrincipal String email) {
+    ResponseEntity<? super PutProductResponseDto> response = productService.updateProduct(productId, requestBody, email);
     return response;
   }
 
