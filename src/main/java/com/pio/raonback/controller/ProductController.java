@@ -2,6 +2,7 @@ package com.pio.raonback.controller;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.PutProductRequestDto;
+import com.pio.raonback.dto.response.product.DeleteProductResponseDto;
 import com.pio.raonback.dto.response.product.GetProductListResponseDto;
 import com.pio.raonback.dto.response.product.PostProductResponseDto;
 import com.pio.raonback.dto.response.product.PutProductResponseDto;
@@ -38,6 +39,13 @@ public class ProductController {
                                                                      @RequestBody @Valid PutProductRequestDto requestBody,
                                                                      @AuthenticationPrincipal String email) {
     ResponseEntity<? super PutProductResponseDto> response = productService.updateProduct(productId, requestBody, email);
+    return response;
+  }
+
+  @DeleteMapping("/{productId}")
+  public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(@PathVariable("productId") Long productId,
+                                                                        @AuthenticationPrincipal String email) {
+    ResponseEntity<? super DeleteProductResponseDto> response = productService.deleteProduct(productId, email);
     return response;
   }
 

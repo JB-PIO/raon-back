@@ -2,6 +2,7 @@ package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.PutProductRequestDto;
+import com.pio.raonback.dto.response.product.DeleteProductResponseDto;
 import com.pio.raonback.dto.response.product.GetProductListResponseDto;
 import com.pio.raonback.dto.response.product.PostProductResponseDto;
 import com.pio.raonback.dto.response.product.PutProductResponseDto;
@@ -108,6 +109,24 @@ public class ProductServiceImplement implements ProductService {
 
     productImageRepository.saveAll(productImageEntities);
     return PutProductResponseDto.ok();
+  }
+
+  @Override
+  public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId, String email) {
+    UserEntity userEntity = userRepository.findByEmail(email);
+    if (userEntity == null) return DeleteProductResponseDto.authFailed();
+    Long userId = userEntity.getUserId();
+
+    Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
+    if (optionalProductEntity.isEmpty()) return DeleteProductResponseDto.productNotFound();
+    ProductEntity productEntity = optionalProductEntity.get();
+    if (productEntity.getIsDeleted()) return DeleteProductResponseDto.productNotFound();
+
+    if (!productEntity.getSellerId().equals(userId)) return DeleteProductResponseDto.noPermission();
+
+    productEntity.delete();
+    productRepository.save(productEntity);
+    return DeleteProductResponseDto.ok();
   }
 
 }

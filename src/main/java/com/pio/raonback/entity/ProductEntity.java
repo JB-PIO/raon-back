@@ -73,4 +73,14 @@ public class ProductEntity {
     this.updatedAt = updatedAt;
   }
 
+  public void delete() {
+    Date now = Date.from(Instant.now());
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String deletedAt = simpleDateFormat.format(now);
+
+    this.isActive = false;
+    this.isDeleted = true;
+    this.deletedAt = deletedAt;
+  }
+
 }
