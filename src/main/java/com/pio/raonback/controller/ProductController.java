@@ -2,10 +2,7 @@ package com.pio.raonback.controller;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.PutProductRequestDto;
-import com.pio.raonback.dto.response.product.DeleteProductResponseDto;
-import com.pio.raonback.dto.response.product.GetProductListResponseDto;
-import com.pio.raonback.dto.response.product.PostProductResponseDto;
-import com.pio.raonback.dto.response.product.PutProductResponseDto;
+import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +21,14 @@ public class ProductController {
   public ResponseEntity<? super GetProductListResponseDto> getProductList(@RequestParam(defaultValue = "0") int page,
                                                                           @RequestParam(defaultValue = "30") int size) {
     ResponseEntity<? super GetProductListResponseDto> response = productService.getProductList(page, size);
+    return response;
+  }
+
+  @GetMapping("/nearby/{locationId}")
+  public ResponseEntity<? super GetNearbyProductListResponseDto> getNearbyProductList(@PathVariable("locationId") Long locationId,
+                                                                                      @RequestParam(defaultValue = "0") int page,
+                                                                                      @RequestParam(defaultValue = "30") int size) {
+    ResponseEntity<? super GetNearbyProductListResponseDto> response = productService.getNearbyProductList(locationId, page, size);
     return response;
   }
 

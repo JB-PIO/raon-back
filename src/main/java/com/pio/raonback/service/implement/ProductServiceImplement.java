@@ -2,10 +2,7 @@ package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.PutProductRequestDto;
-import com.pio.raonback.dto.response.product.DeleteProductResponseDto;
-import com.pio.raonback.dto.response.product.GetProductListResponseDto;
-import com.pio.raonback.dto.response.product.PostProductResponseDto;
-import com.pio.raonback.dto.response.product.PutProductResponseDto;
+import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.entity.*;
 import com.pio.raonback.repository.*;
 import com.pio.raonback.service.ProductService;
@@ -37,6 +34,17 @@ public class ProductServiceImplement implements ProductService {
     Pageable pageable = PageRequest.of(page, size);
     Page<ProductDetailViewEntity> productDetailViewEntitiesPage = productDetailViewRepository.findAllByIsSoldFalseAndIsActiveTrueOrderByCreatedAtDesc(pageable);
     return GetProductListResponseDto.ok(productDetailViewEntitiesPage);
+  }
+
+  @Override
+  public ResponseEntity<? super GetNearbyProductListResponseDto> getNearbyProductList(Long locationId, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    boolean isLocationExist = locationRepository.existsById(locationId);
+    if (!isLocationExist) return GetNearbyProductListResponseDto.locationNotFound();
+    List<LocationEntity> nearbyLocationEntities = locationRepository.findAllByWithinRadius(locationId, 10000L);
+    List<Long> nearbyLocationIds = nearbyLocationEntities.stream().map(LocationEntity::getLocationId).toList();
+    Page<ProductDetailViewEntity> productDetailViewEntitiesPage = productDetailViewRepository.findAllByIsSoldFalseAndIsActiveTrueAndLocationIdInOrderByCreatedAtDesc(nearbyLocationIds, pageable);
+    return GetNearbyProductListResponseDto.ok(productDetailViewEntitiesPage);
   }
 
   @Override
