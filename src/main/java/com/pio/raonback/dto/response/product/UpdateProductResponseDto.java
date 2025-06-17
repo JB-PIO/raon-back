@@ -8,14 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @Getter
-public class PutProductResponseDto extends ResponseDto {
+public class UpdateProductResponseDto extends ResponseDto {
 
-  private PutProductResponseDto() {
+  private UpdateProductResponseDto() {
     super(ResponseCode.OK, ResponseMessage.OK);
   }
 
-  public static ResponseEntity<PutProductResponseDto> ok() {
-    PutProductResponseDto responseBody = new PutProductResponseDto();
+  public static ResponseEntity<UpdateProductResponseDto> ok() {
+    UpdateProductResponseDto responseBody = new UpdateProductResponseDto();
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

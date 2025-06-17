@@ -1,7 +1,7 @@
 package com.pio.raonback.entity;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
-import com.pio.raonback.dto.request.product.PutProductRequestDto;
+import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.entity.enums.TradeType;
 import jakarta.persistence.*;
@@ -58,7 +58,7 @@ public class ProductEntity {
     this.createdAt = createdAt;
   }
 
-  public void update(PutProductRequestDto dto) {
+  public void update(UpdateProductRequestDto dto) {
     Date now = Date.from(Instant.now());
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String updatedAt = simpleDateFormat.format(now);

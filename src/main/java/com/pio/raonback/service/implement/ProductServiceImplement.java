@@ -1,7 +1,7 @@
 package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
-import com.pio.raonback.dto.request.product.PutProductRequestDto;
+import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.entity.*;
 import com.pio.raonback.repository.*;
@@ -91,24 +91,24 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   @Transactional
-  public ResponseEntity<? super PutProductResponseDto> updateProduct(Long productId, PutProductRequestDto dto, String email) {
+  public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, String email) {
     UserEntity userEntity = userRepository.findByEmail(email);
-    if (userEntity == null) return PutProductResponseDto.authFailed();
+    if (userEntity == null) return UpdateProductResponseDto.authFailed();
     Long userId = userEntity.getUserId();
 
     Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
-    if (optionalProductEntity.isEmpty()) return PutProductResponseDto.productNotFound();
+    if (optionalProductEntity.isEmpty()) return UpdateProductResponseDto.productNotFound();
     ProductEntity productEntity = optionalProductEntity.get();
 
-    if (!productEntity.getSellerId().equals(userId)) return PutProductResponseDto.noPermission();
+    if (!productEntity.getSellerId().equals(userId)) return UpdateProductResponseDto.noPermission();
 
     Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
-    if (optionalCategoryEntity.isEmpty()) return PutProductResponseDto.categoryNotFound();
+    if (optionalCategoryEntity.isEmpty()) return UpdateProductResponseDto.categoryNotFound();
     CategoryEntity categoryEntity = optionalCategoryEntity.get();
-    if (!categoryEntity.getIsLeaf()) return PutProductResponseDto.notLeafCategory();
+    if (!categoryEntity.getIsLeaf()) return UpdateProductResponseDto.notLeafCategory();
 
     boolean isLocationExist = locationRepository.existsById(dto.getLocationId());
-    if (!isLocationExist) return PutProductResponseDto.locationNotFound();
+    if (!isLocationExist) return UpdateProductResponseDto.locationNotFound();
 
     productEntity.update(dto);
     productRepository.save(productEntity);
@@ -116,7 +116,7 @@ public class ProductServiceImplement implements ProductService {
     productImageRepository.deleteAllByProductId(productId);
 
     List<String> imageUrls = dto.getImageUrlList();
-    if (imageUrls == null) return PutProductResponseDto.ok();
+    if (imageUrls == null) return UpdateProductResponseDto.ok();
 
     List<ProductImageEntity> productImageEntities = new ArrayList<>();
     for (String imageUrl : imageUrls) {
@@ -125,7 +125,7 @@ public class ProductServiceImplement implements ProductService {
     }
 
     productImageRepository.saveAll(productImageEntities);
-    return PutProductResponseDto.ok();
+    return UpdateProductResponseDto.ok();
   }
 
   @Override

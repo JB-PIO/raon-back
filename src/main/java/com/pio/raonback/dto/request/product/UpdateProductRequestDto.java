@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PutProductRequestDto {
+public class UpdateProductRequestDto {
 
   @NotNull(message = "카테고리를 선택해주세요.")
   private Long categoryId;
