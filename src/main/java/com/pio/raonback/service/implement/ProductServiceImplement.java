@@ -65,7 +65,7 @@ public class ProductServiceImplement implements ProductService {
     ProductEntity productEntity = new ProductEntity(dto, sellerId);
     productRepository.save(productEntity);
 
-    List<String> imageUrls = dto.getImageUrls();
+    List<String> imageUrls = dto.getImageUrlList();
     if (imageUrls == null) return PostProductResponseDto.ok();
 
     List<ProductImageEntity> productImageEntities = new ArrayList<>();
@@ -106,7 +106,7 @@ public class ProductServiceImplement implements ProductService {
 
     productImageRepository.deleteAllByProductId(productId);
 
-    List<String> imageUrls = dto.getImageUrls();
+    List<String> imageUrls = dto.getImageUrlList();
     if (imageUrls == null) return PutProductResponseDto.ok();
 
     List<ProductImageEntity> productImageEntities = new ArrayList<>();
