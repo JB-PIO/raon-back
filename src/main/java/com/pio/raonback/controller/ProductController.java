@@ -32,6 +32,12 @@ public class ProductController {
     return response;
   }
 
+  @GetMapping("/{productId}")
+  public ResponseEntity<? super GetProductResponseDto> getProduct(@PathVariable("productId") Long productId) {
+    ResponseEntity<? super GetProductResponseDto> response = productService.getProduct(productId);
+    return response;
+  }
+
   @PostMapping("")
   public ResponseEntity<? super PostProductResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
                                                                     @AuthenticationPrincipal String email) {

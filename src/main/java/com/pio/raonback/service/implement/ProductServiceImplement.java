@@ -48,6 +48,15 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
+  public ResponseEntity<? super GetProductResponseDto> getProduct(Long productId) {
+    Optional<ProductDetailViewEntity> optionalProductDetailViewEntity = productDetailViewRepository.findByIsActiveTrueAndProductId(productId);
+    if (optionalProductDetailViewEntity.isEmpty()) return GetProductResponseDto.productNotFound();
+    ProductDetailViewEntity productDetailViewEntity = optionalProductDetailViewEntity.get();
+    List<ProductImageEntity> productImageEntities = productImageRepository.findAllByProductId(productId);
+    return GetProductResponseDto.ok(productDetailViewEntity, productImageEntities);
+  }
+
+  @Override
   @Transactional
   public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, String email) {
     UserEntity userEntity = userRepository.findByEmail(email);

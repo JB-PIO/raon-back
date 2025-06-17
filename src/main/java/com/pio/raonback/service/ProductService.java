@@ -11,6 +11,8 @@ public interface ProductService {
 
   ResponseEntity<? super GetNearbyProductListResponseDto> getNearbyProductList(Long locationId, int page, int size);
 
+  ResponseEntity<? super GetProductResponseDto> getProduct(Long productId);
+
   ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, String email);
 
   ResponseEntity<? super PutProductResponseDto> updateProduct(Long productId, PutProductRequestDto dto, String email);
