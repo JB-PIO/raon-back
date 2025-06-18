@@ -44,6 +44,7 @@ public class SecurityConfig {
     http.authorizeHttpRequests((auth) -> auth
         .requestMatchers("/api/v1/auth/**", "/api/v1/location/**").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/product/**").permitAll()
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/product/{productId}/view").permitAll()
         .anyRequest().authenticated());
     http.sessionManagement((session) -> session
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -53,6 +53,12 @@ public class ProductController {
     return response;
   }
 
+  @PatchMapping("/{productId}/view")
+  public ResponseEntity<? super IncreaseViewCountResponseDto> increaseViewCount(@PathVariable("productId") Long productId) {
+    ResponseEntity<? super IncreaseViewCountResponseDto> response = productService.increaseViewCount(productId);
+    return response;
+  }
+
   @DeleteMapping("/{productId}")
   public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(@PathVariable("productId") Long productId,
                                                                         @AuthenticationPrincipal String email) {

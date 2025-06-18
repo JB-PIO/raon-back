@@ -129,6 +129,16 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
+  public ResponseEntity<? super IncreaseViewCountResponseDto> increaseViewCount(Long productId) {
+    Optional<ProductEntity> optionalProductEntity = productRepository.findByIsActiveTrueAndProductId(productId);
+    if (optionalProductEntity.isEmpty()) return IncreaseViewCountResponseDto.productNotFound();
+    ProductEntity productEntity = optionalProductEntity.get();
+    productEntity.increaseViewCount();
+    productRepository.save(productEntity);
+    return IncreaseViewCountResponseDto.ok();
+  }
+
+  @Override
   public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId, String email) {
     UserEntity userEntity = userRepository.findByEmail(email);
     if (userEntity == null) return DeleteProductResponseDto.authFailed();

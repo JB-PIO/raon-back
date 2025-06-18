@@ -17,6 +17,8 @@ public interface ProductService {
 
   ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, String email);
 
+  ResponseEntity<? super IncreaseViewCountResponseDto> increaseViewCount(Long productId);
+
   ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId, String email);
 
 }

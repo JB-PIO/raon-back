@@ -58,6 +58,10 @@ public class ProductEntity {
     this.createdAt = createdAt;
   }
 
+  public void increaseViewCount() {
+    this.viewCount++;
+  }
+
   public void update(UpdateProductRequestDto dto) {
     Date now = Date.from(Instant.now());
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
