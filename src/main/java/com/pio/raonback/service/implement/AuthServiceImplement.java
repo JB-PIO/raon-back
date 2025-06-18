@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImplement implements AuthService {
@@ -49,8 +51,9 @@ public class AuthServiceImplement implements AuthService {
   @Override
   public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
     String email = dto.getEmail();
-    UserEntity userEntity = userRepository.findByEmail(email);
-    if (userEntity == null) return SignInResponseDto.signInFailed();
+    Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
+    if (optionalUserEntity.isEmpty()) return SignInResponseDto.signInFailed();
+    UserEntity userEntity = optionalUserEntity.get();
 
     String inputPassword = dto.getPassword();
     String storedPassword = userEntity.getPassword();

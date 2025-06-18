@@ -59,8 +59,9 @@ public class ProductServiceImplement implements ProductService {
   @Override
   @Transactional
   public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, String email) {
-    UserEntity userEntity = userRepository.findByEmail(email);
-    if (userEntity == null) return PostProductResponseDto.authFailed();
+    Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
+    if (optionalUserEntity.isEmpty()) return PostProductResponseDto.authFailed();
+    UserEntity userEntity = optionalUserEntity.get();
     Long sellerId = userEntity.getUserId();
 
     Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
@@ -92,8 +93,9 @@ public class ProductServiceImplement implements ProductService {
   @Override
   @Transactional
   public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, String email) {
-    UserEntity userEntity = userRepository.findByEmail(email);
-    if (userEntity == null) return UpdateProductResponseDto.authFailed();
+    Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
+    if (optionalUserEntity.isEmpty()) return UpdateProductResponseDto.authFailed();
+    UserEntity userEntity = optionalUserEntity.get();
     Long userId = userEntity.getUserId();
 
     Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
@@ -140,8 +142,9 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId, String email) {
-    UserEntity userEntity = userRepository.findByEmail(email);
-    if (userEntity == null) return DeleteProductResponseDto.authFailed();
+    Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
+    if (optionalUserEntity.isEmpty()) return DeleteProductResponseDto.authFailed();
+    UserEntity userEntity = optionalUserEntity.get();
     Long userId = userEntity.getUserId();
 
     Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
