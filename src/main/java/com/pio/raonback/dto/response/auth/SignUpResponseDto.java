@@ -19,19 +19,19 @@ public class SignUpResponseDto extends ResponseDto {
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 
+  public static ResponseEntity<ResponseDto> locationNotFound() {
+    ResponseDto responseBody = new ResponseDto(ResponseCode.LOCATION_NOT_FOUND, ResponseMessage.LOCATION_NOT_FOUND);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
+  }
+
   public static ResponseEntity<ResponseDto> emailExists() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.EMAIL_EXISTS, ResponseMessage.EMAIL_EXISTS);
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
   }
 
   public static ResponseEntity<ResponseDto> nicknameExists() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.NICKNAME_EXISTS, ResponseMessage.NICKNAME_EXISTS);
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
-  }
-
-  public static ResponseEntity<ResponseDto> locationNotFound() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.LOCATION_NOT_FOUND, ResponseMessage.LOCATION_NOT_FOUND);
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
   }
 
 }

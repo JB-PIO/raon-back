@@ -22,6 +22,7 @@ public class SignUpRequestDto {
   private String password;
 
   @NotBlank(message = "닉네임을 입력해주세요.")
+  @Size(max = 16, message = "닉네임은 16자 이하로 입력해주세요.")
   private String nickname;
 
   @NotNull(message = "지역을 선택해주세요.")
