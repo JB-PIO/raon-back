@@ -13,6 +13,7 @@ spring:
     password:
   jwt:
     secret:
+    refresh-secret:
 ```
 
 ### 개발 DB 서버 구축

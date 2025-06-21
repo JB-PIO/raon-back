@@ -165,6 +165,17 @@ CREATE TABLE block
     FOREIGN KEY (blocked_user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
+CREATE TABLE refresh_token
+(
+    token_id      BIGINT      NOT NULL AUTO_INCREMENT COMMENT '리프레시 토큰 고유 ID',
+    email         VARCHAR(80) NOT NULL UNIQUE COMMENT '이메일',
+    refresh_token TEXT        NOT NULL COMMENT '리프레시 토큰',
+    created_at    DATETIME    NOT NULL COMMENT '토큰 생성 일시',
+    expired_at    DATETIME    NOT NULL COMMENT '토큰 만료 일시',
+    PRIMARY KEY (token_id),
+    FOREIGN KEY (email) REFERENCES user (email) ON DELETE CASCADE
+);
+
 CREATE VIEW product_detail_view AS
 SELECT p.product_id,
        p.seller_id,
