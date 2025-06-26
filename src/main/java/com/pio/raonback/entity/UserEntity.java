@@ -1,6 +1,7 @@
 package com.pio.raonback.entity;
 
 import com.pio.raonback.dto.request.auth.SignUpRequestDto;
+import com.pio.raonback.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,8 @@ public class UserEntity {
   private String password;
   private String profileImage;
   private Long locationId;
+  @Enumerated(EnumType.STRING)
+  private Role role = Role.USER;
   private Boolean isDeleted = false;
   private Boolean isSuspended = false;
   private String createdAt;

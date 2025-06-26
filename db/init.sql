@@ -11,20 +11,32 @@ CREATE TABLE location
 
 CREATE TABLE user
 (
-    user_id       BIGINT       NOT NULL AUTO_INCREMENT COMMENT '사용자 고유 ID',
-    nickname      VARCHAR(30)  NOT NULL UNIQUE COMMENT '닉네임',
-    email         VARCHAR(80)  NOT NULL UNIQUE COMMENT '이메일',
-    password      VARCHAR(255) NULL COMMENT '해시된 비밀번호',
-    profile_image VARCHAR(255) NULL COMMENT '프로필 사진 URL',
-    location_id   BIGINT       NULL COMMENT '사용자 기본 지역',
-    is_deleted    BOOLEAN      NOT NULL DEFAULT FALSE COMMENT '계정 삭제 여부',
-    is_suspended  BOOLEAN      NOT NULL DEFAULT FALSE COMMENT '계정 정지 여부',
-    created_at    DATETIME     NOT NULL COMMENT '가입 일시',
-    updated_at    DATETIME     NULL COMMENT '정보 수정 일시',
-    deleted_at    DATETIME     NULL COMMENT '계정 삭제 일시',
-    suspended_at  DATETIME     NULL COMMENT '계정 정지 일시',
+    user_id       BIGINT                 NOT NULL AUTO_INCREMENT COMMENT '사용자 고유 ID',
+    nickname      VARCHAR(30)            NOT NULL UNIQUE COMMENT '닉네임',
+    email         VARCHAR(80)            NOT NULL UNIQUE COMMENT '이메일',
+    password      VARCHAR(255)           NULL COMMENT '해시된 비밀번호',
+    profile_image VARCHAR(255)           NULL COMMENT '프로필 사진 URL',
+    location_id   BIGINT                 NULL COMMENT '사용자 기본 지역',
+    role          ENUM ('USER', 'ADMIN') NOT NULL DEFAULT 'USER' COMMENT '접근 권한',
+    is_deleted    BOOLEAN                NOT NULL DEFAULT FALSE COMMENT '계정 삭제 여부',
+    is_suspended  BOOLEAN                NOT NULL DEFAULT FALSE COMMENT '계정 정지 여부',
+    created_at    DATETIME               NOT NULL COMMENT '가입 일시',
+    updated_at    DATETIME               NULL COMMENT '정보 수정 일시',
+    deleted_at    DATETIME               NULL COMMENT '계정 삭제 일시',
+    suspended_at  DATETIME               NULL COMMENT '계정 정지 일시',
     PRIMARY KEY (user_id),
     FOREIGN KEY (location_id) REFERENCES location (location_id) ON DELETE SET NULL
+);
+
+CREATE TABLE refresh_token
+(
+    token_id   BIGINT   NOT NULL AUTO_INCREMENT COMMENT '리프레시 토큰 고유 ID',
+    user_id    BIGINT   NOT NULL UNIQUE COMMENT '사용자 ID',
+    token      TEXT     NOT NULL UNIQUE COMMENT '리프레시 토큰',
+    created_at DATETIME NOT NULL COMMENT '토큰 생성 일시',
+    expired_at DATETIME NOT NULL COMMENT '토큰 만료 일시',
+    PRIMARY KEY (token_id),
+    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE category
@@ -163,17 +175,6 @@ CREATE TABLE block
     PRIMARY KEY (block_id),
     FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,
     FOREIGN KEY (blocked_user_id) REFERENCES user (user_id) ON DELETE CASCADE
-);
-
-CREATE TABLE refresh_token
-(
-    token_id      BIGINT      NOT NULL AUTO_INCREMENT COMMENT '리프레시 토큰 고유 ID',
-    email         VARCHAR(80) NOT NULL UNIQUE COMMENT '이메일',
-    refresh_token TEXT        NOT NULL COMMENT '리프레시 토큰',
-    created_at    DATETIME    NOT NULL COMMENT '토큰 생성 일시',
-    expired_at    DATETIME    NOT NULL COMMENT '토큰 만료 일시',
-    PRIMARY KEY (token_id),
-    FOREIGN KEY (email) REFERENCES user (email) ON DELETE CASCADE
 );
 
 CREATE VIEW product_detail_view AS
