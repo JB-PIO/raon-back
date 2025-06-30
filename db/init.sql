@@ -30,13 +30,13 @@ CREATE TABLE user
 
 CREATE TABLE refresh_token
 (
-    token_id   BIGINT   NOT NULL AUTO_INCREMENT COMMENT '리프레시 토큰 고유 ID',
-    user_id    BIGINT   NOT NULL UNIQUE COMMENT '사용자 ID',
-    token      TEXT     NOT NULL UNIQUE COMMENT '리프레시 토큰',
-    created_at DATETIME NOT NULL COMMENT '토큰 생성 일시',
-    expired_at DATETIME NOT NULL COMMENT '토큰 만료 일시',
+    token_id   BIGINT       NOT NULL AUTO_INCREMENT COMMENT '리프레시 토큰 고유 ID',
+    email      VARCHAR(80)  NOT NULL UNIQUE COMMENT '사용자 이메일',
+    token      VARCHAR(128) NOT NULL UNIQUE COMMENT '해시된 리프레시 토큰',
+    created_at DATETIME     NOT NULL COMMENT '리프레시 토큰 생성 일시',
+    expires_at DATETIME     NOT NULL COMMENT '리프레시 토큰 만료 일시',
     PRIMARY KEY (token_id),
-    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
+    FOREIGN KEY (email) REFERENCES user (email) ON DELETE CASCADE
 );
 
 CREATE TABLE category
