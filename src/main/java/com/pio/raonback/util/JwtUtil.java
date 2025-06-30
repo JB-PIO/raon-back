@@ -1,4 +1,4 @@
-package com.pio.raonback.provider;
+package com.pio.raonback.util;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -12,9 +12,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Component
-public class JwtProvider {
+public class JwtUtil {
 
-  @Value("${spring.jwt.secret}")
+  @Value("${jwt.secret}")
   private String secret;
 
   public String create(String email) {

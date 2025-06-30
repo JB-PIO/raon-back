@@ -1,6 +1,6 @@
 package com.pio.raonback.filter;
 
-import com.pio.raonback.provider.JwtProvider;
+import com.pio.raonback.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-  private final JwtProvider jwtProvider;
+  private final JwtUtil jwtUtil;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return;
       }
 
-      String email = jwtProvider.validate(token);
+      String email = jwtUtil.validate(token);
 
       if (email == null) {
         filterChain.doFilter(request, response);

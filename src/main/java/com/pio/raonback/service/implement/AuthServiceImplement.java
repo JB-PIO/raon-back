@@ -5,13 +5,13 @@ import com.pio.raonback.dto.request.auth.SignUpRequestDto;
 import com.pio.raonback.dto.response.auth.SignInResponseDto;
 import com.pio.raonback.dto.response.auth.SignUpResponseDto;
 import com.pio.raonback.entity.UserEntity;
-import com.pio.raonback.provider.JwtProvider;
+import com.pio.raonback.util.JwtUtil;
 import com.pio.raonback.repository.LocationRepository;
 import com.pio.raonback.repository.UserRepository;
 import com.pio.raonback.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,8 +22,8 @@ public class AuthServiceImplement implements AuthService {
 
   private final UserRepository userRepository;
   private final LocationRepository locationRepository;
-  private final JwtProvider jwtProvider;
-  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+  private final JwtUtil jwtUtil;
+  private final PasswordEncoder passwordEncoder;
 
 
   @Override
@@ -40,7 +40,7 @@ public class AuthServiceImplement implements AuthService {
     if (!isLocationValid) return SignUpResponseDto.locationNotFound();
 
     String rawPassword = dto.getPassword();
-    String hashedPassword = bCryptPasswordEncoder.encode(rawPassword);
+    String hashedPassword = passwordEncoder.encode(rawPassword);
     dto.setPassword(hashedPassword);
 
     UserEntity userEntity = new UserEntity(dto);
@@ -57,10 +57,10 @@ public class AuthServiceImplement implements AuthService {
 
     String inputPassword = dto.getPassword();
     String storedPassword = userEntity.getPassword();
-    boolean isPasswordValid = bCryptPasswordEncoder.matches(inputPassword, storedPassword);
+    boolean isPasswordValid = passwordEncoder.matches(inputPassword, storedPassword);
     if (!isPasswordValid) return SignInResponseDto.signInFailed();
 
-    String token = jwtProvider.create(email);
+    String token = jwtUtil.create(email);
     return SignInResponseDto.ok(token);
   }
 
