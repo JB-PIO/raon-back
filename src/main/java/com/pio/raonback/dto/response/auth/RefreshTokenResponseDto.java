@@ -8,26 +8,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @Getter
-public class SignInResponseDto extends ResponseDto {
+public class RefreshTokenResponseDto extends ResponseDto {
 
   private String accessToken;
   private String refreshToken;
   private Long accessTokenExpirationTime;
 
-  private SignInResponseDto(String accessToken, String refreshToken, Long accessTokenExpirationTime) {
+  private RefreshTokenResponseDto(String accessToken, String refreshToken, Long accessTokenExpirationTime) {
     super(ResponseCode.OK, ResponseMessage.OK);
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
     this.accessTokenExpirationTime = accessTokenExpirationTime;
   }
 
-  public static ResponseEntity<SignInResponseDto> ok(String accessToken, String refreshToken, Long accessTokenExpirationTime) {
-    SignInResponseDto responseBody = new SignInResponseDto(accessToken, refreshToken, accessTokenExpirationTime);
+  public static ResponseEntity<RefreshTokenResponseDto> ok(String accessToken, String refreshToken, Long accessTokenExpirationTime) {
+    RefreshTokenResponseDto responseBody = new RefreshTokenResponseDto(accessToken, refreshToken, accessTokenExpirationTime);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 
-  public static ResponseEntity<ResponseDto> signInFailed() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.SIGN_IN_FAILED, ResponseMessage.SIGN_IN_FAILED);
+  public static ResponseEntity<ResponseDto> invalidToken() {
+    ResponseDto responseBody = new ResponseDto(ResponseCode.INVALID_TOKEN, ResponseMessage.INVALID_TOKEN);
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
   }
 

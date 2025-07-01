@@ -24,11 +24,6 @@ public class PostProductResponseDto extends ResponseDto {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
   }
 
-  public static ResponseEntity<ResponseDto> authFailed() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.AUTH_FAILED, ResponseMessage.AUTH_FAILED);
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
-  }
-
   public static ResponseEntity<ResponseDto> locationNotFound() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.LOCATION_NOT_FOUND, ResponseMessage.LOCATION_NOT_FOUND);
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);

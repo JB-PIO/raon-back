@@ -4,6 +4,7 @@ import com.pio.raonback.dto.request.user.UpdateNicknameRequestDto;
 import com.pio.raonback.dto.request.user.UpdateProfileImageRequestDto;
 import com.pio.raonback.dto.response.user.UpdateNicknameResponseDto;
 import com.pio.raonback.dto.response.user.UpdateProfileImageResponseDto;
+import com.pio.raonback.security.CustomUserDetails;
 import com.pio.raonback.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +24,15 @@ public class UserController {
 
   @PatchMapping("/nickname")
   public ResponseEntity<? super UpdateNicknameResponseDto> updateNickname(@RequestBody @Valid UpdateNicknameRequestDto requestBody,
-                                                                          @AuthenticationPrincipal String email) {
-    ResponseEntity<? super UpdateNicknameResponseDto> response = userService.updateNickname(requestBody, email);
+                                                                          @AuthenticationPrincipal CustomUserDetails userDetails) {
+    ResponseEntity<? super UpdateNicknameResponseDto> response = userService.updateNickname(requestBody, userDetails);
     return response;
   }
 
   @PatchMapping("/profile-image")
   public ResponseEntity<? super UpdateProfileImageResponseDto> updateProfileImage(@RequestBody @Valid UpdateProfileImageRequestDto requestBody,
-                                                                                  @AuthenticationPrincipal String email) {
-    ResponseEntity<? super UpdateProfileImageResponseDto> response = userService.updateProfileImage(requestBody, email);
+                                                                                  @AuthenticationPrincipal CustomUserDetails userDetails) {
+    ResponseEntity<? super UpdateProfileImageResponseDto> response = userService.updateProfileImage(requestBody, userDetails);
     return response;
   }
 

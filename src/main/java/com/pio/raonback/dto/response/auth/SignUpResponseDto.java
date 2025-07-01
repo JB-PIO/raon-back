@@ -10,12 +10,19 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class SignUpResponseDto extends ResponseDto {
 
-  private SignUpResponseDto() {
+  private String accessToken;
+  private String refreshToken;
+  private Long accessTokenExpirationTime;
+
+  private SignUpResponseDto(String accessToken, String refreshToken, Long accessTokenExpirationTime) {
     super(ResponseCode.OK, ResponseMessage.OK);
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
+    this.accessTokenExpirationTime = accessTokenExpirationTime;
   }
 
-  public static ResponseEntity<SignUpResponseDto> ok() {
-    SignUpResponseDto responseBody = new SignUpResponseDto();
+  public static ResponseEntity<SignUpResponseDto> ok(String accessToken, String refreshToken, Long accessTokenExpirationTime) {
+    SignUpResponseDto responseBody = new SignUpResponseDto(accessToken, refreshToken, accessTokenExpirationTime);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

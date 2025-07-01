@@ -1,7 +1,5 @@
-package com.pio.raonback.config;
+package com.pio.raonback.security;
 
-import com.pio.raonback.exception.FailedAuthenticationEntryPoint;
-import com.pio.raonback.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +39,8 @@ public class SecurityConfig {
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     http.exceptionHandling((exception) -> exception
-        .authenticationEntryPoint(new FailedAuthenticationEntryPoint()));
+        .authenticationEntryPoint(new FailedAuthenticationEntryPoint())
+        .accessDeniedHandler(new CustomAccessDeniedHandler()));
     return http.build();
   }
 

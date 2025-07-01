@@ -19,9 +19,4 @@ public class UpdateProfileImageResponseDto extends ResponseDto {
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 
-  public static ResponseEntity<ResponseDto> authFailed() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.AUTH_FAILED, ResponseMessage.AUTH_FAILED);
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
-  }
-
 }

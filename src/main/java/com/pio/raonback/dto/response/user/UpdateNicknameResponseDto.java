@@ -19,11 +19,6 @@ public class UpdateNicknameResponseDto extends ResponseDto {
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 
-  public static ResponseEntity<ResponseDto> authFailed() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.AUTH_FAILED, ResponseMessage.AUTH_FAILED);
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
-  }
-
   public static ResponseEntity<ResponseDto> nicknameExists() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.NICKNAME_EXISTS, ResponseMessage.NICKNAME_EXISTS);
     return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);

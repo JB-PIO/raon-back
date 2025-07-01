@@ -1,4 +1,4 @@
-package com.pio.raonback.config;
+package com.pio.raonback.security;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

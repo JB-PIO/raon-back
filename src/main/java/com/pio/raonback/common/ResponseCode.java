@@ -13,6 +13,7 @@ public interface ResponseCode {
   // HTTP Status 401
   String SIGN_IN_FAILED = "SIGN_FAIL";
   String AUTH_FAILED = "AUTH_FAIL";
+  String INVALID_TOKEN = "INV_TOKEN";
 
   // HTTP Status 403
   String NO_PERMISSION = "NO_PER";
@@ -26,7 +27,7 @@ public interface ResponseCode {
   // Http Status 409
   String EMAIL_EXISTS = "EMAIL_DUP";
   String NICKNAME_EXISTS = "NICK_DUP";
-  
+
   // HTTP Status 500
   String SERVER_ERROR = "SRV_ERR";
 
