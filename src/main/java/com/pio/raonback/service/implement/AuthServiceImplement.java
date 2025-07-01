@@ -2,9 +2,11 @@ package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.request.auth.RefreshTokenRequestDto;
 import com.pio.raonback.dto.request.auth.SignInRequestDto;
+import com.pio.raonback.dto.request.auth.SignOutRequestDto;
 import com.pio.raonback.dto.request.auth.SignUpRequestDto;
 import com.pio.raonback.dto.response.auth.RefreshTokenResponseDto;
 import com.pio.raonback.dto.response.auth.SignInResponseDto;
+import com.pio.raonback.dto.response.auth.SignOutResponseDto;
 import com.pio.raonback.dto.response.auth.SignUpResponseDto;
 import com.pio.raonback.entity.RefreshTokenEntity;
 import com.pio.raonback.entity.UserEntity;
@@ -14,11 +16,11 @@ import com.pio.raonback.repository.UserRepository;
 import com.pio.raonback.security.JwtProperties;
 import com.pio.raonback.security.JwtUtil;
 import com.pio.raonback.service.AuthService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -91,9 +93,8 @@ public class AuthServiceImplement implements AuthService {
   @Transactional
   public ResponseEntity<? super RefreshTokenResponseDto> refreshToken(RefreshTokenRequestDto dto) {
     String refreshToken = dto.getRefreshToken();
-    String refreshTokenHash = jwtUtil.generateTokenHash(refreshToken);
-
     if (!jwtUtil.validateRefreshToken(refreshToken)) return RefreshTokenResponseDto.invalidToken();
+    String refreshTokenHash = jwtUtil.generateTokenHash(refreshToken);
     Optional<RefreshTokenEntity> optionalRefreshTokenEntity = refreshTokenRepository.findByToken(refreshTokenHash);
     if (optionalRefreshTokenEntity.isEmpty()) return RefreshTokenResponseDto.invalidToken();
     RefreshTokenEntity refreshTokenEntity = optionalRefreshTokenEntity.get();
@@ -107,6 +108,14 @@ public class AuthServiceImplement implements AuthService {
     refreshTokenRepository.save(newRefreshTokenEntity);
 
     return RefreshTokenResponseDto.ok(newAccessToken, newRefreshToken, jwtProperties.getAccessTokenExpirationTime());
+  }
+
+  @Override
+  public ResponseEntity<? super SignOutResponseDto> signOut(SignOutRequestDto dto) {
+    String refreshToken = dto.getRefreshToken();
+    String refreshTokenHash = jwtUtil.generateTokenHash(refreshToken);
+    refreshTokenRepository.deleteByToken(refreshTokenHash);
+    return SignOutResponseDto.ok();
   }
 
 }
