@@ -70,7 +70,7 @@ public class AuthServiceImplement implements AuthService {
   @Transactional
   public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
     String email = dto.getEmail();
-    Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
+    Optional<UserEntity> optionalUserEntity = userRepository.findByIsDeletedFalseAndEmail(email);
     if (optionalUserEntity.isEmpty()) return SignInResponseDto.signInFailed();
     UserEntity userEntity = optionalUserEntity.get();
 
@@ -78,6 +78,7 @@ public class AuthServiceImplement implements AuthService {
     String storedPassword = userEntity.getPassword();
     boolean isPasswordValid = passwordEncoder.matches(inputPassword, storedPassword);
     if (!isPasswordValid) return SignInResponseDto.signInFailed();
+    if (userEntity.getIsSuspended()) return SignInResponseDto.suspendedUser();
 
     refreshTokenRepository.deleteByEmail(email);
     refreshTokenRepository.flush();

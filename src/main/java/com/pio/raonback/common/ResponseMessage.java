@@ -17,6 +17,7 @@ public interface ResponseMessage {
 
   // HTTP Status 403
   String NO_PERMISSION = "권한이 없습니다.";
+  String SUSPENDED_USER = "정지된 계정입니다.";
 
   // HTTP Status 404
   String NOT_FOUND = "존재하지 않는 리소스입니다.";

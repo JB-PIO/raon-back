@@ -31,4 +31,9 @@ public class SignInResponseDto extends ResponseDto {
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
   }
 
+  public static ResponseEntity<ResponseDto> suspendedUser() {
+    ResponseDto responseBody = new ResponseDto(ResponseCode.SUSPENDED_USER, ResponseMessage.SUSPENDED_USER);
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+  }
+
 }

@@ -17,6 +17,7 @@ public interface ResponseCode {
 
   // HTTP Status 403
   String NO_PERMISSION = "NO_PER";
+  String SUSPENDED_USER = "SUS_ACC";
 
   // HTTP Status 404
   String NOT_FOUND = "404";
