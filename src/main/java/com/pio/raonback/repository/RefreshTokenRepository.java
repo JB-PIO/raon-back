@@ -12,9 +12,13 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshTokenEntity
 
   Optional<RefreshTokenEntity> findByToken(String tokenHash);
 
+  @Transactional
   void deleteByEmail(String email);
 
   @Transactional
   void deleteByToken(String tokenHash);
+
+  @Transactional
+  void deleteAllByExpiresAtBefore(String expiresAt);
 
 }
