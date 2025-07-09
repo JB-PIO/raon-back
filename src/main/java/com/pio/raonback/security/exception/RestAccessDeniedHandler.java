@@ -1,4 +1,4 @@
-package com.pio.raonback.security;
+package com.pio.raonback.security.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pio.raonback.common.ResponseCode;
@@ -7,19 +7,19 @@ import com.pio.raonback.dto.response.ResponseDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 import java.io.IOException;
 
-public class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class RestAccessDeniedHandler implements AccessDeniedHandler {
 
   @Override
-  public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+  public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
-    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    ResponseDto responseBody = new ResponseDto(ResponseCode.AUTH_FAILED, ResponseMessage.AUTH_FAILED);
+    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    ResponseDto responseBody = new ResponseDto(ResponseCode.NO_PERMISSION, ResponseMessage.NO_PERMISSION);
     ObjectMapper objectMapper = new ObjectMapper();
     String jsonResponse = objectMapper.writeValueAsString(responseBody);
     response.getWriter().write(jsonResponse);

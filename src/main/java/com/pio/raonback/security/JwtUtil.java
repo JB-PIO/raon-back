@@ -1,6 +1,6 @@
 package com.pio.raonback.security;
 
-import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -44,26 +44,14 @@ public class JwtUtil {
                .compact();
   }
 
-  public boolean validateAccessToken(String accessToken) {
-    try {
-      SecretKey key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
-      Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(accessToken).getPayload();
-      String tokenType = claims.get("type", String.class);
-      return "access".equals(tokenType);
-    } catch (Exception exception) {
-      return false;
-    }
+  public String validateAccessToken(String accessToken) throws JwtException {
+    SecretKey key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
+    return Jwts.parser().require("type", "access").verifyWith(key).build().parseSignedClaims(accessToken).getPayload().getSubject();
   }
 
-  public boolean validateRefreshToken(String refreshToken) {
-    try {
-      SecretKey key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
-      Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(refreshToken).getPayload();
-      String tokenType = claims.get("type", String.class);
-      return "refresh".equals(tokenType);
-    } catch (Exception exception) {
-      return false;
-    }
+  public String validateRefreshToken(String refreshToken) throws JwtException {
+    SecretKey key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
+    return Jwts.parser().require("type", "refresh").verifyWith(key).build().parseSignedClaims(refreshToken).getPayload().getSubject();
   }
 
   public String generateTokenHash(String token) {
@@ -80,11 +68,6 @@ public class JwtUtil {
     } catch (NoSuchAlgorithmException exception) {
       throw new RuntimeException("SHA-512 algorithm not available.", exception);
     }
-  }
-
-  public String getEmailFromToken(String token) {
-    SecretKey key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
-    return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
   }
 
   public Date getExpirationFromToken(String token) {

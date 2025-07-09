@@ -16,6 +16,8 @@ import com.pio.raonback.repository.UserRepository;
 import com.pio.raonback.security.JwtProperties;
 import com.pio.raonback.security.JwtUtil;
 import com.pio.raonback.service.AuthService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -94,10 +96,20 @@ public class AuthServiceImplement implements AuthService {
   @Transactional
   public ResponseEntity<? super RefreshTokenResponseDto> refreshToken(RefreshTokenRequestDto dto) {
     String refreshToken = dto.getRefreshToken();
-    if (!jwtUtil.validateRefreshToken(refreshToken)) return RefreshTokenResponseDto.invalidToken();
+    try {
+      jwtUtil.validateRefreshToken(refreshToken);
+    } catch (ExpiredJwtException exception) {
+      if (exception.getClaims().get("type", String.class).equals("refresh")) {
+        return RefreshTokenResponseDto.expiredToken();
+      } else {
+        return RefreshTokenResponseDto.authFailed();
+      }
+    } catch (JwtException exception) {
+      return RefreshTokenResponseDto.authFailed();
+    }
     String refreshTokenHash = jwtUtil.generateTokenHash(refreshToken);
     Optional<RefreshTokenEntity> optionalRefreshTokenEntity = refreshTokenRepository.findByToken(refreshTokenHash);
-    if (optionalRefreshTokenEntity.isEmpty()) return RefreshTokenResponseDto.invalidToken();
+    if (optionalRefreshTokenEntity.isEmpty()) return RefreshTokenResponseDto.expiredToken();
     RefreshTokenEntity refreshTokenEntity = optionalRefreshTokenEntity.get();
 
     String email = refreshTokenEntity.getEmail();

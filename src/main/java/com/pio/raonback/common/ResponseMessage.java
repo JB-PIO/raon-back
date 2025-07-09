@@ -13,7 +13,7 @@ public interface ResponseMessage {
   // HTTP Status 401
   String SIGN_IN_FAILED = "이메일 또는 비밀번호가 일치하지 않습니다.";
   String AUTH_FAILED = "인증에 실패했습니다.";
-  String INVALID_TOKEN = "만료되었거나 유효하지 않은 토큰입니다.";
+  String EXPIRED_TOKEN = "만료된 토큰입니다.";
 
   // HTTP Status 403
   String NO_PERMISSION = "권한이 없습니다.";

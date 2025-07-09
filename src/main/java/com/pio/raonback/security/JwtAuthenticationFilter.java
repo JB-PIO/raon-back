@@ -4,46 +4,58 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component
-@RequiredArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-  private final CustomUserDetailsService customUserDetailsService;
-  private final JwtUtil jwtUtil;
+  private final AuthenticationFailureHandler failureHandler;
 
-  @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-    String token = getTokenFromRequest(request);
-
-    if (token != null && jwtUtil.validateAccessToken(token)) {
-      String email = jwtUtil.getEmailFromToken(token);
-      CustomUserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
-
-      UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-      authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    filterChain.doFilter(request, response);
+  public JwtAuthenticationFilter(AuthenticationFailureHandler failureHandler, RequestMatcher matcher) {
+    super(matcher);
+    this.failureHandler = failureHandler;
   }
 
-  private String getTokenFromRequest(HttpServletRequest request) {
+  @Override
+  public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+    String token = obtainToken(request);
+    JwtAuthenticationToken authRequest = new JwtAuthenticationToken(token);
+    setDetails(request, authRequest);
+    return this.getAuthenticationManager().authenticate(authRequest);
+  }
+
+  @Override
+  protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    SecurityContext context = SecurityContextHolder.createEmptyContext();
+    context.setAuthentication(authResult);
+    SecurityContextHolder.setContext(context);
+    chain.doFilter(request, response);
+  }
+
+  @Override
+  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    SecurityContextHolder.clearContext();
+    failureHandler.onAuthenticationFailure(request, response, failed);
+  }
+
+  private String obtainToken(HttpServletRequest request) {
     String bearerToken = request.getHeader("Authorization");
     if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
       return bearerToken.substring(7);
     }
     return null;
+  }
+
+  private void setDetails(HttpServletRequest request, JwtAuthenticationToken authRequest) {
+    authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
   }
 
 }

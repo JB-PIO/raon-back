@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public class CustomUserDetails implements UserDetails {
+public class RaonUser implements UserDetails {
 
   private final UserEntity userEntity;
 

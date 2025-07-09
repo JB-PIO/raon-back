@@ -5,7 +5,7 @@ import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.entity.*;
 import com.pio.raonback.repository.*;
-import com.pio.raonback.security.CustomUserDetails;
+import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -59,8 +59,8 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   @Transactional
-  public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, CustomUserDetails userDetails) {
-    UserEntity userEntity = userDetails.getUserEntity();
+  public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser user) {
+    UserEntity userEntity = user.getUserEntity();
     Long sellerId = userEntity.getUserId();
 
     Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
@@ -91,8 +91,8 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   @Transactional
-  public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, CustomUserDetails userDetails) {
-    UserEntity userEntity = userDetails.getUserEntity();
+  public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser user) {
+    UserEntity userEntity = user.getUserEntity();
     Long userId = userEntity.getUserId();
 
     Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
@@ -138,8 +138,8 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
-  public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId, CustomUserDetails userDetails) {
-    UserEntity userEntity = userDetails.getUserEntity();
+  public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId, RaonUser user) {
+    UserEntity userEntity = user.getUserEntity();
     Long userId = userEntity.getUserId();
 
     Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);

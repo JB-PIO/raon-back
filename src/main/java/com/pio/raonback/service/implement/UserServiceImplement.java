@@ -6,7 +6,7 @@ import com.pio.raonback.dto.response.user.UpdateNicknameResponseDto;
 import com.pio.raonback.dto.response.user.UpdateProfileImageResponseDto;
 import com.pio.raonback.entity.UserEntity;
 import com.pio.raonback.repository.UserRepository;
-import com.pio.raonback.security.CustomUserDetails;
+import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class UserServiceImplement implements UserService {
   private final UserRepository userRepository;
 
   @Override
-  public ResponseEntity<? super UpdateNicknameResponseDto> updateNickname(UpdateNicknameRequestDto dto, CustomUserDetails userDetails) {
+  public ResponseEntity<? super UpdateNicknameResponseDto> updateNickname(UpdateNicknameRequestDto dto, RaonUser userDetails) {
     UserEntity userEntity = userDetails.getUserEntity();
     String newNickname = dto.getNickname();
     boolean isNicknameTaken = userRepository.existsByNickname(newNickname);
@@ -30,7 +30,7 @@ public class UserServiceImplement implements UserService {
   }
 
   @Override
-  public ResponseEntity<? super UpdateProfileImageResponseDto> updateProfileImage(UpdateProfileImageRequestDto dto, CustomUserDetails userDetails) {
+  public ResponseEntity<? super UpdateProfileImageResponseDto> updateProfileImage(UpdateProfileImageRequestDto dto, RaonUser userDetails) {
     UserEntity userEntity = userDetails.getUserEntity();
     String newProfileImage = dto.getProfileImage();
     userEntity.updateProfileImage(newProfileImage);

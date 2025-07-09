@@ -13,7 +13,7 @@ public interface ResponseCode {
   // HTTP Status 401
   String SIGN_IN_FAILED = "SIGN_FAIL";
   String AUTH_FAILED = "AUTH_FAIL";
-  String INVALID_TOKEN = "INV_TOKEN";
+  String EXPIRED_TOKEN = "EXP_TOKEN";
 
   // HTTP Status 403
   String NO_PERMISSION = "NO_PER";
