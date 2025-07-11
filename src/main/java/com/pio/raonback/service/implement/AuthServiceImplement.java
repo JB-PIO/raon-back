@@ -1,8 +1,6 @@
 package com.pio.raonback.service.implement;
 
-import com.pio.raonback.dto.request.auth.RefreshTokenRequestDto;
 import com.pio.raonback.dto.request.auth.SignInRequestDto;
-import com.pio.raonback.dto.request.auth.SignOutRequestDto;
 import com.pio.raonback.dto.request.auth.SignUpRequestDto;
 import com.pio.raonback.dto.response.auth.RefreshTokenResponseDto;
 import com.pio.raonback.dto.response.auth.SignInResponseDto;
@@ -19,6 +17,7 @@ import com.pio.raonback.service.AuthService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -62,10 +61,11 @@ public class AuthServiceImplement implements AuthService {
     refreshTokenRepository.flush();
     String accessToken = jwtUtil.generateAccessToken(email);
     String refreshToken = jwtUtil.generateRefreshToken(email);
+    String refreshTokenCookie = buildRefreshTokenCookie(refreshToken);
     RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity(email, jwtUtil.generateTokenHash(refreshToken), jwtUtil.getExpirationFromToken(refreshToken));
     refreshTokenRepository.save(refreshTokenEntity);
 
-    return SignUpResponseDto.ok(accessToken, refreshToken, jwtProperties.getAccessTokenExpirationTime());
+    return SignUpResponseDto.ok(accessToken, refreshTokenCookie, jwtProperties.getAccessTokenExpirationTime());
   }
 
   @Override
@@ -86,16 +86,16 @@ public class AuthServiceImplement implements AuthService {
     refreshTokenRepository.flush();
     String accessToken = jwtUtil.generateAccessToken(email);
     String refreshToken = jwtUtil.generateRefreshToken(email);
+    String refreshTokenCookie = buildRefreshTokenCookie(refreshToken);
     RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity(email, jwtUtil.generateTokenHash(refreshToken), jwtUtil.getExpirationFromToken(refreshToken));
     refreshTokenRepository.save(refreshTokenEntity);
 
-    return SignInResponseDto.ok(accessToken, refreshToken, jwtProperties.getAccessTokenExpirationTime());
+    return SignInResponseDto.ok(accessToken, refreshTokenCookie, jwtProperties.getAccessTokenExpirationTime());
   }
 
   @Override
   @Transactional
-  public ResponseEntity<? super RefreshTokenResponseDto> refreshToken(RefreshTokenRequestDto dto) {
-    String refreshToken = dto.getRefreshToken();
+  public ResponseEntity<? super RefreshTokenResponseDto> refreshToken(String refreshToken) {
     try {
       jwtUtil.validateRefreshToken(refreshToken);
     } catch (ExpiredJwtException exception) {
@@ -117,18 +117,23 @@ public class AuthServiceImplement implements AuthService {
     refreshTokenRepository.flush();
     String newAccessToken = jwtUtil.generateAccessToken(email);
     String newRefreshToken = jwtUtil.generateRefreshToken(email);
+    String newRefreshTokenCookie = buildRefreshTokenCookie(newRefreshToken);
     RefreshTokenEntity newRefreshTokenEntity = new RefreshTokenEntity(email, jwtUtil.generateTokenHash(newRefreshToken), jwtUtil.getExpirationFromToken(newRefreshToken));
     refreshTokenRepository.save(newRefreshTokenEntity);
 
-    return RefreshTokenResponseDto.ok(newAccessToken, newRefreshToken, jwtProperties.getAccessTokenExpirationTime());
+    return RefreshTokenResponseDto.ok(newAccessToken, newRefreshTokenCookie, jwtProperties.getAccessTokenExpirationTime());
   }
 
   @Override
-  public ResponseEntity<? super SignOutResponseDto> signOut(SignOutRequestDto dto) {
-    String refreshToken = dto.getRefreshToken();
+  public ResponseEntity<? super SignOutResponseDto> signOut(String refreshToken) {
     String refreshTokenHash = jwtUtil.generateTokenHash(refreshToken);
     refreshTokenRepository.deleteByToken(refreshTokenHash);
     return SignOutResponseDto.ok();
+  }
+
+  private String buildRefreshTokenCookie(String refreshToken) {
+    return ResponseCookie.from("refreshToken", refreshToken).maxAge(jwtProperties.getRefreshTokenExpirationTime())
+                         .path("/api/v1/auth").httpOnly(true).secure(true).build().toString();
   }
 
 }

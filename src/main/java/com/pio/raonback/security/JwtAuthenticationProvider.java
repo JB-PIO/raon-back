@@ -20,7 +20,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-    String token = authentication.getCredentials().toString();
+    String token = ((JwtAuthenticationToken) authentication).getToken();
     if (token == null || token.isEmpty()) throw new BadCredentialsException("토큰이 없습니다.");
     try {
       String email = jwtUtil.validateAccessToken(token);

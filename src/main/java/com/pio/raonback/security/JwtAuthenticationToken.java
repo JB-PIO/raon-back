@@ -1,7 +1,9 @@
 package com.pio.raonback.security;
 
+import lombok.Getter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
+@Getter
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
   private final String token;

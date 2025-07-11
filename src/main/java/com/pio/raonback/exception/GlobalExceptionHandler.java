@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -17,6 +18,11 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+  @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class, IllegalArgumentException.class})
+  public ResponseEntity<ResponseDto> badRequestExceptionHandler(Exception exception) {
+    return ResponseDto.badRequest();
+  }
 
   @ExceptionHandler({MethodArgumentNotValidException.class})
   public ResponseEntity<InvalidInputResponseDto> validationExceptionHandler(MethodArgumentNotValidException exception) {
@@ -30,8 +36,9 @@ public class GlobalExceptionHandler {
     return InvalidInputResponseDto.invalidInput(errors);
   }
 
-  @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class, IllegalArgumentException.class})
-  public ResponseEntity<ResponseDto> badRequestExceptionHandler(Exception exception) {
+  @ExceptionHandler({MissingRequestCookieException.class})
+  public ResponseEntity<ResponseDto> missingRequestCookieExceptionHandler(MissingRequestCookieException exception) {
+    if (exception.getCookieName().equals("refreshToken")) return ResponseDto.authFailed();
     return ResponseDto.badRequest();
   }
 
