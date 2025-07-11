@@ -11,8 +11,10 @@ spring:
     url:
     username:
     password:
-  jwt:
-    secret:
+jwt:
+  secret:
+  access-token-expiration-time:
+  refresh-token-expiration-time:
 ```
 
 ### 개발 DB 서버 구축

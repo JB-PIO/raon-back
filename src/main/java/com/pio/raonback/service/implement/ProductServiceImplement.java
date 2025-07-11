@@ -5,6 +5,7 @@ import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.entity.*;
 import com.pio.raonback.repository.*;
+import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -58,10 +59,8 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   @Transactional
-  public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, String email) {
-    Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
-    if (optionalUserEntity.isEmpty()) return PostProductResponseDto.authFailed();
-    UserEntity userEntity = optionalUserEntity.get();
+  public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser user) {
+    UserEntity userEntity = user.getUserEntity();
     Long sellerId = userEntity.getUserId();
 
     Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
@@ -92,10 +91,8 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   @Transactional
-  public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, String email) {
-    Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
-    if (optionalUserEntity.isEmpty()) return UpdateProductResponseDto.authFailed();
-    UserEntity userEntity = optionalUserEntity.get();
+  public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser user) {
+    UserEntity userEntity = user.getUserEntity();
     Long userId = userEntity.getUserId();
 
     Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
@@ -141,10 +138,8 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
-  public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId, String email) {
-    Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
-    if (optionalUserEntity.isEmpty()) return DeleteProductResponseDto.authFailed();
-    UserEntity userEntity = optionalUserEntity.get();
+  public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId, RaonUser user) {
+    UserEntity userEntity = user.getUserEntity();
     Long userId = userEntity.getUserId();
 
     Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);

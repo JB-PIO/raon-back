@@ -3,6 +3,7 @@ package com.pio.raonback.controller;
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.product.*;
+import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,16 +41,16 @@ public class ProductController {
 
   @PostMapping("")
   public ResponseEntity<? super PostProductResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
-                                                                    @AuthenticationPrincipal String email) {
-    ResponseEntity<? super PostProductResponseDto> response = productService.postProduct(requestBody, email);
+                                                                    @AuthenticationPrincipal RaonUser user) {
+    ResponseEntity<? super PostProductResponseDto> response = productService.postProduct(requestBody, user);
     return response;
   }
 
   @PutMapping("/{productId}")
   public ResponseEntity<? super UpdateProductResponseDto> updateProduct(@PathVariable("productId") Long productId,
                                                                         @RequestBody @Valid UpdateProductRequestDto requestBody,
-                                                                        @AuthenticationPrincipal String email) {
-    ResponseEntity<? super UpdateProductResponseDto> response = productService.updateProduct(productId, requestBody, email);
+                                                                        @AuthenticationPrincipal RaonUser user) {
+    ResponseEntity<? super UpdateProductResponseDto> response = productService.updateProduct(productId, requestBody, user);
     return response;
   }
 
@@ -61,8 +62,8 @@ public class ProductController {
 
   @DeleteMapping("/{productId}")
   public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(@PathVariable("productId") Long productId,
-                                                                        @AuthenticationPrincipal String email) {
-    ResponseEntity<? super DeleteProductResponseDto> response = productService.deleteProduct(productId, email);
+                                                                        @AuthenticationPrincipal RaonUser user) {
+    ResponseEntity<? super DeleteProductResponseDto> response = productService.deleteProduct(productId, user);
     return response;
   }
 

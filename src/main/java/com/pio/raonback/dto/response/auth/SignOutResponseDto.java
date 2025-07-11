@@ -1,4 +1,4 @@
-package com.pio.raonback.dto.response.user;
+package com.pio.raonback.dto.response.auth;
 
 import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;
@@ -8,14 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @Getter
-public class UpdateProfileImageResponseDto extends ResponseDto {
+public class SignOutResponseDto extends ResponseDto {
 
-  private UpdateProfileImageResponseDto() {
+  private SignOutResponseDto() {
     super(ResponseCode.OK, ResponseMessage.OK);
   }
 
-  public static ResponseEntity<UpdateProfileImageResponseDto> ok() {
-    UpdateProfileImageResponseDto responseBody = new UpdateProfileImageResponseDto();
+  public static ResponseEntity<SignOutResponseDto> ok() {
+    SignOutResponseDto responseBody = new SignOutResponseDto();
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

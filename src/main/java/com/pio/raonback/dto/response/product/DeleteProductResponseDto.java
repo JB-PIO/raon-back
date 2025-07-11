@@ -19,11 +19,6 @@ public class DeleteProductResponseDto extends ResponseDto {
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 
-  public static ResponseEntity<ResponseDto> authFailed() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.AUTH_FAILED, ResponseMessage.AUTH_FAILED);
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
-  }
-
   public static ResponseEntity<ResponseDto> noPermission() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.NO_PERMISSION, ResponseMessage.NO_PERMISSION);
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);

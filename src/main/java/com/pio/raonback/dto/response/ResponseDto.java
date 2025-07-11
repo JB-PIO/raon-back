@@ -21,6 +21,11 @@ public class ResponseDto {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
   }
 
+  public static ResponseEntity<ResponseDto> authFailed() {
+    ResponseDto responseBody = new ResponseDto(ResponseCode.AUTH_FAILED, ResponseMessage.AUTH_FAILED);
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+  }
+
   public static ResponseEntity<ResponseDto> notFound() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_FOUND, ResponseMessage.NOT_FOUND);
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
