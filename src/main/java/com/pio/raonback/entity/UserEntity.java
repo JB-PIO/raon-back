@@ -55,4 +55,8 @@ public class UserEntity {
     this.profileImage = profileImage;
   }
 
+  public void updateLocation(Long locationId) {
+    this.locationId = locationId;
+  }
+
 }
