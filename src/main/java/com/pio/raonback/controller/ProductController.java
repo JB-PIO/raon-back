@@ -2,7 +2,10 @@ package com.pio.raonback.controller;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
-import com.pio.raonback.dto.response.product.*;
+import com.pio.raonback.dto.response.ResponseDto;
+import com.pio.raonback.dto.response.product.GetNearbyProductListResponseDto;
+import com.pio.raonback.dto.response.product.GetProductListResponseDto;
+import com.pio.raonback.dto.response.product.GetProductResponseDto;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ProductService;
 import jakarta.validation.Valid;
@@ -40,30 +43,30 @@ public class ProductController {
   }
 
   @PostMapping("")
-  public ResponseEntity<? super PostProductResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
-                                                                    @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<? super PostProductResponseDto> response = productService.postProduct(requestBody, user);
+  public ResponseEntity<ResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
+                                                 @AuthenticationPrincipal RaonUser user) {
+    ResponseEntity<ResponseDto> response = productService.postProduct(requestBody, user);
     return response;
   }
 
   @PutMapping("/{productId}")
-  public ResponseEntity<? super UpdateProductResponseDto> updateProduct(@PathVariable("productId") Long productId,
-                                                                        @RequestBody @Valid UpdateProductRequestDto requestBody,
-                                                                        @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<? super UpdateProductResponseDto> response = productService.updateProduct(productId, requestBody, user);
+  public ResponseEntity<ResponseDto> updateProduct(@PathVariable("productId") Long productId,
+                                                   @RequestBody @Valid UpdateProductRequestDto requestBody,
+                                                   @AuthenticationPrincipal RaonUser user) {
+    ResponseEntity<ResponseDto> response = productService.updateProduct(productId, requestBody, user);
     return response;
   }
 
   @PatchMapping("/{productId}/view")
-  public ResponseEntity<? super IncreaseViewCountResponseDto> increaseViewCount(@PathVariable("productId") Long productId) {
-    ResponseEntity<? super IncreaseViewCountResponseDto> response = productService.increaseViewCount(productId);
+  public ResponseEntity<ResponseDto> increaseViewCount(@PathVariable("productId") Long productId) {
+    ResponseEntity<ResponseDto> response = productService.increaseViewCount(productId);
     return response;
   }
 
   @DeleteMapping("/{productId}")
-  public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(@PathVariable("productId") Long productId,
-                                                                        @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<? super DeleteProductResponseDto> response = productService.deleteProduct(productId, user);
+  public ResponseEntity<ResponseDto> deleteProduct(@PathVariable("productId") Long productId,
+                                                   @AuthenticationPrincipal RaonUser user) {
+    ResponseEntity<ResponseDto> response = productService.deleteProduct(productId, user);
     return response;
   }
 

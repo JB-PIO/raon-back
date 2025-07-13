@@ -2,7 +2,10 @@ package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
-import com.pio.raonback.dto.response.product.*;
+import com.pio.raonback.dto.response.ResponseDto;
+import com.pio.raonback.dto.response.product.GetNearbyProductListResponseDto;
+import com.pio.raonback.dto.response.product.GetProductListResponseDto;
+import com.pio.raonback.dto.response.product.GetProductResponseDto;
 import com.pio.raonback.entity.*;
 import com.pio.raonback.repository.*;
 import com.pio.raonback.security.RaonUser;
@@ -25,7 +28,6 @@ public class ProductServiceImplement implements ProductService {
 
   private final ProductRepository productRepository;
   private final ProductImageRepository productImageRepository;
-  private final UserRepository userRepository;
   private final LocationRepository locationRepository;
   private final CategoryRepository categoryRepository;
   private final ProductDetailViewRepository productDetailViewRepository;
@@ -41,7 +43,7 @@ public class ProductServiceImplement implements ProductService {
   public ResponseEntity<? super GetNearbyProductListResponseDto> getNearbyProductList(Long locationId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
     boolean isLocationExist = locationRepository.existsById(locationId);
-    if (!isLocationExist) return GetNearbyProductListResponseDto.locationNotFound();
+    if (!isLocationExist) return ResponseDto.locationNotFound();
     List<LocationEntity> nearbyLocationEntities = locationRepository.findAllByWithinRadius(locationId, 10000L);
     List<Long> nearbyLocationIds = nearbyLocationEntities.stream().map(LocationEntity::getLocationId).toList();
     Page<ProductDetailViewEntity> productDetailViewEntitiesPage = productDetailViewRepository.findAllByIsSoldFalseAndIsActiveTrueAndLocationIdInOrderByCreatedAtDesc(nearbyLocationIds, pageable);
@@ -51,7 +53,7 @@ public class ProductServiceImplement implements ProductService {
   @Override
   public ResponseEntity<? super GetProductResponseDto> getProduct(Long productId) {
     Optional<ProductDetailViewEntity> optionalProductDetailViewEntity = productDetailViewRepository.findByIsActiveTrueAndProductId(productId);
-    if (optionalProductDetailViewEntity.isEmpty()) return GetProductResponseDto.productNotFound();
+    if (optionalProductDetailViewEntity.isEmpty()) return ResponseDto.productNotFound();
     ProductDetailViewEntity productDetailViewEntity = optionalProductDetailViewEntity.get();
     List<ProductImageEntity> productImageEntities = productImageRepository.findAllByProductId(productId);
     return GetProductResponseDto.ok(productDetailViewEntity, productImageEntities);
@@ -59,23 +61,23 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   @Transactional
-  public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser user) {
+  public ResponseEntity<ResponseDto> postProduct(PostProductRequestDto dto, RaonUser user) {
     UserEntity userEntity = user.getUserEntity();
     Long sellerId = userEntity.getUserId();
 
     Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
-    if (optionalCategoryEntity.isEmpty()) return PostProductResponseDto.categoryNotFound();
+    if (optionalCategoryEntity.isEmpty()) return ResponseDto.categoryNotFound();
     CategoryEntity categoryEntity = optionalCategoryEntity.get();
-    if (!categoryEntity.getIsLeaf()) return PostProductResponseDto.notLeafCategory();
+    if (!categoryEntity.getIsLeaf()) return ResponseDto.notLeafCategory();
 
     boolean isLocationExist = locationRepository.existsById(dto.getLocationId());
-    if (!isLocationExist) return PostProductResponseDto.locationNotFound();
+    if (!isLocationExist) return ResponseDto.locationNotFound();
 
     ProductEntity productEntity = new ProductEntity(dto, sellerId);
     productRepository.save(productEntity);
 
     List<String> imageUrls = dto.getImageUrlList();
-    if (imageUrls == null) return PostProductResponseDto.ok();
+    if (imageUrls == null) return ResponseDto.ok();
 
     List<ProductImageEntity> productImageEntities = new ArrayList<>();
     Long productId = productEntity.getProductId();
@@ -86,28 +88,28 @@ public class ProductServiceImplement implements ProductService {
     }
 
     productImageRepository.saveAll(productImageEntities);
-    return PostProductResponseDto.ok();
+    return ResponseDto.ok();
   }
 
   @Override
   @Transactional
-  public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser user) {
+  public ResponseEntity<ResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser user) {
     UserEntity userEntity = user.getUserEntity();
     Long userId = userEntity.getUserId();
 
     Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
-    if (optionalProductEntity.isEmpty()) return UpdateProductResponseDto.productNotFound();
+    if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
     ProductEntity productEntity = optionalProductEntity.get();
 
-    if (!productEntity.getSellerId().equals(userId)) return UpdateProductResponseDto.noPermission();
+    if (!productEntity.getSellerId().equals(userId)) return ResponseDto.noPermission();
 
     Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
-    if (optionalCategoryEntity.isEmpty()) return UpdateProductResponseDto.categoryNotFound();
+    if (optionalCategoryEntity.isEmpty()) return ResponseDto.categoryNotFound();
     CategoryEntity categoryEntity = optionalCategoryEntity.get();
-    if (!categoryEntity.getIsLeaf()) return UpdateProductResponseDto.notLeafCategory();
+    if (!categoryEntity.getIsLeaf()) return ResponseDto.notLeafCategory();
 
     boolean isLocationExist = locationRepository.existsById(dto.getLocationId());
-    if (!isLocationExist) return UpdateProductResponseDto.locationNotFound();
+    if (!isLocationExist) return ResponseDto.locationNotFound();
 
     productEntity.update(dto);
     productRepository.save(productEntity);
@@ -115,7 +117,7 @@ public class ProductServiceImplement implements ProductService {
     productImageRepository.deleteAllByProductId(productId);
 
     List<String> imageUrls = dto.getImageUrlList();
-    if (imageUrls == null) return UpdateProductResponseDto.ok();
+    if (imageUrls == null) return ResponseDto.ok();
 
     List<ProductImageEntity> productImageEntities = new ArrayList<>();
     for (String imageUrl : imageUrls) {
@@ -124,34 +126,34 @@ public class ProductServiceImplement implements ProductService {
     }
 
     productImageRepository.saveAll(productImageEntities);
-    return UpdateProductResponseDto.ok();
+    return ResponseDto.ok();
   }
 
   @Override
-  public ResponseEntity<? super IncreaseViewCountResponseDto> increaseViewCount(Long productId) {
+  public ResponseEntity<ResponseDto> increaseViewCount(Long productId) {
     Optional<ProductEntity> optionalProductEntity = productRepository.findByIsActiveTrueAndProductId(productId);
-    if (optionalProductEntity.isEmpty()) return IncreaseViewCountResponseDto.productNotFound();
+    if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
     ProductEntity productEntity = optionalProductEntity.get();
     productEntity.increaseViewCount();
     productRepository.save(productEntity);
-    return IncreaseViewCountResponseDto.ok();
+    return ResponseDto.ok();
   }
 
   @Override
-  public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId, RaonUser user) {
+  public ResponseEntity<ResponseDto> deleteProduct(Long productId, RaonUser user) {
     UserEntity userEntity = user.getUserEntity();
     Long userId = userEntity.getUserId();
 
     Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
-    if (optionalProductEntity.isEmpty()) return DeleteProductResponseDto.productNotFound();
+    if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
     ProductEntity productEntity = optionalProductEntity.get();
-    if (productEntity.getIsDeleted()) return DeleteProductResponseDto.productNotFound();
+    if (productEntity.getIsDeleted()) return ResponseDto.productNotFound();
 
-    if (!productEntity.getSellerId().equals(userId)) return DeleteProductResponseDto.noPermission();
+    if (!productEntity.getSellerId().equals(userId)) return ResponseDto.noPermission();
 
     productEntity.delete();
     productRepository.save(productEntity);
-    return DeleteProductResponseDto.ok();
+    return ResponseDto.ok();
   }
 
 }

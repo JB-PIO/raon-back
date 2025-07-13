@@ -33,9 +33,4 @@ public class GetNearbyProductListResponseDto extends ResponseDto {
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 
-  public static ResponseEntity<ResponseDto> locationNotFound() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.LOCATION_NOT_FOUND, ResponseMessage.LOCATION_NOT_FOUND);
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
-  }
-
 }

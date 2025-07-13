@@ -25,14 +25,4 @@ public class RefreshTokenResponseDto extends ResponseDto {
     return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.SET_COOKIE, refreshTokenCookie).body(responseBody);
   }
 
-  public static ResponseEntity<ResponseDto> authFailed() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.AUTH_FAILED, ResponseMessage.AUTH_FAILED);
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
-  }
-
-  public static ResponseEntity<ResponseDto> expiredToken() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.EXPIRED_TOKEN, ResponseMessage.EXPIRED_TOKEN);
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
-  }
-
 }

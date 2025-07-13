@@ -2,9 +2,9 @@ package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.request.auth.SignInRequestDto;
 import com.pio.raonback.dto.request.auth.SignUpRequestDto;
+import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.auth.RefreshTokenResponseDto;
 import com.pio.raonback.dto.response.auth.SignInResponseDto;
-import com.pio.raonback.dto.response.auth.SignOutResponseDto;
 import com.pio.raonback.dto.response.auth.SignUpResponseDto;
 import com.pio.raonback.entity.RefreshTokenEntity;
 import com.pio.raonback.entity.UserEntity;
@@ -41,14 +41,14 @@ public class AuthServiceImplement implements AuthService {
   public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto) {
     String email = dto.getEmail();
     boolean isEmailTaken = userRepository.existsByEmail(email);
-    if (isEmailTaken) return SignUpResponseDto.emailExists();
+    if (isEmailTaken) return ResponseDto.emailExists();
 
     String nickname = dto.getNickname();
     boolean isNicknameTaken = userRepository.existsByNickname(nickname);
-    if (isNicknameTaken) return SignUpResponseDto.nicknameExists();
+    if (isNicknameTaken) return ResponseDto.nicknameExists();
 
     boolean isLocationValid = locationRepository.existsById(dto.getLocationId());
-    if (!isLocationValid) return SignUpResponseDto.locationNotFound();
+    if (!isLocationValid) return ResponseDto.locationNotFound();
 
     String rawPassword = dto.getPassword();
     String hashedPassword = passwordEncoder.encode(rawPassword);
@@ -73,14 +73,14 @@ public class AuthServiceImplement implements AuthService {
   public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
     String email = dto.getEmail();
     Optional<UserEntity> optionalUserEntity = userRepository.findByIsDeletedFalseAndEmail(email);
-    if (optionalUserEntity.isEmpty()) return SignInResponseDto.signInFailed();
+    if (optionalUserEntity.isEmpty()) return ResponseDto.signInFailed();
     UserEntity userEntity = optionalUserEntity.get();
 
     String inputPassword = dto.getPassword();
     String storedPassword = userEntity.getPassword();
     boolean isPasswordValid = passwordEncoder.matches(inputPassword, storedPassword);
-    if (!isPasswordValid) return SignInResponseDto.signInFailed();
-    if (userEntity.getIsSuspended()) return SignInResponseDto.suspendedUser();
+    if (!isPasswordValid) return ResponseDto.signInFailed();
+    if (userEntity.getIsSuspended()) return ResponseDto.suspendedUser();
 
     refreshTokenRepository.deleteByEmail(email);
     refreshTokenRepository.flush();
@@ -100,16 +100,16 @@ public class AuthServiceImplement implements AuthService {
       jwtUtil.validateRefreshToken(refreshToken);
     } catch (ExpiredJwtException exception) {
       if (exception.getClaims().get("type", String.class).equals("refresh")) {
-        return RefreshTokenResponseDto.expiredToken();
+        return ResponseDto.expiredToken();
       } else {
-        return RefreshTokenResponseDto.authFailed();
+        return ResponseDto.authFailed();
       }
     } catch (JwtException exception) {
-      return RefreshTokenResponseDto.authFailed();
+      return ResponseDto.authFailed();
     }
     String refreshTokenHash = jwtUtil.generateTokenHash(refreshToken);
     Optional<RefreshTokenEntity> optionalRefreshTokenEntity = refreshTokenRepository.findByToken(refreshTokenHash);
-    if (optionalRefreshTokenEntity.isEmpty()) return RefreshTokenResponseDto.expiredToken();
+    if (optionalRefreshTokenEntity.isEmpty()) return ResponseDto.expiredToken();
     RefreshTokenEntity refreshTokenEntity = optionalRefreshTokenEntity.get();
 
     String email = refreshTokenEntity.getEmail();
@@ -125,10 +125,10 @@ public class AuthServiceImplement implements AuthService {
   }
 
   @Override
-  public ResponseEntity<? super SignOutResponseDto> signOut(String refreshToken) {
+  public ResponseEntity<ResponseDto> signOut(String refreshToken) {
     String refreshTokenHash = jwtUtil.generateTokenHash(refreshToken);
     refreshTokenRepository.deleteByToken(refreshTokenHash);
-    return SignOutResponseDto.ok();
+    return ResponseDto.ok();
   }
 
   private String buildRefreshTokenCookie(String refreshToken) {

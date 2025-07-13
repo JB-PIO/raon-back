@@ -2,9 +2,9 @@ package com.pio.raonback.controller;
 
 import com.pio.raonback.dto.request.auth.SignInRequestDto;
 import com.pio.raonback.dto.request.auth.SignUpRequestDto;
+import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.auth.RefreshTokenResponseDto;
 import com.pio.raonback.dto.response.auth.SignInResponseDto;
-import com.pio.raonback.dto.response.auth.SignOutResponseDto;
 import com.pio.raonback.dto.response.auth.SignUpResponseDto;
 import com.pio.raonback.service.AuthService;
 import jakarta.validation.Valid;
@@ -38,8 +38,8 @@ public class AuthController {
   }
 
   @PostMapping("/sign-out")
-  public ResponseEntity<? super SignOutResponseDto> signOut(@CookieValue(value = "refreshToken") String refreshToken) {
-    ResponseEntity<? super SignOutResponseDto> response = authService.signOut(refreshToken);
+  public ResponseEntity<ResponseDto> signOut(@CookieValue(value = "refreshToken") String refreshToken) {
+    ResponseEntity<ResponseDto> response = authService.signOut(refreshToken);
     return response;
   }
 

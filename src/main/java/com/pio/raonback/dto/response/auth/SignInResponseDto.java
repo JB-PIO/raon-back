@@ -25,14 +25,4 @@ public class SignInResponseDto extends ResponseDto {
     return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.SET_COOKIE, refreshTokenCookie).body(responseBody);
   }
 
-  public static ResponseEntity<ResponseDto> signInFailed() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.SIGN_IN_FAILED, ResponseMessage.SIGN_IN_FAILED);
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
-  }
-
-  public static ResponseEntity<ResponseDto> suspendedUser() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.SUSPENDED_USER, ResponseMessage.SUSPENDED_USER);
-    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
-  }
-
 }

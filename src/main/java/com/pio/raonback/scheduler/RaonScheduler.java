@@ -15,7 +15,7 @@ public class RaonScheduler {
 
   private final RefreshTokenRepository refreshTokenRepository;
 
-  @Scheduled(cron = "* * * * * *")
+  @Scheduled(cron = "0 0 * * * *")
   public void cleanUpExpiredRefreshTokens() {
     Date now = Date.from(Instant.now());
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

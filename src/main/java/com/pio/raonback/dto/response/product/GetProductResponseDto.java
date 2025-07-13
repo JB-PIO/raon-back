@@ -70,9 +70,4 @@ public class GetProductResponseDto extends ResponseDto {
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 
-  public static ResponseEntity<ResponseDto> productNotFound() {
-    ResponseDto responseBody = new ResponseDto(ResponseCode.PRODUCT_NOT_FOUND, ResponseMessage.PRODUCT_NOT_FOUND);
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
-  }
-
 }
