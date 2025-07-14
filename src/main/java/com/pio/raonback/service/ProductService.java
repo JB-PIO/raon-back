@@ -3,10 +3,7 @@ package com.pio.raonback.service;
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.dto.response.product.CreateChatResponseDto;
-import com.pio.raonback.dto.response.product.GetNearbyProductListResponseDto;
-import com.pio.raonback.dto.response.product.GetProductListResponseDto;
-import com.pio.raonback.dto.response.product.GetProductResponseDto;
+import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.security.RaonUser;
 import org.springframework.http.ResponseEntity;
 
@@ -18,11 +15,11 @@ public interface ProductService {
 
   ResponseEntity<? super GetProductResponseDto> getProduct(Long productId);
 
-  ResponseEntity<ResponseDto> postProduct(PostProductRequestDto dto, RaonUser user);
+  ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser user);
 
   ResponseEntity<? super CreateChatResponseDto> createChat(Long productId, RaonUser user);
 
-  ResponseEntity<ResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser user);
+  ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser user);
 
   ResponseEntity<ResponseDto> increaseViewCount(Long productId);
 

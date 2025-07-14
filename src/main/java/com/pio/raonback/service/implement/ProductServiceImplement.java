@@ -3,10 +3,7 @@ package com.pio.raonback.service.implement;
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.dto.response.product.CreateChatResponseDto;
-import com.pio.raonback.dto.response.product.GetNearbyProductListResponseDto;
-import com.pio.raonback.dto.response.product.GetProductListResponseDto;
-import com.pio.raonback.dto.response.product.GetProductResponseDto;
+import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.entity.*;
 import com.pio.raonback.repository.*;
 import com.pio.raonback.security.RaonUser;
@@ -63,7 +60,7 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   @Transactional
-  public ResponseEntity<ResponseDto> postProduct(PostProductRequestDto dto, RaonUser user) {
+  public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser user) {
     UserEntity userEntity = user.getUserEntity();
     Long sellerId = userEntity.getUserId();
 
@@ -90,7 +87,7 @@ public class ProductServiceImplement implements ProductService {
     }
 
     productImageRepository.saveAll(productImageEntities);
-    return ResponseDto.ok();
+    return PostProductResponseDto.ok(productId);
   }
 
   @Override
@@ -117,7 +114,7 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   @Transactional
-  public ResponseEntity<ResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser user) {
+  public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser user) {
     UserEntity userEntity = user.getUserEntity();
     Long userId = userEntity.getUserId();
 
@@ -150,7 +147,7 @@ public class ProductServiceImplement implements ProductService {
     }
 
     productImageRepository.saveAll(productImageEntities);
-    return ResponseDto.ok();
+    return UpdateProductResponseDto.ok(productId);
   }
 
   @Override

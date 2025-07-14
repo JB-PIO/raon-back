@@ -3,10 +3,7 @@ package com.pio.raonback.controller;
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.dto.response.product.CreateChatResponseDto;
-import com.pio.raonback.dto.response.product.GetNearbyProductListResponseDto;
-import com.pio.raonback.dto.response.product.GetProductListResponseDto;
-import com.pio.raonback.dto.response.product.GetProductResponseDto;
+import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ProductService;
 import jakarta.validation.Valid;
@@ -44,9 +41,9 @@ public class ProductController {
   }
 
   @PostMapping("")
-  public ResponseEntity<ResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
-                                                 @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<ResponseDto> response = productService.postProduct(requestBody, user);
+  public ResponseEntity<? super PostProductResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
+                                                                    @AuthenticationPrincipal RaonUser user) {
+    ResponseEntity<? super PostProductResponseDto> response = productService.postProduct(requestBody, user);
     return response;
   }
 
@@ -58,10 +55,10 @@ public class ProductController {
   }
 
   @PutMapping("/{productId}")
-  public ResponseEntity<ResponseDto> updateProduct(@PathVariable("productId") Long productId,
-                                                   @RequestBody @Valid UpdateProductRequestDto requestBody,
-                                                   @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<ResponseDto> response = productService.updateProduct(productId, requestBody, user);
+  public ResponseEntity<? super UpdateProductResponseDto> updateProduct(@PathVariable("productId") Long productId,
+                                                                        @RequestBody @Valid UpdateProductRequestDto requestBody,
+                                                                        @AuthenticationPrincipal RaonUser user) {
+    ResponseEntity<? super UpdateProductResponseDto> response = productService.updateProduct(productId, requestBody, user);
     return response;
   }
 
