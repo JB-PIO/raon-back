@@ -51,6 +51,11 @@ public class ResponseDto {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
   }
 
+  public static ResponseEntity<ResponseDto> ownProduct() {
+    ResponseDto responseBody = new ResponseDto(ResponseCode.OWN_PRODUCT, ResponseMessage.OWN_PRODUCT);
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+  }
+
   public static ResponseEntity<ResponseDto> notFound() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_FOUND, ResponseMessage.NOT_FOUND);
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
@@ -83,6 +88,11 @@ public class ResponseDto {
 
   public static ResponseEntity<ResponseDto> nicknameExists() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.NICKNAME_EXISTS, ResponseMessage.NICKNAME_EXISTS);
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
+  }
+
+  public static ResponseEntity<ResponseDto> chatExists() {
+    ResponseDto responseBody = new ResponseDto(ResponseCode.CHAT_EXISTS, ResponseMessage.CHAT_EXISTS);
     return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
   }
 

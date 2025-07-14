@@ -3,6 +3,7 @@ package com.pio.raonback.controller;
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
+import com.pio.raonback.dto.response.product.CreateChatResponseDto;
 import com.pio.raonback.dto.response.product.GetNearbyProductListResponseDto;
 import com.pio.raonback.dto.response.product.GetProductListResponseDto;
 import com.pio.raonback.dto.response.product.GetProductResponseDto;
@@ -46,6 +47,13 @@ public class ProductController {
   public ResponseEntity<ResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
                                                  @AuthenticationPrincipal RaonUser user) {
     ResponseEntity<ResponseDto> response = productService.postProduct(requestBody, user);
+    return response;
+  }
+
+  @PostMapping("/{productId}/chat")
+  public ResponseEntity<? super CreateChatResponseDto> createChat(@PathVariable("productId") Long productId,
+                                                                  @AuthenticationPrincipal RaonUser user) {
+    ResponseEntity<? super CreateChatResponseDto> response = productService.createChat(productId, user);
     return response;
   }
 

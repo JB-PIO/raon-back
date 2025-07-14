@@ -3,6 +3,7 @@ package com.pio.raonback.service.implement;
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
+import com.pio.raonback.dto.response.product.CreateChatResponseDto;
 import com.pio.raonback.dto.response.product.GetNearbyProductListResponseDto;
 import com.pio.raonback.dto.response.product.GetProductListResponseDto;
 import com.pio.raonback.dto.response.product.GetProductResponseDto;
@@ -30,6 +31,7 @@ public class ProductServiceImplement implements ProductService {
   private final ProductImageRepository productImageRepository;
   private final LocationRepository locationRepository;
   private final CategoryRepository categoryRepository;
+  private final ChatRepository chatRepository;
   private final ProductDetailViewRepository productDetailViewRepository;
 
   @Override
@@ -89,6 +91,28 @@ public class ProductServiceImplement implements ProductService {
 
     productImageRepository.saveAll(productImageEntities);
     return ResponseDto.ok();
+  }
+
+  @Override
+  public ResponseEntity<? super CreateChatResponseDto> createChat(Long productId, RaonUser user) {
+    UserEntity userEntity = user.getUserEntity();
+    Long buyerId = userEntity.getUserId();
+
+    Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
+    if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
+    ProductEntity productEntity = optionalProductEntity.get();
+
+    Long sellerId = productEntity.getSellerId();
+    if (buyerId.equals(sellerId)) return ResponseDto.ownProduct();
+
+    boolean isChatExists = chatRepository.existsByProductIdAndBuyerIdAndSellerId(productId, buyerId, sellerId);
+    if (isChatExists) return ResponseDto.chatExists();
+
+    ChatEntity chatEntity = new ChatEntity(productId, buyerId, sellerId);
+    chatRepository.save(chatEntity);
+    Long chatId = chatEntity.getChatId();
+
+    return CreateChatResponseDto.ok(chatId);
   }
 
   @Override

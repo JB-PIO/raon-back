@@ -17,6 +17,7 @@ public interface ResponseCode {
   // HTTP Status 403 - Forbidden
   String NO_PERMISSION = "NO_PER";
   String SUSPENDED_USER = "SUS_ACC";
+  String OWN_PRODUCT = "OWN_PRD";
 
   // HTTP Status 404 - Not Found
   String NOT_FOUND = "404";
@@ -30,6 +31,7 @@ public interface ResponseCode {
   // Http Status 409 - Conflict
   String EMAIL_EXISTS = "EMAIL_DUP";
   String NICKNAME_EXISTS = "NICK_DUP";
+  String CHAT_EXISTS = "CHAT_EXIST";
 
   // HTTP Status 500 - Internal Server Error
   String SERVER_ERROR = "SRV_ERR";

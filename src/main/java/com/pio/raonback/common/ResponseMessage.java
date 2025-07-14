@@ -17,6 +17,7 @@ public interface ResponseMessage {
   // HTTP Status 403 - Forbidden
   String NO_PERMISSION = "권한이 없습니다.";
   String SUSPENDED_USER = "정지된 계정입니다.";
+  String OWN_PRODUCT = "본인의 상품입니다.";
 
   // HTTP Status 404 - Not Found
   String NOT_FOUND = "존재하지 않는 리소스입니다.";
@@ -30,6 +31,7 @@ public interface ResponseMessage {
   // HTTP Status 409 - Conflict
   String EMAIL_EXISTS = "이미 사용 중인 이메일입니다.";
   String NICKNAME_EXISTS = "이미 사용 중인 닉네임입니다.";
+  String CHAT_EXISTS = "이미 존재하는 채팅방이 있습니다.";
 
   // HTTP Status 500 - Internal Server Error
   String SERVER_ERROR = "서버 오류가 발생했습니다.";
