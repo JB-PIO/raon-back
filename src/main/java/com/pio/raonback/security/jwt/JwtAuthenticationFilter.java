@@ -1,5 +1,6 @@
-package com.pio.raonback.security;
+package com.pio.raonback.security.jwt;
 
+import com.pio.raonback.security.JwtAuthenticationToken;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

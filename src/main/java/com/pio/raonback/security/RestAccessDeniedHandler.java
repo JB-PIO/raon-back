@@ -1,4 +1,4 @@
-package com.pio.raonback.security.exception;
+package com.pio.raonback.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pio.raonback.common.ResponseCode;

@@ -1,6 +1,9 @@
-package com.pio.raonback.security;
+package com.pio.raonback.config;
 
-import com.pio.raonback.security.exception.RestAccessDeniedHandler;
+import com.pio.raonback.security.jwt.JwtAuthenticationFilter;
+import com.pio.raonback.security.jwt.JwtAuthenticationProvider;
+import com.pio.raonback.security.jwt.SkipPathRequestMatcher;
+import com.pio.raonback.security.RestAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,12 +31,13 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 public class SecurityConfig {
 
   private static final RequestMatcher JWT_BASED_AUTH_REQUEST_MATCHER = PathPatternRequestMatcher.withDefaults().matcher("/api/v1/**");
-  private static final OrRequestMatcher NON_AUTH_REQUEST_MATCHERS = new OrRequestMatcher(
+  private static final OrRequestMatcher NON_JWT_BASED_AUTH_REQUEST_MATCHERS = new OrRequestMatcher(
       PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/**"),
       PathPatternRequestMatcher.withDefaults().matcher("/api/v1/location/**"),
       PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/product/**"),
       PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.PATCH, "/api/v1/product/*/view")
   );
+
   private final AuthenticationFailureHandler failureHandler;
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
@@ -47,7 +51,7 @@ public class SecurityConfig {
   }
 
   protected JwtAuthenticationFilter buildJwtAuthenticationFilter(AuthenticationManager authenticationManager) {
-    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(NON_AUTH_REQUEST_MATCHERS, JWT_BASED_AUTH_REQUEST_MATCHER);
+    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(NON_JWT_BASED_AUTH_REQUEST_MATCHERS, JWT_BASED_AUTH_REQUEST_MATCHER);
     JwtAuthenticationFilter filter = new JwtAuthenticationFilter(failureHandler, matcher);
     filter.setAuthenticationManager(authenticationManager);
     return filter;
@@ -59,7 +63,7 @@ public class SecurityConfig {
     http.formLogin(AbstractHttpConfigurer::disable);
     http.httpBasic(AbstractHttpConfigurer::disable);
     http.authorizeHttpRequests((auth) -> auth
-        .requestMatchers(NON_AUTH_REQUEST_MATCHERS).permitAll()
+        .requestMatchers(NON_JWT_BASED_AUTH_REQUEST_MATCHERS).permitAll()
         .anyRequest().authenticated());
     http.sessionManagement((session) -> session
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));

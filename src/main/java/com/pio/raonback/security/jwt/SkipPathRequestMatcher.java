@@ -1,4 +1,4 @@
-package com.pio.raonback.security;
+package com.pio.raonback.security.jwt;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;

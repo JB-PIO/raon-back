@@ -6,12 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public class RaonUser implements UserDetails {
+public class RaonUser implements UserDetails, Principal {
 
   private final UserEntity userEntity;
 
@@ -27,6 +28,11 @@ public class RaonUser implements UserDetails {
 
   @Override
   public String getUsername() {
+    return userEntity.getEmail();
+  }
+
+  @Override
+  public String getName() {
     return userEntity.getEmail();
   }
 
