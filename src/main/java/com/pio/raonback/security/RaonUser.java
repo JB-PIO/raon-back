@@ -33,7 +33,7 @@ public class RaonUser implements UserDetails, Principal {
 
   @Override
   public String getName() {
-    return userEntity.getEmail();
+    return userEntity.getUserId().toString();
   }
 
 }

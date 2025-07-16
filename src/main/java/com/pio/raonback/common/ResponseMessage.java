@@ -24,6 +24,7 @@ public interface ResponseMessage {
   String PRODUCT_NOT_FOUND = "존재하지 않는 상품입니다.";
   String LOCATION_NOT_FOUND = "존재하지 않는 지역입니다.";
   String CATEGORY_NOT_FOUND = "존재하지 않는 카테고리입니다.";
+  String CHAT_NOT_FOUND = "존재하지 않는 채팅방입니다.";
 
   // HTTP Status 406 - Not Acceptable
   String NOT_LEAF_CATEGORY = "최하위 카테고리를 선택해주세요.";

@@ -1,9 +1,9 @@
 package com.pio.raonback.config;
 
+import com.pio.raonback.security.RestAccessDeniedHandler;
 import com.pio.raonback.security.jwt.JwtAuthenticationFilter;
 import com.pio.raonback.security.jwt.JwtAuthenticationProvider;
 import com.pio.raonback.security.jwt.SkipPathRequestMatcher;
-import com.pio.raonback.security.RestAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +30,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+  private static final RequestMatcher WEBSOCKET_CONNECT_REQUEST_MATCHER = PathPatternRequestMatcher.withDefaults().matcher("/ws");
   private static final RequestMatcher JWT_BASED_AUTH_REQUEST_MATCHER = PathPatternRequestMatcher.withDefaults().matcher("/api/v1/**");
   private static final OrRequestMatcher NON_JWT_BASED_AUTH_REQUEST_MATCHERS = new OrRequestMatcher(
       PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/**"),
@@ -63,6 +64,7 @@ public class SecurityConfig {
     http.formLogin(AbstractHttpConfigurer::disable);
     http.httpBasic(AbstractHttpConfigurer::disable);
     http.authorizeHttpRequests((auth) -> auth
+        .requestMatchers(WEBSOCKET_CONNECT_REQUEST_MATCHER).permitAll()
         .requestMatchers(NON_JWT_BASED_AUTH_REQUEST_MATCHERS).permitAll()
         .anyRequest().authenticated());
     http.sessionManagement((session) -> session

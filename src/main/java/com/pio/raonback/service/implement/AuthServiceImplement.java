@@ -32,6 +32,7 @@ public class AuthServiceImplement implements AuthService {
   private final UserRepository userRepository;
   private final RefreshTokenRepository refreshTokenRepository;
   private final LocationRepository locationRepository;
+
   private final JwtProperties jwtProperties;
   private final JwtUtil jwtUtil;
   private final PasswordEncoder passwordEncoder;

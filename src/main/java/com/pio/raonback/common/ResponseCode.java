@@ -24,6 +24,7 @@ public interface ResponseCode {
   String PRODUCT_NOT_FOUND = "PRD_404";
   String LOCATION_NOT_FOUND = "LOC_404";
   String CATEGORY_NOT_FOUND = "CAT_404";
+  String CHAT_NOT_FOUND = "CHAT_404";
 
   // HTTP Status 406 - Not Acceptable
   String NOT_LEAF_CATEGORY = "NOT_LEAF";
