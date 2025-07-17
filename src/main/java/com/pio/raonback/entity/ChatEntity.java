@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -23,6 +24,7 @@ public class ChatEntity {
   private Long buyerId;
   private Long sellerId;
   private String createdAt;
+  @Setter
   private String lastMessageAt;
 
   public ChatEntity(Long productId, Long buyerId, Long sellerId) {
