@@ -1,6 +1,7 @@
 package com.pio.raonback.controller;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
+import com.pio.raonback.dto.request.product.PutFavoriteRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.product.*;
@@ -59,6 +60,14 @@ public class ProductController {
                                                                         @RequestBody @Valid UpdateProductRequestDto requestBody,
                                                                         @AuthenticationPrincipal RaonUser user) {
     ResponseEntity<? super UpdateProductResponseDto> response = productService.updateProduct(productId, requestBody, user);
+    return response;
+  }
+
+  @PutMapping("/{productId}/favorite")
+  public ResponseEntity<ResponseDto> putFavorite(@PathVariable("productId") Long productId,
+                                                 @RequestBody @Valid PutFavoriteRequestDto requestBody,
+                                                 @AuthenticationPrincipal RaonUser user) {
+    ResponseEntity<ResponseDto> response = productService.putFavorite(productId, requestBody, user);
     return response;
   }
 

@@ -1,6 +1,7 @@
 package com.pio.raonback.service;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
+import com.pio.raonback.dto.request.product.PutFavoriteRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.product.*;
@@ -20,6 +21,8 @@ public interface ProductService {
   ResponseEntity<? super CreateChatResponseDto> createChat(Long productId, RaonUser user);
 
   ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser user);
+
+  ResponseEntity<ResponseDto> putFavorite(Long productId, PutFavoriteRequestDto dto, RaonUser user);
 
   ResponseEntity<ResponseDto> increaseViewCount(Long productId);
 

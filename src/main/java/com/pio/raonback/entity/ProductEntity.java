@@ -58,10 +58,6 @@ public class ProductEntity {
     this.createdAt = createdAt;
   }
 
-  public void increaseViewCount() {
-    this.viewCount++;
-  }
-
   public void update(UpdateProductRequestDto dto) {
     Date now = Date.from(Instant.now());
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -85,6 +81,18 @@ public class ProductEntity {
     this.isActive = false;
     this.isDeleted = true;
     this.deletedAt = deletedAt;
+  }
+
+  public void increaseViewCount() {
+    this.viewCount++;
+  }
+
+  public void increaseFavoriteCount() {
+    this.favoriteCount++;
+  }
+
+  public void decreaseFavoriteCount() {
+    this.favoriteCount--;
   }
 
 }

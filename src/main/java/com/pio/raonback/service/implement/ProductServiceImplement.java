@@ -1,6 +1,7 @@
 package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
+import com.pio.raonback.dto.request.product.PutFavoriteRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.product.*;
@@ -29,6 +30,7 @@ public class ProductServiceImplement implements ProductService {
   private final LocationRepository locationRepository;
   private final CategoryRepository categoryRepository;
   private final ChatRepository chatRepository;
+  private final FavoriteRepository favoriteRepository;
   private final ProductDetailViewRepository productDetailViewRepository;
 
   @Override
@@ -149,6 +151,38 @@ public class ProductServiceImplement implements ProductService {
 
     productImageRepository.saveAll(productImageEntities);
     return UpdateProductResponseDto.ok(productId);
+  }
+
+  @Override
+  @Transactional
+  public ResponseEntity<ResponseDto> putFavorite(Long productId, PutFavoriteRequestDto dto, RaonUser user) {
+    UserEntity userEntity = user.getUserEntity();
+    Long userId = userEntity.getUserId();
+    boolean isFavorite = dto.getIsFavorite();
+
+    Optional<ProductEntity> optionalProductEntity = productRepository.findByIsActiveTrueAndProductId(productId);
+    if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
+    ProductEntity productEntity = optionalProductEntity.get();
+
+    Long sellerId = productEntity.getSellerId();
+    if (userId.equals(sellerId)) return ResponseDto.ownProduct();
+
+    Optional<FavoriteEntity> optionalFavoriteEntity = favoriteRepository.findByUserIdAndProductId(userId, productId);
+    if (isFavorite) {
+      if (optionalFavoriteEntity.isPresent()) return ResponseDto.ok();
+      FavoriteEntity favoriteEntity = new FavoriteEntity(userId, productId);
+      favoriteRepository.save(favoriteEntity);
+      productEntity.increaseFavoriteCount();
+
+    } else {
+      if (optionalFavoriteEntity.isEmpty()) return ResponseDto.ok();
+      FavoriteEntity favoriteEntity = optionalFavoriteEntity.get();
+      favoriteRepository.delete(favoriteEntity);
+      productEntity.decreaseFavoriteCount();
+    }
+
+    productRepository.save(productEntity);
+    return ResponseDto.ok();
   }
 
   @Override
