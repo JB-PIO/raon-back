@@ -95,7 +95,7 @@ public class ProductServiceImplement implements ProductService {
     UserEntity userEntity = user.getUserEntity();
     Long buyerId = userEntity.getUserId();
 
-    Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
+    Optional<ProductEntity> optionalProductEntity = productRepository.findByIsActiveTrueAndProductId(productId);
     if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
     ProductEntity productEntity = optionalProductEntity.get();
 
@@ -118,11 +118,12 @@ public class ProductServiceImplement implements ProductService {
     UserEntity userEntity = user.getUserEntity();
     Long userId = userEntity.getUserId();
 
-    Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
+    Optional<ProductEntity> optionalProductEntity = productRepository.findByIsActiveTrueAndProductId(productId);
     if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
     ProductEntity productEntity = optionalProductEntity.get();
 
     if (!productEntity.getSellerId().equals(userId)) return ResponseDto.noPermission();
+    if (productEntity.getIsSold()) return ResponseDto.soldProduct();
 
     Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
     if (optionalCategoryEntity.isEmpty()) return ResponseDto.categoryNotFound();
@@ -165,10 +166,9 @@ public class ProductServiceImplement implements ProductService {
     UserEntity userEntity = user.getUserEntity();
     Long userId = userEntity.getUserId();
 
-    Optional<ProductEntity> optionalProductEntity = productRepository.findById(productId);
+    Optional<ProductEntity> optionalProductEntity = productRepository.findByIsActiveTrueAndProductId(productId);
     if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
     ProductEntity productEntity = optionalProductEntity.get();
-    if (productEntity.getIsDeleted()) return ResponseDto.productNotFound();
 
     if (!productEntity.getSellerId().equals(userId)) return ResponseDto.noPermission();
 

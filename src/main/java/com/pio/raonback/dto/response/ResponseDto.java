@@ -56,6 +56,11 @@ public class ResponseDto {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
   }
 
+  public static ResponseEntity<ResponseDto> soldProduct() {
+    ResponseDto responseBody = new ResponseDto(ResponseCode.SOLD_PRODUCT, ResponseMessage.SOLD_PRODUCT);
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+  }
+
   public static ResponseEntity<ResponseDto> notFound() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_FOUND, ResponseMessage.NOT_FOUND);
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);

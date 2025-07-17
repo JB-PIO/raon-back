@@ -18,6 +18,7 @@ public interface ResponseCode {
   String NO_PERMISSION = "NO_PER";
   String SUSPENDED_USER = "SUS_ACC";
   String OWN_PRODUCT = "OWN_PRD";
+  String SOLD_PRODUCT = "SOLD_PRD";
 
   // HTTP Status 404 - Not Found
   String NOT_FOUND = "404";
