@@ -4,6 +4,7 @@ import com.pio.raonback.dto.object.MessageListItem;
 import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.chat.GetChatListResponseDto;
+import com.pio.raonback.dto.response.chat.GetMessageListResponseDto;
 import com.pio.raonback.entity.ChatEntity;
 import com.pio.raonback.entity.MessageEntity;
 import com.pio.raonback.entity.UserEntity;
@@ -38,6 +39,23 @@ public class ChatServiceImplement implements ChatService {
     Pageable pageable = PageRequest.of(page, size);
     Page<ChatEntity> chatEntitiesPage = chatRepository.findAllByBuyerIdOrSellerIdOrderByLastMessageAtDesc(userId, userId, pageable);
     return GetChatListResponseDto.ok(chatEntitiesPage);
+  }
+
+  @Override
+  public ResponseEntity<? super GetMessageListResponseDto> getMessageList(Long chatId, int page, int size, RaonUser user) {
+    UserEntity userEntity = user.getUserEntity();
+    Long userId = userEntity.getUserId();
+
+    Optional<ChatEntity> optionalChatEntity = chatRepository.findById(chatId);
+    if (optionalChatEntity.isEmpty()) return ResponseDto.chatNotFound();
+    ChatEntity chatEntity = optionalChatEntity.get();
+    if (!chatEntity.getBuyerId().equals(userId) && !chatEntity.getSellerId().equals(userId)) {
+      return ResponseDto.noPermission();
+    }
+
+    Pageable pageable = PageRequest.of(page, size);
+    Page<MessageEntity> messageEntitiesPage = messageRepository.findAllByIsDeletedFalseAndChatIdOrderBySentAtDesc(chatId, pageable);
+    return GetMessageListResponseDto.ok(messageEntitiesPage);
   }
 
   @Override

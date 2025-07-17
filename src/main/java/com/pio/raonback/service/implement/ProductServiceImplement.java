@@ -43,8 +43,8 @@ public class ProductServiceImplement implements ProductService {
   @Override
   public ResponseEntity<? super GetNearbyProductListResponseDto> getNearbyProductList(Long locationId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
-    boolean isLocationExist = locationRepository.existsById(locationId);
-    if (!isLocationExist) return ResponseDto.locationNotFound();
+    boolean isLocationExists = locationRepository.existsById(locationId);
+    if (!isLocationExists) return ResponseDto.locationNotFound();
     List<LocationEntity> nearbyLocationEntities = locationRepository.findAllByWithinRadius(locationId, 10000L);
     List<Long> nearbyLocationIds = nearbyLocationEntities.stream().map(LocationEntity::getLocationId).toList();
     Page<ProductDetailViewEntity> productDetailViewEntitiesPage = productDetailViewRepository.findAllByIsSoldFalseAndIsActiveTrueAndLocationIdInOrderByCreatedAtDesc(nearbyLocationIds, pageable);
@@ -71,8 +71,8 @@ public class ProductServiceImplement implements ProductService {
     CategoryEntity categoryEntity = optionalCategoryEntity.get();
     if (!categoryEntity.getIsLeaf()) return ResponseDto.notLeafCategory();
 
-    boolean isLocationExist = locationRepository.existsById(dto.getLocationId());
-    if (!isLocationExist) return ResponseDto.locationNotFound();
+    boolean isLocationExists = locationRepository.existsById(dto.getLocationId());
+    if (!isLocationExists) return ResponseDto.locationNotFound();
 
     ProductEntity productEntity = new ProductEntity(dto, sellerId);
     productRepository.save(productEntity);
@@ -132,8 +132,8 @@ public class ProductServiceImplement implements ProductService {
     CategoryEntity categoryEntity = optionalCategoryEntity.get();
     if (!categoryEntity.getIsLeaf()) return ResponseDto.notLeafCategory();
 
-    boolean isLocationExist = locationRepository.existsById(dto.getLocationId());
-    if (!isLocationExist) return ResponseDto.locationNotFound();
+    boolean isLocationExists = locationRepository.existsById(dto.getLocationId());
+    if (!isLocationExists) return ResponseDto.locationNotFound();
 
     productEntity.update(dto);
     productRepository.save(productEntity);

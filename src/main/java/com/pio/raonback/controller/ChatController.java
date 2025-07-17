@@ -3,6 +3,7 @@ package com.pio.raonback.controller;
 import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.chat.GetChatListResponseDto;
+import com.pio.raonback.dto.response.chat.GetMessageListResponseDto;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ChatService;
 import jakarta.validation.Valid;
@@ -23,6 +24,15 @@ public class ChatController {
                                                                     @RequestParam(defaultValue = "10") int size,
                                                                     @AuthenticationPrincipal RaonUser user) {
     ResponseEntity<? super GetChatListResponseDto> response = chatService.getChatList(page, size, user);
+    return response;
+  }
+
+  @GetMapping("/{chatId}/message")
+  public ResponseEntity<? super GetMessageListResponseDto> getMessageList(@PathVariable("chatId") Long chatId,
+                                                                          @RequestParam(defaultValue = "0") int page,
+                                                                          @RequestParam(defaultValue = "20") int size,
+                                                                          @AuthenticationPrincipal RaonUser user) {
+    ResponseEntity<? super GetMessageListResponseDto> response = chatService.getMessageList(chatId, page, size, user);
     return response;
   }
 
