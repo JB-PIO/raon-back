@@ -31,13 +31,12 @@ public class ProductServiceImplement implements ProductService {
   private final CategoryRepository categoryRepository;
   private final ChatRepository chatRepository;
   private final FavoriteRepository favoriteRepository;
-  private final ProductDetailViewRepository productDetailViewRepository;
 
   @Override
   public ResponseEntity<? super GetProductListResponseDto> getProductList(int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
-    Page<ProductDetailViewEntity> productDetailViewEntitiesPage = productDetailViewRepository.findAllByIsSoldFalseAndIsActiveTrueOrderByCreatedAtDesc(pageable);
-    return GetProductListResponseDto.ok(productDetailViewEntitiesPage);
+    Page<Product> productPage = productRepository.findAllByIsSoldFalseAndIsActiveTrueOrderByCreatedAtDesc(pageable);
+    return GetProductListResponseDto.ok(productPage);
   }
 
   @Override
@@ -45,169 +44,155 @@ public class ProductServiceImplement implements ProductService {
     Pageable pageable = PageRequest.of(page, size);
     boolean isLocationExists = locationRepository.existsById(locationId);
     if (!isLocationExists) return ResponseDto.locationNotFound();
-    List<LocationEntity> nearbyLocationEntities = locationRepository.findAllByWithinRadius(locationId, 10000L);
-    List<Long> nearbyLocationIds = nearbyLocationEntities.stream().map(LocationEntity::getLocationId).toList();
-    Page<ProductDetailViewEntity> productDetailViewEntitiesPage = productDetailViewRepository.findAllByIsSoldFalseAndIsActiveTrueAndLocationIdInOrderByCreatedAtDesc(nearbyLocationIds, pageable);
-    return GetNearbyProductListResponseDto.ok(productDetailViewEntitiesPage);
+    List<Location> nearbyLocations = locationRepository.findAllByWithinRadius(locationId, 10000L);
+    Page<Product> productPage = productRepository.findAllByIsSoldFalseAndIsActiveTrueAndLocationInOrderByCreatedAtDesc(nearbyLocations, pageable);
+    return GetNearbyProductListResponseDto.ok(productPage);
   }
 
   @Override
   public ResponseEntity<? super GetProductResponseDto> getProduct(Long productId) {
-    Optional<ProductDetailViewEntity> optionalProductDetailViewEntity = productDetailViewRepository.findByIsActiveTrueAndProductId(productId);
-    if (optionalProductDetailViewEntity.isEmpty()) return ResponseDto.productNotFound();
-    ProductDetailViewEntity productDetailViewEntity = optionalProductDetailViewEntity.get();
-    List<ProductImageEntity> productImageEntities = productImageRepository.findAllByProductId(productId);
-    return GetProductResponseDto.ok(productDetailViewEntity, productImageEntities);
+    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
+    Product product = optionalProduct.get();
+    return GetProductResponseDto.ok(product);
   }
 
   @Override
   @Transactional
-  public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser user) {
-    UserEntity userEntity = user.getUserEntity();
-    Long sellerId = userEntity.getUserId();
+  public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser principal) {
+    User seller = principal.getUser();
 
-    Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
-    if (optionalCategoryEntity.isEmpty()) return ResponseDto.categoryNotFound();
-    CategoryEntity categoryEntity = optionalCategoryEntity.get();
-    if (!categoryEntity.getIsLeaf()) return ResponseDto.notLeafCategory();
+    Optional<Category> optionalCategory = categoryRepository.findById(dto.getCategoryId());
+    if (optionalCategory.isEmpty()) return ResponseDto.categoryNotFound();
+    Category category = optionalCategory.get();
+    if (!category.getIsLeaf()) return ResponseDto.notLeafCategory();
 
-    boolean isLocationExists = locationRepository.existsById(dto.getLocationId());
-    if (!isLocationExists) return ResponseDto.locationNotFound();
+    Optional<Location> optionalLocation = locationRepository.findById(dto.getLocationId());
+    if (optionalLocation.isEmpty()) return ResponseDto.locationNotFound();
+    Location location = optionalLocation.get();
 
-    ProductEntity productEntity = new ProductEntity(dto, sellerId);
-    productRepository.save(productEntity);
+    Product product =
+        new Product(seller, category, location, dto.getTitle(), dto.getDescription(), dto.getPrice(), dto.getStatus(), dto.getTradeType());
+    productRepository.save(product);
 
     List<String> imageUrls = dto.getImageUrlList();
-    if (imageUrls == null) return ResponseDto.ok();
+    if (imageUrls == null) return PostProductResponseDto.ok(product.getProductId());
 
-    List<ProductImageEntity> productImageEntities = new ArrayList<>();
-    Long productId = productEntity.getProductId();
-
+    List<ProductImage> productImages = new ArrayList<>();
     for (String imageUrl : imageUrls) {
-      ProductImageEntity productImageEntity = new ProductImageEntity(productId, imageUrl);
-      productImageEntities.add(productImageEntity);
+      ProductImage productImage = new ProductImage(product, imageUrl);
+      productImages.add(productImage);
     }
 
-    productImageRepository.saveAll(productImageEntities);
-    return PostProductResponseDto.ok(productId);
+    productImageRepository.saveAll(productImages);
+    return PostProductResponseDto.ok(product.getProductId());
   }
 
   @Override
-  public ResponseEntity<? super CreateChatResponseDto> createChat(Long productId, RaonUser user) {
-    UserEntity userEntity = user.getUserEntity();
-    Long buyerId = userEntity.getUserId();
+  public ResponseEntity<? super CreateChatResponseDto> createChat(Long productId, RaonUser principal) {
+    User buyer = principal.getUser();
 
-    Optional<ProductEntity> optionalProductEntity = productRepository.findByIsActiveTrueAndProductId(productId);
-    if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
-    ProductEntity productEntity = optionalProductEntity.get();
+    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
+    Product product = optionalProduct.get();
 
-    Long sellerId = productEntity.getSellerId();
-    if (buyerId.equals(sellerId)) return ResponseDto.ownProduct();
+    User seller = product.getSeller();
+    if (seller.equals(buyer)) return ResponseDto.ownProduct();
 
-    boolean isChatExists = chatRepository.existsByProductIdAndBuyerIdAndSellerId(productId, buyerId, sellerId);
+    boolean isChatExists = chatRepository.existsByProductAndBuyerAndSeller(product, buyer, seller);
     if (isChatExists) return ResponseDto.chatExists();
 
-    ChatEntity chatEntity = new ChatEntity(productId, buyerId, sellerId);
-    chatRepository.save(chatEntity);
-    Long chatId = chatEntity.getChatId();
+    Chat chat = new Chat(product, buyer, seller);
+    chatRepository.save(chat);
 
-    return CreateChatResponseDto.ok(chatId);
+    return CreateChatResponseDto.ok(chat.getChatId());
   }
 
   @Override
   @Transactional
-  public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser user) {
-    UserEntity userEntity = user.getUserEntity();
-    Long userId = userEntity.getUserId();
+  public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser principal) {
+    User seller = principal.getUser();
 
-    Optional<ProductEntity> optionalProductEntity = productRepository.findByIsActiveTrueAndProductId(productId);
-    if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
-    ProductEntity productEntity = optionalProductEntity.get();
+    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
+    Product product = optionalProduct.get();
 
-    if (!productEntity.getSellerId().equals(userId)) return ResponseDto.noPermission();
-    if (productEntity.getIsSold()) return ResponseDto.soldProduct();
+    if (!product.getSeller().equals(seller)) return ResponseDto.noPermission();
+    if (product.getIsSold()) return ResponseDto.soldProduct();
 
-    Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
-    if (optionalCategoryEntity.isEmpty()) return ResponseDto.categoryNotFound();
-    CategoryEntity categoryEntity = optionalCategoryEntity.get();
-    if (!categoryEntity.getIsLeaf()) return ResponseDto.notLeafCategory();
+    Optional<Category> optionalCategory = categoryRepository.findById(dto.getCategoryId());
+    if (optionalCategory.isEmpty()) return ResponseDto.categoryNotFound();
+    Category category = optionalCategory.get();
+    if (!category.getIsLeaf()) return ResponseDto.notLeafCategory();
 
-    boolean isLocationExists = locationRepository.existsById(dto.getLocationId());
-    if (!isLocationExists) return ResponseDto.locationNotFound();
+    Optional<Location> optionalLocation = locationRepository.findById(dto.getLocationId());
+    if (optionalLocation.isEmpty()) return ResponseDto.locationNotFound();
+    Location location = optionalLocation.get();
 
-    productEntity.update(dto);
-    productRepository.save(productEntity);
+    product.update(category, location, dto.getTitle(), dto.getDescription(), dto.getPrice(), dto.getStatus(), dto.getTradeType());
+    productRepository.save(product);
 
-    productImageRepository.deleteAllByProductId(productId);
+    productImageRepository.deleteAllByProduct(product);
 
     List<String> imageUrls = dto.getImageUrlList();
-    if (imageUrls == null) return ResponseDto.ok();
+    if (imageUrls == null) return UpdateProductResponseDto.ok(product.getProductId());
 
-    List<ProductImageEntity> productImageEntities = new ArrayList<>();
+    List<ProductImage> productImages = new ArrayList<>();
     for (String imageUrl : imageUrls) {
-      ProductImageEntity productImageEntity = new ProductImageEntity(productId, imageUrl);
-      productImageEntities.add(productImageEntity);
+      ProductImage productImage = new ProductImage(product, imageUrl);
+      productImages.add(productImage);
     }
 
-    productImageRepository.saveAll(productImageEntities);
-    return UpdateProductResponseDto.ok(productId);
+    productImageRepository.saveAll(productImages);
+    return UpdateProductResponseDto.ok(product.getProductId());
   }
 
   @Override
   @Transactional
-  public ResponseEntity<ResponseDto> putFavorite(Long productId, PutFavoriteRequestDto dto, RaonUser user) {
-    UserEntity userEntity = user.getUserEntity();
-    Long userId = userEntity.getUserId();
-    boolean isFavorite = dto.getIsFavorite();
+  public ResponseEntity<ResponseDto> putFavorite(Long productId, PutFavoriteRequestDto dto, RaonUser principal) {
+    User user = principal.getUser();
 
-    Optional<ProductEntity> optionalProductEntity = productRepository.findByIsActiveTrueAndProductId(productId);
-    if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
-    ProductEntity productEntity = optionalProductEntity.get();
+    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
+    Product product = optionalProduct.get();
+    if (product.getSeller().equals(user)) return ResponseDto.ownProduct();
 
-    Long sellerId = productEntity.getSellerId();
-    if (userId.equals(sellerId)) return ResponseDto.ownProduct();
-
-    Optional<FavoriteEntity> optionalFavoriteEntity = favoriteRepository.findByUserIdAndProductId(userId, productId);
-    if (isFavorite) {
-      if (optionalFavoriteEntity.isPresent()) return ResponseDto.ok();
-      FavoriteEntity favoriteEntity = new FavoriteEntity(userId, productId);
-      favoriteRepository.save(favoriteEntity);
-      productEntity.increaseFavoriteCount();
-
+    Optional<Favorite> optionalFavorite = favoriteRepository.findByUserAndProduct(user, product);
+    if (dto.getIsFavorite()) {
+      if (optionalFavorite.isPresent()) return ResponseDto.ok();
+      Favorite favorite = new Favorite(user, product);
+      favoriteRepository.save(favorite);
     } else {
-      if (optionalFavoriteEntity.isEmpty()) return ResponseDto.ok();
-      FavoriteEntity favoriteEntity = optionalFavoriteEntity.get();
-      favoriteRepository.delete(favoriteEntity);
-      productEntity.decreaseFavoriteCount();
+      if (optionalFavorite.isEmpty()) return ResponseDto.ok();
+      Favorite favorite = optionalFavorite.get();
+      favoriteRepository.delete(favorite);
     }
 
-    productRepository.save(productEntity);
     return ResponseDto.ok();
   }
 
   @Override
   public ResponseEntity<ResponseDto> increaseViewCount(Long productId) {
-    Optional<ProductEntity> optionalProductEntity = productRepository.findByIsActiveTrueAndProductId(productId);
-    if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
-    ProductEntity productEntity = optionalProductEntity.get();
-    productEntity.increaseViewCount();
-    productRepository.save(productEntity);
+    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
+    Product product = optionalProduct.get();
+    product.increaseViewCount();
+    productRepository.save(product);
     return ResponseDto.ok();
   }
 
   @Override
-  public ResponseEntity<ResponseDto> deleteProduct(Long productId, RaonUser user) {
-    UserEntity userEntity = user.getUserEntity();
-    Long userId = userEntity.getUserId();
+  public ResponseEntity<ResponseDto> deleteProduct(Long productId, RaonUser principal) {
+    User seller = principal.getUser();
 
-    Optional<ProductEntity> optionalProductEntity = productRepository.findByIsActiveTrueAndProductId(productId);
-    if (optionalProductEntity.isEmpty()) return ResponseDto.productNotFound();
-    ProductEntity productEntity = optionalProductEntity.get();
+    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
+    Product product = optionalProduct.get();
 
-    if (!productEntity.getSellerId().equals(userId)) return ResponseDto.noPermission();
+    if (!product.getSeller().equals(seller)) return ResponseDto.noPermission();
 
-    productEntity.delete();
-    productRepository.save(productEntity);
+    product.delete();
+    productRepository.save(product);
     return ResponseDto.ok();
   }
 

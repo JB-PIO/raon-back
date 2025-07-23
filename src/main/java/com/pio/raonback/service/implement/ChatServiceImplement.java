@@ -5,9 +5,9 @@ import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.chat.GetChatListResponseDto;
 import com.pio.raonback.dto.response.chat.GetMessageListResponseDto;
-import com.pio.raonback.entity.ChatEntity;
-import com.pio.raonback.entity.MessageEntity;
-import com.pio.raonback.entity.UserEntity;
+import com.pio.raonback.entity.Chat;
+import com.pio.raonback.entity.Message;
+import com.pio.raonback.entity.User;
 import com.pio.raonback.repository.ChatRepository;
 import com.pio.raonback.repository.MessageRepository;
 import com.pio.raonback.security.RaonUser;
@@ -32,52 +32,45 @@ public class ChatServiceImplement implements ChatService {
   private final SimpMessagingTemplate messagingTemplate;
 
   @Override
-  public ResponseEntity<? super GetChatListResponseDto> getChatList(int page, int size, RaonUser user) {
-    UserEntity userEntity = user.getUserEntity();
-    Long userId = userEntity.getUserId();
+  public ResponseEntity<? super GetChatListResponseDto> getChatList(int page, int size, RaonUser principal) {
+    User user = principal.getUser();
 
     Pageable pageable = PageRequest.of(page, size);
-    Page<ChatEntity> chatEntitiesPage = chatRepository.findAllByBuyerIdOrSellerIdOrderByLastMessageAtDesc(userId, userId, pageable);
-    return GetChatListResponseDto.ok(chatEntitiesPage);
+    Page<Chat> chatPage = chatRepository.findAllByBuyerOrSellerOrderByLastMessageAtDesc(user, user, pageable);
+    return GetChatListResponseDto.ok(chatPage);
   }
 
   @Override
-  public ResponseEntity<? super GetMessageListResponseDto> getMessageList(Long chatId, int page, int size, RaonUser user) {
-    UserEntity userEntity = user.getUserEntity();
-    Long userId = userEntity.getUserId();
+  public ResponseEntity<? super GetMessageListResponseDto> getMessageList(Long chatId, int page, int size, RaonUser principal) {
+    User user = principal.getUser();
 
-    Optional<ChatEntity> optionalChatEntity = chatRepository.findById(chatId);
-    if (optionalChatEntity.isEmpty()) return ResponseDto.chatNotFound();
-    ChatEntity chatEntity = optionalChatEntity.get();
-    if (!chatEntity.getBuyerId().equals(userId) && !chatEntity.getSellerId().equals(userId)) {
-      return ResponseDto.noPermission();
-    }
+    Optional<Chat> optionalChat = chatRepository.findById(chatId);
+    if (optionalChat.isEmpty()) return ResponseDto.chatNotFound();
+    Chat chat = optionalChat.get();
+    if (!chat.getSeller().equals(user) && !chat.getBuyer().equals(user)) return ResponseDto.noPermission();
 
     Pageable pageable = PageRequest.of(page, size);
-    Page<MessageEntity> messageEntitiesPage = messageRepository.findAllByIsDeletedFalseAndChatIdOrderBySentAtDesc(chatId, pageable);
-    return GetMessageListResponseDto.ok(messageEntitiesPage);
+    Page<Message> messagePage = messageRepository.findAllByIsDeletedFalseAndChatOrderBySentAtDesc(chat, pageable);
+    return GetMessageListResponseDto.ok(messagePage);
   }
 
   @Override
-  public ResponseEntity<ResponseDto> sendMessage(Long chatId, SendMessageRequestDto dto, RaonUser user) {
-    UserEntity userEntity = user.getUserEntity();
-    Long senderId = userEntity.getUserId();
+  public ResponseEntity<ResponseDto> sendMessage(Long chatId, SendMessageRequestDto dto, RaonUser principal) {
+    User sender = principal.getUser();
 
-    Optional<ChatEntity> optionalChatEntity = chatRepository.findById(chatId);
-    if (optionalChatEntity.isEmpty()) return ResponseDto.chatNotFound();
-    ChatEntity chatEntity = optionalChatEntity.get();
-    if (!chatEntity.getBuyerId().equals(senderId) && !chatEntity.getSellerId().equals(senderId)) {
-      return ResponseDto.noPermission();
-    }
-    Long receiverId = chatEntity.getBuyerId().equals(senderId) ? chatEntity.getSellerId() : chatEntity.getBuyerId();
+    Optional<Chat> optionalChat = chatRepository.findById(chatId);
+    if (optionalChat.isEmpty()) return ResponseDto.chatNotFound();
+    Chat chat = optionalChat.get();
+    if (!chat.getSeller().equals(sender) && !chat.getBuyer().equals(sender)) return ResponseDto.noPermission();
 
-    MessageEntity messageEntity = new MessageEntity(chatId, dto, senderId);
-    messageRepository.save(messageEntity);
-    chatEntity.setLastMessageAt(messageEntity.getSentAt());
-    chatRepository.save(chatEntity);
+    User receiver = chat.getSeller().equals(sender) ? chat.getBuyer() : chat.getSeller();
+    Message message = new Message(chat, sender, dto.getContent(), dto.getImageUrl());
+    messageRepository.save(message);
+    chat.setLastMessageAt(message.getSentAt());
+    chatRepository.save(chat);
 
-    MessageListItem message = new MessageListItem(messageEntity);
-    messagingTemplate.convertAndSend("/user/" + receiverId + "/chat", message);
+    MessageListItem messageListItem = new MessageListItem(message);
+    messagingTemplate.convertAndSend("/user/" + receiver.getUserId() + "/chat", messageListItem);
 
     return ResponseDto.ok();
   }

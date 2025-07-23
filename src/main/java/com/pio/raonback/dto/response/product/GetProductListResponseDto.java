@@ -4,7 +4,7 @@ import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;
 import com.pio.raonback.dto.object.ProductListItem;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.entity.ProductDetailViewEntity;
+import com.pio.raonback.entity.Product;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,16 +20,16 @@ public class GetProductListResponseDto extends ResponseDto {
   private int totalPages;
   private long totalElements;
 
-  private GetProductListResponseDto(Page<ProductDetailViewEntity> productDetailViewEntitiesPage) {
+  private GetProductListResponseDto(Page<Product> productPage) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.productList = ProductListItem.copyList(productDetailViewEntitiesPage);
-    this.currentPage = productDetailViewEntitiesPage.getNumber();
-    this.totalPages = productDetailViewEntitiesPage.getTotalPages();
-    this.totalElements = productDetailViewEntitiesPage.getTotalElements();
+    this.productList = ProductListItem.copyList(productPage);
+    this.currentPage = productPage.getNumber();
+    this.totalPages = productPage.getTotalPages();
+    this.totalElements = productPage.getTotalElements();
   }
 
-  public static ResponseEntity<GetProductListResponseDto> ok(Page<ProductDetailViewEntity> productDetailViewEntitiesPage) {
-    GetProductListResponseDto responseBody = new GetProductListResponseDto(productDetailViewEntitiesPage);
+  public static ResponseEntity<GetProductListResponseDto> ok(Page<Product> productPage) {
+    GetProductListResponseDto responseBody = new GetProductListResponseDto(productPage);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

@@ -23,23 +23,23 @@ public class UserController {
   private final UserService userService;
 
   @PatchMapping("/nickname")
-  public ResponseEntity<? super ResponseDto> updateNickname(@RequestBody @Valid UpdateNicknameRequestDto requestBody,
-                                                            @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<? super ResponseDto> response = userService.updateNickname(requestBody, user);
+  public ResponseEntity<ResponseDto> updateNickname(@RequestBody @Valid UpdateNicknameRequestDto requestBody,
+                                                    @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<ResponseDto> response = userService.updateNickname(requestBody, principal);
     return response;
   }
 
   @PatchMapping("/profile-image")
-  public ResponseEntity<? super ResponseDto> updateProfileImage(@RequestBody @Valid UpdateProfileImageRequestDto requestBody,
-                                                                @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<? super ResponseDto> response = userService.updateProfileImage(requestBody, user);
+  public ResponseEntity<ResponseDto> updateProfileImage(@RequestBody @Valid UpdateProfileImageRequestDto requestBody,
+                                                        @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<ResponseDto> response = userService.updateProfileImage(requestBody, principal);
     return response;
   }
 
   @PatchMapping("/location")
-  public ResponseEntity<? super ResponseDto> updateLocation(@RequestBody @Valid UpdateLocationRequestDto requestBody,
-                                                            @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<? super ResponseDto> response = userService.updateLocation(requestBody, user);
+  public ResponseEntity<ResponseDto> updateLocation(@RequestBody @Valid UpdateLocationRequestDto requestBody,
+                                                    @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<ResponseDto> response = userService.updateLocation(requestBody, principal);
     return response;
   }
 

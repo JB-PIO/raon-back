@@ -16,16 +16,16 @@ public interface ProductService {
 
   ResponseEntity<? super GetProductResponseDto> getProduct(Long productId);
 
-  ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser user);
+  ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser principal);
 
-  ResponseEntity<? super CreateChatResponseDto> createChat(Long productId, RaonUser user);
+  ResponseEntity<? super CreateChatResponseDto> createChat(Long productId, RaonUser principal);
 
-  ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser user);
+  ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser principal);
 
-  ResponseEntity<ResponseDto> putFavorite(Long productId, PutFavoriteRequestDto dto, RaonUser user);
+  ResponseEntity<ResponseDto> putFavorite(Long productId, PutFavoriteRequestDto dto, RaonUser principal);
 
   ResponseEntity<ResponseDto> increaseViewCount(Long productId);
 
-  ResponseEntity<ResponseDto> deleteProduct(Long productId, RaonUser user);
+  ResponseEntity<ResponseDto> deleteProduct(Long productId, RaonUser principal);
 
 }

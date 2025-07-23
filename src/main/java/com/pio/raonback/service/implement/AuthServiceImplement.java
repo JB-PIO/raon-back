@@ -6,8 +6,9 @@ import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.auth.RefreshTokenResponseDto;
 import com.pio.raonback.dto.response.auth.SignInResponseDto;
 import com.pio.raonback.dto.response.auth.SignUpResponseDto;
-import com.pio.raonback.entity.RefreshTokenEntity;
-import com.pio.raonback.entity.UserEntity;
+import com.pio.raonback.entity.Location;
+import com.pio.raonback.entity.RefreshToken;
+import com.pio.raonback.entity.User;
 import com.pio.raonback.repository.LocationRepository;
 import com.pio.raonback.repository.RefreshTokenRepository;
 import com.pio.raonback.repository.UserRepository;
@@ -48,22 +49,23 @@ public class AuthServiceImplement implements AuthService {
     boolean isNicknameTaken = userRepository.existsByNickname(nickname);
     if (isNicknameTaken) return ResponseDto.nicknameExists();
 
-    boolean isLocationValid = locationRepository.existsById(dto.getLocationId());
-    if (!isLocationValid) return ResponseDto.locationNotFound();
+    Optional<Location> optionalLocation = locationRepository.findById(dto.getLocationId());
+    if (optionalLocation.isEmpty()) return ResponseDto.locationNotFound();
+    Location location = optionalLocation.get();
 
-    String rawPassword = dto.getPassword();
-    String hashedPassword = passwordEncoder.encode(rawPassword);
-    dto.setPassword(hashedPassword);
+    String hashedPassword = passwordEncoder.encode(dto.getPassword());
 
-    UserEntity userEntity = new UserEntity(dto);
-    userRepository.save(userEntity);
+    User user = new User(nickname, email, hashedPassword, location);
+    userRepository.save(user);
 
-    refreshTokenRepository.deleteByEmail(email);
+    refreshTokenRepository.deleteByUser(user);
     refreshTokenRepository.flush();
     String accessToken = jwtUtil.generateAccessToken(email);
     String refreshToken = jwtUtil.generateRefreshToken(email);
     String refreshTokenCookie = buildRefreshTokenCookie(refreshToken);
-    RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity(email, jwtUtil.generateTokenHash(refreshToken), jwtUtil.getExpirationFromToken(refreshToken));
+
+    RefreshToken refreshTokenEntity =
+        new RefreshToken(user, jwtUtil.generateTokenHash(refreshToken), jwtUtil.getExpirationFromToken(refreshToken));
     refreshTokenRepository.save(refreshTokenEntity);
 
     return SignUpResponseDto.ok(accessToken, refreshTokenCookie, jwtProperties.getAccessTokenExpirationTime());
@@ -73,22 +75,24 @@ public class AuthServiceImplement implements AuthService {
   @Transactional
   public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
     String email = dto.getEmail();
-    Optional<UserEntity> optionalUserEntity = userRepository.findByIsDeletedFalseAndEmail(email);
-    if (optionalUserEntity.isEmpty()) return ResponseDto.signInFailed();
-    UserEntity userEntity = optionalUserEntity.get();
+    Optional<User> optionalUser = userRepository.findByIsDeletedFalseAndEmail(email);
+    if (optionalUser.isEmpty()) return ResponseDto.signInFailed();
+    User user = optionalUser.get();
 
     String inputPassword = dto.getPassword();
-    String storedPassword = userEntity.getPassword();
+    String storedPassword = user.getPassword();
     boolean isPasswordValid = passwordEncoder.matches(inputPassword, storedPassword);
     if (!isPasswordValid) return ResponseDto.signInFailed();
-    if (userEntity.getIsSuspended()) return ResponseDto.suspendedUser();
+    if (user.getIsSuspended()) return ResponseDto.suspendedUser();
 
-    refreshTokenRepository.deleteByEmail(email);
+    refreshTokenRepository.deleteByUser(user);
     refreshTokenRepository.flush();
     String accessToken = jwtUtil.generateAccessToken(email);
     String refreshToken = jwtUtil.generateRefreshToken(email);
     String refreshTokenCookie = buildRefreshTokenCookie(refreshToken);
-    RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity(email, jwtUtil.generateTokenHash(refreshToken), jwtUtil.getExpirationFromToken(refreshToken));
+
+    RefreshToken refreshTokenEntity =
+        new RefreshToken(user, jwtUtil.generateTokenHash(refreshToken), jwtUtil.getExpirationFromToken(refreshToken));
     refreshTokenRepository.save(refreshTokenEntity);
 
     return SignInResponseDto.ok(accessToken, refreshTokenCookie, jwtProperties.getAccessTokenExpirationTime());
@@ -108,18 +112,21 @@ public class AuthServiceImplement implements AuthService {
     } catch (JwtException exception) {
       return ResponseDto.authFailed();
     }
-    String refreshTokenHash = jwtUtil.generateTokenHash(refreshToken);
-    Optional<RefreshTokenEntity> optionalRefreshTokenEntity = refreshTokenRepository.findByToken(refreshTokenHash);
-    if (optionalRefreshTokenEntity.isEmpty()) return ResponseDto.expiredToken();
-    RefreshTokenEntity refreshTokenEntity = optionalRefreshTokenEntity.get();
 
-    String email = refreshTokenEntity.getEmail();
-    refreshTokenRepository.deleteByEmail(email);
+    String refreshTokenHash = jwtUtil.generateTokenHash(refreshToken);
+    Optional<RefreshToken> optionalRefreshTokenEntity = refreshTokenRepository.findByToken(refreshTokenHash);
+    if (optionalRefreshTokenEntity.isEmpty()) return ResponseDto.expiredToken();
+    RefreshToken refreshTokenEntity = optionalRefreshTokenEntity.get();
+
+    User user = refreshTokenEntity.getUser();
+    refreshTokenRepository.delete(refreshTokenEntity);
     refreshTokenRepository.flush();
-    String newAccessToken = jwtUtil.generateAccessToken(email);
-    String newRefreshToken = jwtUtil.generateRefreshToken(email);
+    String newAccessToken = jwtUtil.generateAccessToken(user.getEmail());
+    String newRefreshToken = jwtUtil.generateRefreshToken(user.getEmail());
     String newRefreshTokenCookie = buildRefreshTokenCookie(newRefreshToken);
-    RefreshTokenEntity newRefreshTokenEntity = new RefreshTokenEntity(email, jwtUtil.generateTokenHash(newRefreshToken), jwtUtil.getExpirationFromToken(newRefreshToken));
+
+    RefreshToken newRefreshTokenEntity =
+        new RefreshToken(user, jwtUtil.generateTokenHash(newRefreshToken), jwtUtil.getExpirationFromToken(newRefreshToken));
     refreshTokenRepository.save(newRefreshTokenEntity);
 
     return RefreshTokenResponseDto.ok(newAccessToken, newRefreshTokenCookie, jwtProperties.getAccessTokenExpirationTime());
@@ -133,8 +140,13 @@ public class AuthServiceImplement implements AuthService {
   }
 
   private String buildRefreshTokenCookie(String refreshToken) {
-    return ResponseCookie.from("refreshToken", refreshToken).maxAge(jwtProperties.getRefreshTokenExpirationTime())
-                         .path("/api/v1/auth").httpOnly(true).secure(true).build().toString();
+    return ResponseCookie.from("refreshToken", refreshToken)
+                         .maxAge(jwtProperties.getRefreshTokenExpirationTime())
+                         .path("/api/v1/auth")
+                         .httpOnly(true)
+                         .secure(true)
+                         .build()
+                         .toString();
   }
 
 }

@@ -1,12 +1,11 @@
 CREATE TABLE location
 (
     location_id BIGINT          NOT NULL AUTO_INCREMENT COMMENT '지역 고유 ID',
-    code        BIGINT          NOT NULL COMMENT '읍면동 코드',
+    code        BIGINT          NOT NULL UNIQUE COMMENT '읍면동 코드',
     name        VARCHAR(10)     NOT NULL COMMENT '읍면동명',
     address     VARCHAR(50)     NOT NULL COMMENT '전체 주소',
     coordinates POINT SRID 4326 NOT NULL COMMENT '좌표(WGS84)',
-    PRIMARY KEY (location_id),
-    UNIQUE KEY (code, name, address)
+    PRIMARY KEY (location_id)
 );
 
 CREATE TABLE user
@@ -16,7 +15,7 @@ CREATE TABLE user
     email         VARCHAR(80)            NOT NULL UNIQUE COMMENT '이메일',
     password      VARCHAR(255)           NULL COMMENT '해시된 비밀번호',
     profile_image VARCHAR(255)           NULL COMMENT '프로필 사진 URL',
-    location_id   BIGINT                 NULL COMMENT '사용자 기본 지역',
+    location_id   BIGINT                 NOT NULL COMMENT '사용자 기본 지역',
     role          ENUM ('USER', 'ADMIN') NOT NULL DEFAULT 'USER' COMMENT '접근 권한',
     is_deleted    BOOLEAN                NOT NULL DEFAULT FALSE COMMENT '계정 삭제 여부',
     is_suspended  BOOLEAN                NOT NULL DEFAULT FALSE COMMENT '계정 정지 여부',
@@ -25,18 +24,18 @@ CREATE TABLE user
     deleted_at    DATETIME               NULL COMMENT '계정 삭제 일시',
     suspended_at  DATETIME               NULL COMMENT '계정 정지 일시',
     PRIMARY KEY (user_id),
-    FOREIGN KEY (location_id) REFERENCES location (location_id) ON DELETE SET NULL
+    FOREIGN KEY (location_id) REFERENCES location (location_id) ON DELETE RESTRICT
 );
 
 CREATE TABLE refresh_token
 (
     token_id   BIGINT       NOT NULL AUTO_INCREMENT COMMENT '리프레시 토큰 고유 ID',
-    email      VARCHAR(80)  NOT NULL UNIQUE COMMENT '사용자 이메일',
+    user_id    BIGINT       NOT NULL UNIQUE COMMENT '사용자 ID',
     token      VARCHAR(128) NOT NULL UNIQUE COMMENT '해시된 리프레시 토큰',
     created_at DATETIME     NOT NULL COMMENT '리프레시 토큰 생성 일시',
     expires_at DATETIME     NOT NULL COMMENT '리프레시 토큰 만료 일시',
     PRIMARY KEY (token_id),
-    FOREIGN KEY (email) REFERENCES user (email) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE category
@@ -52,23 +51,22 @@ CREATE TABLE category
 
 CREATE TABLE product
 (
-    product_id     BIGINT                              NOT NULL AUTO_INCREMENT COMMENT '상품 고유 ID',
-    seller_id      BIGINT                              NOT NULL COMMENT '등록자 ID',
-    category_id    BIGINT                              NOT NULL COMMENT '카테고리 ID',
-    location_id    BIGINT                              NOT NULL COMMENT '거래 지역 ID',
-    title          VARCHAR(100)                        NOT NULL COMMENT '상품 제목',
-    description    TEXT                                NULL COMMENT '상품 설명',
-    price          BIGINT                              NOT NULL COMMENT '가격(원)',
-    view_count     BIGINT                              NOT NULL DEFAULT 0 COMMENT '조회수',
-    favorite_count BIGINT                              NOT NULL DEFAULT 0 COMMENT '찜 개수',
-    status         ENUM ('NEW', 'USED')                NOT NULL COMMENT '상태(새 상품/중고)',
-    trade_type     ENUM ('DIRECT', 'DELIVERY', 'BOTH') NOT NULL COMMENT '거래 방식(직거래/택배)',
-    is_sold        BOOLEAN                             NOT NULL DEFAULT FALSE COMMENT '판매 완료 여부',
-    is_active      BOOLEAN                             NOT NULL DEFAULT TRUE COMMENT '상품 활성화 여부',
-    is_deleted     BOOLEAN                             NOT NULL DEFAULT FALSE COMMENT '상품 삭제 여부',
-    created_at     DATETIME                            NOT NULL COMMENT '상품 등록 일시',
-    updated_at     DATETIME                            NULL COMMENT '상품 수정 일시',
-    deleted_at     DATETIME                            NULL COMMENT '상품 삭제 일시',
+    product_id  BIGINT                              NOT NULL AUTO_INCREMENT COMMENT '상품 고유 ID',
+    seller_id   BIGINT                              NOT NULL COMMENT '등록자 ID',
+    category_id BIGINT                              NOT NULL COMMENT '카테고리 ID',
+    location_id BIGINT                              NOT NULL COMMENT '거래 지역 ID',
+    title       VARCHAR(100)                        NOT NULL COMMENT '상품 제목',
+    description TEXT                                NULL COMMENT '상품 설명',
+    price       BIGINT                              NOT NULL COMMENT '가격(원)',
+    view_count  BIGINT                              NOT NULL DEFAULT 0 COMMENT '조회수',
+    status      ENUM ('NEW', 'USED')                NOT NULL COMMENT '상태(새 상품/중고)',
+    trade_type  ENUM ('DIRECT', 'DELIVERY', 'BOTH') NOT NULL COMMENT '거래 방식(직거래/택배)',
+    is_sold     BOOLEAN                             NOT NULL DEFAULT FALSE COMMENT '판매 완료 여부',
+    is_active   BOOLEAN                             NOT NULL DEFAULT TRUE COMMENT '상품 활성화 여부',
+    is_deleted  BOOLEAN                             NOT NULL DEFAULT FALSE COMMENT '상품 삭제 여부',
+    created_at  DATETIME                            NOT NULL COMMENT '상품 등록 일시',
+    updated_at  DATETIME                            NULL COMMENT '상품 수정 일시',
+    deleted_at  DATETIME                            NULL COMMENT '상품 삭제 일시',
     PRIMARY KEY (product_id),
     FOREIGN KEY (seller_id) REFERENCES user (user_id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE RESTRICT,
@@ -105,9 +103,9 @@ CREATE TABLE chat
     created_at      DATETIME NOT NULL COMMENT '채팅 시작 일시',
     last_message_at DATETIME NULL COMMENT '마지막 메시지 시간',
     PRIMARY KEY (chat_id),
-    FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE CASCADE,
-    FOREIGN KEY (buyer_id) REFERENCES user (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (seller_id) REFERENCES user (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE RESTRICT,
+    FOREIGN KEY (buyer_id) REFERENCES user (user_id) ON DELETE RESTRICT,
+    FOREIGN KEY (seller_id) REFERENCES user (user_id) ON DELETE RESTRICT,
     UNIQUE KEY (product_id, buyer_id, seller_id)
 );
 
@@ -124,7 +122,7 @@ CREATE TABLE message
     deleted_at DATETIME     NULL COMMENT '메시지 삭제 일시',
     PRIMARY KEY (message_id),
     FOREIGN KEY (chat_id) REFERENCES chat (chat_id) ON DELETE CASCADE,
-    FOREIGN KEY (sender_id) REFERENCES user (user_id) ON DELETE CASCADE
+    FOREIGN KEY (sender_id) REFERENCES user (user_id) ON DELETE RESTRICT
 );
 
 CREATE TABLE transaction
@@ -137,9 +135,9 @@ CREATE TABLE transaction
     created_at     DATETIME                                   NOT NULL COMMENT '거래 시작 일시',
     completed_at   DATETIME                                   NULL COMMENT '거래 완료 일시',
     PRIMARY KEY (transaction_id),
-    FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE CASCADE,
-    FOREIGN KEY (buyer_id) REFERENCES user (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (seller_id) REFERENCES user (user_id) ON DELETE CASCADE
+    FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE RESTRICT,
+    FOREIGN KEY (buyer_id) REFERENCES user (user_id) ON DELETE RESTRICT,
+    FOREIGN KEY (seller_id) REFERENCES user (user_id) ON DELETE RESTRICT
 );
 
 CREATE TABLE report
@@ -176,37 +174,6 @@ CREATE TABLE block
     FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,
     FOREIGN KEY (blocked_user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
-
-CREATE VIEW product_detail_view AS
-SELECT p.product_id,
-       p.seller_id,
-       u.nickname      AS seller_nickname,
-       u.email         AS seller_email,
-       u.profile_image AS seller_profile_image,
-       p.category_id,
-       p.location_id,
-       l.address,
-       (SELECT pi.image_url
-        FROM product_image AS pi
-        WHERE pi.product_id = p.product_id
-        ORDER BY pi.image_id ASC
-        LIMIT 1)       AS thumbnail,
-       p.title,
-       p.description,
-       p.price,
-       p.view_count,
-       p.favorite_count,
-       p.status,
-       p.trade_type,
-       p.is_sold,
-       p.is_active,
-       p.is_deleted,
-       p.created_at,
-       p.updated_at,
-       p.deleted_at
-FROM product AS p
-         JOIN user AS u ON p.seller_id = u.user_id
-         JOIN location AS l ON p.location_id = l.location_id;
 
 LOAD DATA INFILE '/var/lib/mysql-files/location.csv'
     INTO TABLE location

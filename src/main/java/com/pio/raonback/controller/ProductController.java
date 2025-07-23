@@ -43,31 +43,31 @@ public class ProductController {
 
   @PostMapping("")
   public ResponseEntity<? super PostProductResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
-                                                                    @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<? super PostProductResponseDto> response = productService.postProduct(requestBody, user);
+                                                                    @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<? super PostProductResponseDto> response = productService.postProduct(requestBody, principal);
     return response;
   }
 
   @PostMapping("/{productId}/chat")
   public ResponseEntity<? super CreateChatResponseDto> createChat(@PathVariable("productId") Long productId,
-                                                                  @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<? super CreateChatResponseDto> response = productService.createChat(productId, user);
+                                                                  @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<? super CreateChatResponseDto> response = productService.createChat(productId, principal);
     return response;
   }
 
   @PutMapping("/{productId}")
   public ResponseEntity<? super UpdateProductResponseDto> updateProduct(@PathVariable("productId") Long productId,
                                                                         @RequestBody @Valid UpdateProductRequestDto requestBody,
-                                                                        @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<? super UpdateProductResponseDto> response = productService.updateProduct(productId, requestBody, user);
+                                                                        @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<? super UpdateProductResponseDto> response = productService.updateProduct(productId, requestBody, principal);
     return response;
   }
 
   @PutMapping("/{productId}/favorite")
   public ResponseEntity<ResponseDto> putFavorite(@PathVariable("productId") Long productId,
                                                  @RequestBody @Valid PutFavoriteRequestDto requestBody,
-                                                 @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<ResponseDto> response = productService.putFavorite(productId, requestBody, user);
+                                                 @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<ResponseDto> response = productService.putFavorite(productId, requestBody, principal);
     return response;
   }
 
@@ -79,8 +79,8 @@ public class ProductController {
 
   @DeleteMapping("/{productId}")
   public ResponseEntity<ResponseDto> deleteProduct(@PathVariable("productId") Long productId,
-                                                   @AuthenticationPrincipal RaonUser user) {
-    ResponseEntity<ResponseDto> response = productService.deleteProduct(productId, user);
+                                                   @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<ResponseDto> response = productService.deleteProduct(productId, principal);
     return response;
   }
 

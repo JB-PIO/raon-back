@@ -1,6 +1,6 @@
 package com.pio.raonback.security;
 
-import com.pio.raonback.entity.UserEntity;
+import com.pio.raonback.entity.User;
 import com.pio.raonback.repository.UserRepository;
 import com.pio.raonback.security.exception.UsernameCannotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,15 +19,15 @@ public class RaonUserService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    Optional<UserEntity> optionalUserEntity;
+    Optional<User> optionalUser;
     try {
-      optionalUserEntity = userRepository.findByIsDeletedFalseAndEmail(email);
+      optionalUser = userRepository.findByIsDeletedFalseAndEmail(email);
     } catch (Exception exception) {
       throw new UsernameCannotFoundException(exception.getMessage());
     }
-    if (optionalUserEntity.isEmpty()) throw new UsernameNotFoundException("User not found with email: " + email);
-    UserEntity userEntity = optionalUserEntity.get();
-    return new RaonUser(userEntity);
+    if (optionalUser.isEmpty()) throw new UsernameNotFoundException("User not found with email: " + email);
+    User user = optionalUser.get();
+    return new RaonUser(user);
   }
 
 }

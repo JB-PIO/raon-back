@@ -4,7 +4,7 @@ import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;
 import com.pio.raonback.dto.object.ProductListItem;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.entity.ProductDetailViewEntity;
+import com.pio.raonback.entity.Product;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,16 +20,16 @@ public class GetNearbyProductListResponseDto extends ResponseDto {
   private int totalPages;
   private long totalElements;
 
-  private GetNearbyProductListResponseDto(Page<ProductDetailViewEntity> productDetailViewEntitiesPage) {
+  private GetNearbyProductListResponseDto(Page<Product> productPage) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.nearbyProductList = ProductListItem.copyList(productDetailViewEntitiesPage);
-    this.currentPage = productDetailViewEntitiesPage.getNumber();
-    this.totalPages = productDetailViewEntitiesPage.getTotalPages();
-    this.totalElements = productDetailViewEntitiesPage.getTotalElements();
+    this.nearbyProductList = ProductListItem.copyList(productPage);
+    this.currentPage = productPage.getNumber();
+    this.totalPages = productPage.getTotalPages();
+    this.totalElements = productPage.getTotalElements();
   }
 
-  public static ResponseEntity<GetNearbyProductListResponseDto> ok(Page<ProductDetailViewEntity> productDetailViewEntitiesPage) {
-    GetNearbyProductListResponseDto responseBody = new GetNearbyProductListResponseDto(productDetailViewEntitiesPage);
+  public static ResponseEntity<GetNearbyProductListResponseDto> ok(Page<Product> productPage) {
+    GetNearbyProductListResponseDto responseBody = new GetNearbyProductListResponseDto(productPage);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

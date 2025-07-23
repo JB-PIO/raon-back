@@ -27,9 +27,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     if (token == null || token.isEmpty()) throw new BadCredentialsException("토큰이 없습니다.");
     try {
       String email = jwtUtil.validateAccessToken(token);
-      RaonUser user = (RaonUser) userDetailsService.loadUserByUsername(email);
-      if (user.getUserEntity().getIsSuspended()) throw new LockedException("정지된 계정입니다.");
-      return new RaonAuthenticationToken(user);
+      RaonUser principal = (RaonUser) userDetailsService.loadUserByUsername(email);
+      if (principal.getUser().getIsSuspended()) throw new LockedException("정지된 계정입니다.");
+      return new RaonAuthenticationToken(principal);
     } catch (io.jsonwebtoken.ExpiredJwtException exception) {
       if (exception.getClaims().get("type", String.class).equals("access")) {
         throw new ExpiredJwtException("만료된 토큰입니다.");

@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -17,9 +15,7 @@ public class RaonScheduler {
 
   @Scheduled(cron = "0 0 * * * *")
   public void cleanUpExpiredRefreshTokens() {
-    Date now = Date.from(Instant.now());
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    refreshTokenRepository.deleteAllByExpiresAtBefore(simpleDateFormat.format(now));
+    refreshTokenRepository.deleteAllByExpiresAtBefore(LocalDateTime.now());
   }
 
 }

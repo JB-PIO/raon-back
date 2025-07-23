@@ -11,6 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
@@ -46,12 +48,24 @@ public class JwtUtil {
 
   public String validateAccessToken(String accessToken) throws JwtException {
     SecretKey key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
-    return Jwts.parser().require("type", "access").verifyWith(key).build().parseSignedClaims(accessToken).getPayload().getSubject();
+    return Jwts.parser()
+               .require("type", "access")
+               .verifyWith(key)
+               .build()
+               .parseSignedClaims(accessToken)
+               .getPayload()
+               .getSubject();
   }
 
   public String validateRefreshToken(String refreshToken) throws JwtException {
     SecretKey key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
-    return Jwts.parser().require("type", "refresh").verifyWith(key).build().parseSignedClaims(refreshToken).getPayload().getSubject();
+    return Jwts.parser()
+               .require("type", "refresh")
+               .verifyWith(key)
+               .build()
+               .parseSignedClaims(refreshToken)
+               .getPayload()
+               .getSubject();
   }
 
   public String generateTokenHash(String token) {
@@ -70,9 +84,17 @@ public class JwtUtil {
     }
   }
 
-  public Date getExpirationFromToken(String token) {
+  public LocalDateTime getExpirationFromToken(String token) {
     SecretKey key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
-    return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getExpiration();
+    return Jwts.parser()
+               .verifyWith(key)
+               .build()
+               .parseSignedClaims(token)
+               .getPayload()
+               .getExpiration()
+               .toInstant()
+               .atZone(ZoneId.systemDefault())
+               .toLocalDateTime();
   }
 
 }

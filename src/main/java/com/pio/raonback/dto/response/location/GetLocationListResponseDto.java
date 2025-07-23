@@ -4,7 +4,7 @@ import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;
 import com.pio.raonback.dto.object.LocationListItem;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.entity.LocationEntity;
+import com.pio.raonback.entity.Location;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,16 +20,16 @@ public class GetLocationListResponseDto extends ResponseDto {
   private int totalPages;
   private long totalElements;
 
-  private GetLocationListResponseDto(Page<LocationEntity> locationEntitiesPage) {
+  private GetLocationListResponseDto(Page<Location> locationPage) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.locationList = LocationListItem.copyList(locationEntitiesPage);
-    this.currentPage = locationEntitiesPage.getNumber();
-    this.totalPages = locationEntitiesPage.getTotalPages();
-    this.totalElements = locationEntitiesPage.getTotalElements();
+    this.locationList = LocationListItem.copyList(locationPage);
+    this.currentPage = locationPage.getNumber();
+    this.totalPages = locationPage.getTotalPages();
+    this.totalElements = locationPage.getTotalElements();
   }
 
-  public static ResponseEntity<GetLocationListResponseDto> ok(Page<LocationEntity> locationEntitiesPage) {
-    GetLocationListResponseDto responseBody = new GetLocationListResponseDto(locationEntitiesPage);
+  public static ResponseEntity<GetLocationListResponseDto> ok(Page<Location> locationPage) {
+    GetLocationListResponseDto responseBody = new GetLocationListResponseDto(locationPage);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

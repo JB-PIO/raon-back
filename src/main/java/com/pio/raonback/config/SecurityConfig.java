@@ -30,8 +30,10 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private static final RequestMatcher WEBSOCKET_CONNECT_REQUEST_MATCHER = PathPatternRequestMatcher.withDefaults().matcher("/ws");
-  private static final RequestMatcher JWT_BASED_AUTH_REQUEST_MATCHER = PathPatternRequestMatcher.withDefaults().matcher("/api/v1/**");
+  private static final RequestMatcher WEBSOCKET_CONNECT_REQUEST_MATCHER =
+      PathPatternRequestMatcher.withDefaults().matcher("/ws");
+  private static final RequestMatcher JWT_BASED_AUTH_REQUEST_MATCHER =
+      PathPatternRequestMatcher.withDefaults().matcher("/api/v1/**");
   private static final OrRequestMatcher NON_JWT_BASED_AUTH_REQUEST_MATCHERS = new OrRequestMatcher(
       PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/**"),
       PathPatternRequestMatcher.withDefaults().matcher("/api/v1/location/**"),
@@ -44,7 +46,8 @@ public class SecurityConfig {
 
   @Bean
   public AuthenticationManager authenticationManager(ObjectPostProcessor<Object> objectPostProcessor) throws Exception {
-    DefaultAuthenticationEventPublisher eventPublisher = objectPostProcessor.postProcess(new DefaultAuthenticationEventPublisher());
+    DefaultAuthenticationEventPublisher eventPublisher =
+        objectPostProcessor.postProcess(new DefaultAuthenticationEventPublisher());
     AuthenticationManagerBuilder builder = new AuthenticationManagerBuilder(objectPostProcessor);
     builder.authenticationEventPublisher(eventPublisher);
     builder.authenticationProvider(jwtAuthenticationProvider);
@@ -52,7 +55,8 @@ public class SecurityConfig {
   }
 
   protected JwtAuthenticationFilter buildJwtAuthenticationFilter(AuthenticationManager authenticationManager) {
-    SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(NON_JWT_BASED_AUTH_REQUEST_MATCHERS, JWT_BASED_AUTH_REQUEST_MATCHER);
+    SkipPathRequestMatcher matcher =
+        new SkipPathRequestMatcher(NON_JWT_BASED_AUTH_REQUEST_MATCHERS, JWT_BASED_AUTH_REQUEST_MATCHER);
     JwtAuthenticationFilter filter = new JwtAuthenticationFilter(failureHandler, matcher);
     filter.setAuthenticationManager(authenticationManager);
     return filter;

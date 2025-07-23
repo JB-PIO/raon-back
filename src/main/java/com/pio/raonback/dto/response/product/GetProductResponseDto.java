@@ -1,17 +1,17 @@
 package com.pio.raonback.dto.response.product;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.entity.ProductDetailViewEntity;
-import com.pio.raonback.entity.ProductImageEntity;
+import com.pio.raonback.entity.Product;
 import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.entity.enums.TradeType;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -33,40 +33,35 @@ public class GetProductResponseDto extends ResponseDto {
   private ProductStatus status;
   private TradeType tradeType;
   private Boolean isSold;
-  private String createdAt;
-  private String updatedAt;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime createdAt;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime updatedAt;
 
-  private GetProductResponseDto(ProductDetailViewEntity productDetailViewEntity, List<ProductImageEntity> productImageEntities) {
+  private GetProductResponseDto(Product product) {
     super(ResponseCode.OK, ResponseMessage.OK);
-
-    List<String> imageUrls = new ArrayList<>();
-    for (ProductImageEntity productImageEntity : productImageEntities) {
-      String imageUrl = productImageEntity.getImageUrl();
-      imageUrls.add(imageUrl);
-    }
-
-    this.productId = productDetailViewEntity.getProductId();
-    this.sellerId = productDetailViewEntity.getSellerId();
-    this.sellerNickname = productDetailViewEntity.getSellerNickname();
-    this.sellerProfileImage = productDetailViewEntity.getSellerProfileImage();
-    this.categoryId = productDetailViewEntity.getCategoryId();
-    this.locationId = productDetailViewEntity.getLocationId();
-    this.address = productDetailViewEntity.getAddress();
-    this.imageUrlList = imageUrls;
-    this.title = productDetailViewEntity.getTitle();
-    this.description = productDetailViewEntity.getDescription();
-    this.price = productDetailViewEntity.getPrice();
-    this.viewCount = productDetailViewEntity.getViewCount();
-    this.favoriteCount = productDetailViewEntity.getFavoriteCount();
-    this.status = productDetailViewEntity.getStatus();
-    this.tradeType = productDetailViewEntity.getTradeType();
-    this.isSold = productDetailViewEntity.getIsSold();
-    this.createdAt = productDetailViewEntity.getCreatedAt();
-    this.updatedAt = productDetailViewEntity.getUpdatedAt();
+    this.productId = product.getProductId();
+    this.sellerId = product.getSeller().getUserId();
+    this.sellerNickname = product.getSeller().getNickname();
+    this.sellerProfileImage = product.getSeller().getProfileImage();
+    this.categoryId = product.getCategory().getCategoryId();
+    this.locationId = product.getLocation().getLocationId();
+    this.address = product.getLocation().getAddress();
+    this.imageUrlList = product.getImages().stream().map(productImage -> productImage.getImageUrl()).toList();
+    this.title = product.getTitle();
+    this.description = product.getDescription();
+    this.price = product.getPrice();
+    this.viewCount = product.getViewCount();
+    this.favoriteCount = (long) product.getFavorites().size();
+    this.status = product.getStatus();
+    this.tradeType = product.getTradeType();
+    this.isSold = product.getIsSold();
+    this.createdAt = product.getCreatedAt();
+    this.updatedAt = product.getUpdatedAt();
   }
 
-  public static ResponseEntity<GetProductResponseDto> ok(ProductDetailViewEntity productDetailViewEntity, List<ProductImageEntity> productImageEntities) {
-    GetProductResponseDto responseBody = new GetProductResponseDto(productDetailViewEntity, productImageEntities);
+  public static ResponseEntity<GetProductResponseDto> ok(Product product) {
+    GetProductResponseDto responseBody = new GetProductResponseDto(product);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

@@ -1,6 +1,6 @@
 package com.pio.raonback.security;
 
-import com.pio.raonback.entity.UserEntity;
+import com.pio.raonback.entity.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,26 +14,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RaonUser implements UserDetails, Principal {
 
-  private final UserEntity userEntity;
+  private final User user;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(() -> "ROLE_" + userEntity.getRole().name());
+    return List.of(() -> "ROLE_" + user.getRole().name());
   }
 
   @Override
   public String getPassword() {
-    return userEntity.getPassword();
+    return user.getPassword();
   }
 
   @Override
   public String getUsername() {
-    return userEntity.getEmail();
+    return user.getEmail();
   }
 
   @Override
   public String getName() {
-    return userEntity.getUserId().toString();
+    return user.getUserId().toString();
   }
 
 }

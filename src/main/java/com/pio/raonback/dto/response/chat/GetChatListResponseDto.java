@@ -4,7 +4,7 @@ import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;
 import com.pio.raonback.dto.object.ChatListItem;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.entity.ChatEntity;
+import com.pio.raonback.entity.Chat;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,16 +20,16 @@ public class GetChatListResponseDto extends ResponseDto {
   private int totalPages;
   private long totalElements;
 
-  private GetChatListResponseDto(Page<ChatEntity> chatEntitiesPage) {
+  private GetChatListResponseDto(Page<Chat> chatPage) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.chatList = ChatListItem.copyList(chatEntitiesPage);
-    this.currentPage = chatEntitiesPage.getNumber();
-    this.totalPages = chatEntitiesPage.getTotalPages();
-    this.totalElements = chatEntitiesPage.getTotalElements();
+    this.chatList = ChatListItem.copyList(chatPage);
+    this.currentPage = chatPage.getNumber();
+    this.totalPages = chatPage.getTotalPages();
+    this.totalElements = chatPage.getTotalElements();
   }
 
-  public static ResponseEntity<GetChatListResponseDto> ok(Page<ChatEntity> chatEntitiesPage) {
-    GetChatListResponseDto responseBody = new GetChatListResponseDto(chatEntitiesPage);
+  public static ResponseEntity<GetChatListResponseDto> ok(Page<Chat> chatPage) {
+    GetChatListResponseDto responseBody = new GetChatListResponseDto(chatPage);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

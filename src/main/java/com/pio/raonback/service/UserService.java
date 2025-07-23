@@ -9,10 +9,10 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
-  ResponseEntity<? super ResponseDto> updateNickname(UpdateNicknameRequestDto dto, RaonUser user);
+  ResponseEntity<ResponseDto> updateNickname(UpdateNicknameRequestDto dto, RaonUser principal);
 
-  ResponseEntity<? super ResponseDto> updateProfileImage(UpdateProfileImageRequestDto dto, RaonUser user);
+  ResponseEntity<ResponseDto> updateProfileImage(UpdateProfileImageRequestDto dto, RaonUser principal);
 
-  ResponseEntity<? super ResponseDto> updateLocation(UpdateLocationRequestDto dto, RaonUser user);
+  ResponseEntity<ResponseDto> updateLocation(UpdateLocationRequestDto dto, RaonUser principal);
 
 }

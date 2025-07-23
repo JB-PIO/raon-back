@@ -1,15 +1,15 @@
 package com.pio.raonback.repository;
 
-import com.pio.raonback.entity.UserEntity;
+import com.pio.raonback.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-  Optional<UserEntity> findByIsDeletedFalseAndEmail(String email);
+  Optional<User> findByIsDeletedFalseAndEmail(String email);
 
   boolean existsByEmail(String email);
 

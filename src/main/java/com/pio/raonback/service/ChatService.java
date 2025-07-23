@@ -9,10 +9,10 @@ import org.springframework.http.ResponseEntity;
 
 public interface ChatService {
 
-  ResponseEntity<? super GetChatListResponseDto> getChatList(int page, int size, RaonUser user);
+  ResponseEntity<? super GetChatListResponseDto> getChatList(int page, int size, RaonUser principal);
 
-  ResponseEntity<? super GetMessageListResponseDto> getMessageList(Long chatId, int page, int size, RaonUser user);
+  ResponseEntity<? super GetMessageListResponseDto> getMessageList(Long chatId, int page, int size, RaonUser principal);
 
-  ResponseEntity<ResponseDto> sendMessage(Long chatId, SendMessageRequestDto dto, RaonUser user);
+  ResponseEntity<ResponseDto> sendMessage(Long chatId, SendMessageRequestDto dto, RaonUser principal);
 
 }
