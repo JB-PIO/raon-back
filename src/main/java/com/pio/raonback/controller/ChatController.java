@@ -1,9 +1,9 @@
 package com.pio.raonback.controller;
 
 import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
-import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.chat.GetChatListResponseDto;
 import com.pio.raonback.dto.response.chat.GetMessageListResponseDto;
+import com.pio.raonback.dto.response.chat.SendMessageResponseDto;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ChatService;
 import jakarta.validation.Valid;
@@ -37,10 +37,10 @@ public class ChatController {
   }
 
   @PostMapping("/{chatId}/message")
-  public ResponseEntity<ResponseDto> sendMessage(@PathVariable("chatId") Long chatId,
-                                                 @RequestBody @Valid SendMessageRequestDto requestBody,
-                                                 @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<ResponseDto> response = chatService.sendMessage(chatId, requestBody, principal);
+  public ResponseEntity<? super SendMessageResponseDto> sendMessage(@PathVariable("chatId") Long chatId,
+                                                                    @RequestBody @Valid SendMessageRequestDto requestBody,
+                                                                    @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<? super SendMessageResponseDto> response = chatService.sendMessage(chatId, requestBody, principal);
     return response;
   }
 

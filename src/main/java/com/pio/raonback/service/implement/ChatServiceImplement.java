@@ -5,6 +5,7 @@ import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.chat.GetChatListResponseDto;
 import com.pio.raonback.dto.response.chat.GetMessageListResponseDto;
+import com.pio.raonback.dto.response.chat.SendMessageResponseDto;
 import com.pio.raonback.entity.Chat;
 import com.pio.raonback.entity.Message;
 import com.pio.raonback.entity.User;
@@ -55,7 +56,7 @@ public class ChatServiceImplement implements ChatService {
   }
 
   @Override
-  public ResponseEntity<ResponseDto> sendMessage(Long chatId, SendMessageRequestDto dto, RaonUser principal) {
+  public ResponseEntity<? super SendMessageResponseDto> sendMessage(Long chatId, SendMessageRequestDto dto, RaonUser principal) {
     User sender = principal.getUser();
 
     Optional<Chat> optionalChat = chatRepository.findById(chatId);
@@ -72,7 +73,7 @@ public class ChatServiceImplement implements ChatService {
     MessageListItem messageListItem = new MessageListItem(message);
     messagingTemplate.convertAndSend("/user/" + receiver.getUserId() + "/chat", messageListItem);
 
-    return ResponseDto.ok();
+    return SendMessageResponseDto.ok(message);
   }
 
 }
