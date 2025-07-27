@@ -2,9 +2,8 @@ package com.pio.raonback.dto.object;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pio.raonback.entity.Message;
-import lombok.AllArgsConstructor;
+import com.pio.raonback.entity.User;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
@@ -12,26 +11,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class MessageListItem {
 
   private Long messageId;
   private Long chatId;
-  private Long senderId;
+  private UserData sender;
   private String content;
   private String imageUrl;
   private Boolean isRead;
+  private Boolean isDeleted;
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime sentAt;
+
+  @Getter
+  private static class UserData {
+
+    private Long userId;
+    private String nickname;
+    private String profileImage;
+    private Boolean isDeleted;
+
+    private UserData(User user) {
+      this.userId = user.getUserId();
+      this.nickname = user.getNickname();
+      this.profileImage = user.getProfileImage();
+      this.isDeleted = user.getIsDeleted();
+    }
+
+  }
 
   public MessageListItem(Message message) {
     this.messageId = message.getMessageId();
     this.chatId = message.getChat().getChatId();
-    this.senderId = message.getSender().getUserId();
+    this.sender = new UserData(message.getSender());
     this.content = message.getContent();
     this.imageUrl = message.getImageUrl();
     this.isRead = message.getIsRead();
+    this.isDeleted = message.getIsDeleted();
     this.sentAt = message.getSentAt();
   }
 

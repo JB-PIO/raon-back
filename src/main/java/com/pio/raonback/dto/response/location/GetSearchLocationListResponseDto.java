@@ -15,17 +15,28 @@ import java.util.List;
 @Getter
 public class GetSearchLocationListResponseDto extends ResponseDto {
 
-  private List<LocationListItem> searchLocationList;
-  private int currentPage;
-  private int totalPages;
-  private long totalElements;
+  private Data data;
+
+  @Getter
+  private static class Data {
+
+    private List<LocationListItem> searchLocationList;
+    private int currentPage;
+    private int totalPages;
+    private long totalElements;
+
+    private Data(Page<Location> locationPage) {
+      this.searchLocationList = LocationListItem.copyList(locationPage);
+      this.currentPage = locationPage.getNumber();
+      this.totalPages = locationPage.getTotalPages();
+      this.totalElements = locationPage.getTotalElements();
+    }
+
+  }
 
   private GetSearchLocationListResponseDto(Page<Location> locationPage) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.searchLocationList = LocationListItem.copyList(locationPage);
-    this.currentPage = locationPage.getNumber();
-    this.totalPages = locationPage.getTotalPages();
-    this.totalElements = locationPage.getTotalElements();
+    this.data = new Data(locationPage);
   }
 
   public static ResponseEntity<GetSearchLocationListResponseDto> ok(Page<Location> locationPage) {

@@ -4,15 +4,11 @@ import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.entity.enums.TradeType;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 
 import java.util.List;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class UpdateProductRequestDto {
 
   @NotNull(message = "카테고리를 선택해주세요.")

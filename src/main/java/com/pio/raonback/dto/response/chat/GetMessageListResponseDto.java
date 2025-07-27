@@ -15,17 +15,28 @@ import java.util.List;
 @Getter
 public class GetMessageListResponseDto extends ResponseDto {
 
-  private List<MessageListItem> messageList;
-  private int currentPage;
-  private int totalPages;
-  private long totalElements;
+  private Data data;
+
+  @Getter
+  private static class Data {
+
+    private List<MessageListItem> messageList;
+    private int currentPage;
+    private int totalPages;
+    private long totalElements;
+
+    private Data(Page<Message> messagePage) {
+      this.messageList = MessageListItem.copyList(messagePage);
+      this.currentPage = messagePage.getNumber();
+      this.totalPages = messagePage.getTotalPages();
+      this.totalElements = messagePage.getTotalElements();
+    }
+
+  }
 
   private GetMessageListResponseDto(Page<Message> messagePage) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.messageList = MessageListItem.copyList(messagePage);
-    this.currentPage = messagePage.getNumber();
-    this.totalPages = messagePage.getTotalPages();
-    this.totalElements = messagePage.getTotalElements();
+    this.data = new Data(messagePage);
   }
 
   public static ResponseEntity<GetMessageListResponseDto> ok(Page<Message> messagePage) {

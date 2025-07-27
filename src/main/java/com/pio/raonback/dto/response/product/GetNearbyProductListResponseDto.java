@@ -15,17 +15,28 @@ import java.util.List;
 @Getter
 public class GetNearbyProductListResponseDto extends ResponseDto {
 
-  private List<ProductListItem> nearbyProductList;
-  private int currentPage;
-  private int totalPages;
-  private long totalElements;
+  private Data data;
+
+  @Getter
+  private static class Data {
+
+    private List<ProductListItem> nearbyProductList;
+    private int currentPage;
+    private int totalPages;
+    private long totalElements;
+
+    private Data(Page<Product> productPage) {
+      this.nearbyProductList = ProductListItem.copyList(productPage);
+      this.currentPage = productPage.getNumber();
+      this.totalPages = productPage.getTotalPages();
+      this.totalElements = productPage.getTotalElements();
+    }
+
+  }
 
   private GetNearbyProductListResponseDto(Page<Product> productPage) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.nearbyProductList = ProductListItem.copyList(productPage);
-    this.currentPage = productPage.getNumber();
-    this.totalPages = productPage.getTotalPages();
-    this.totalElements = productPage.getTotalElements();
+    this.data = new Data(productPage);
   }
 
   public static ResponseEntity<GetNearbyProductListResponseDto> ok(Page<Product> productPage) {

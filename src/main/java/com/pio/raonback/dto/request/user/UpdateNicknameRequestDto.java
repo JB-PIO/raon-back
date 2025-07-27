@@ -3,12 +3,8 @@ package com.pio.raonback.dto.request.user;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class UpdateNicknameRequestDto {
 
   @NotBlank(message = "닉네임을 입력해주세요.")

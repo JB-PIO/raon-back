@@ -15,17 +15,28 @@ import java.util.List;
 @Getter
 public class GetChatListResponseDto extends ResponseDto {
 
-  private List<ChatListItem> chatList;
-  private int currentPage;
-  private int totalPages;
-  private long totalElements;
+  private Data data;
+
+  @Getter
+  private static class Data {
+
+    private List<ChatListItem> chatList;
+    private int currentPage;
+    private int totalPages;
+    private long totalElements;
+
+    private Data(Page<Chat> chatPage) {
+      this.chatList = ChatListItem.copyList(chatPage);
+      this.currentPage = chatPage.getNumber();
+      this.totalPages = chatPage.getTotalPages();
+      this.totalElements = chatPage.getTotalElements();
+    }
+
+  }
 
   private GetChatListResponseDto(Page<Chat> chatPage) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.chatList = ChatListItem.copyList(chatPage);
-    this.currentPage = chatPage.getNumber();
-    this.totalPages = chatPage.getTotalPages();
-    this.totalElements = chatPage.getTotalElements();
+    this.data = new Data(chatPage);
   }
 
   public static ResponseEntity<GetChatListResponseDto> ok(Page<Chat> chatPage) {

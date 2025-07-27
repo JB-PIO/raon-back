@@ -10,11 +10,22 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class UpdateProductResponseDto extends ResponseDto {
 
-  Long productId;
+  private Data data;
+
+  @Getter
+  private static class Data {
+
+    private Long productId;
+
+    private Data(Long productId) {
+      this.productId = productId;
+    }
+
+  }
 
   private UpdateProductResponseDto(Long productId) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.productId = productId;
+    this.data = new Data(productId);
   }
 
   public static ResponseEntity<UpdateProductResponseDto> ok(Long productId) {

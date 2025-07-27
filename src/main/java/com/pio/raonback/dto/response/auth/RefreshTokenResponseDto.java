@@ -11,13 +11,24 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class RefreshTokenResponseDto extends ResponseDto {
 
-  private String accessToken;
-  private Long accessTokenExpirationTime;
+  private Data data;
+
+  @Getter
+  private static class Data {
+
+    private String accessToken;
+    private Long accessTokenExpirationTime;
+
+    private Data(String accessToken, Long accessTokenExpirationTime) {
+      this.accessToken = accessToken;
+      this.accessTokenExpirationTime = accessTokenExpirationTime;
+    }
+
+  }
 
   private RefreshTokenResponseDto(String accessToken, Long accessTokenExpirationTime) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.accessToken = accessToken;
-    this.accessTokenExpirationTime = accessTokenExpirationTime;
+    this.data = new Data(accessToken, accessTokenExpirationTime);
   }
 
   public static ResponseEntity<RefreshTokenResponseDto> ok(String accessToken, String refreshTokenCookie, Long accessTokenExpirationTime) {

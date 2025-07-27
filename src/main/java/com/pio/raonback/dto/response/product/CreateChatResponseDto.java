@@ -10,11 +10,22 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class CreateChatResponseDto extends ResponseDto {
 
-  Long chatId;
+  private Data data;
+
+  @Getter
+  private static class Data {
+
+    private Long chatId;
+
+    private Data(Long chatId) {
+      this.chatId = chatId;
+    }
+
+  }
 
   private CreateChatResponseDto(Long chatId) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.chatId = chatId;
+    this.data = new Data(chatId);
   }
 
   public static ResponseEntity<CreateChatResponseDto> ok(Long chatId) {
