@@ -8,11 +8,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
 
   boolean existsByProductAndBuyerAndSeller(Product product, User buyer, User seller);
 
   Page<Chat> findAllByBuyerOrSellerOrderByLastMessageAtDesc(User buyer, User seller, Pageable pageable);
+
+  Optional<Chat> findByProductAndBuyerAndSeller(Product product, User buyer, User seller);
 
 }

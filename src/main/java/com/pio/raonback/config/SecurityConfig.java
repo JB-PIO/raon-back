@@ -37,8 +37,10 @@ public class SecurityConfig {
   private static final OrRequestMatcher NON_JWT_BASED_AUTH_REQUEST_MATCHERS = new OrRequestMatcher(
       PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/**"),
       PathPatternRequestMatcher.withDefaults().matcher("/api/v1/location/**"),
-      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/product/**"),
-      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.PATCH, "/api/v1/product/*/view")
+      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/product"),
+      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/product/nearby/{locationId}"),
+      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/product/{productId}"),
+      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.PATCH, "/api/v1/product/{productId}/view")
   );
 
   private final AuthenticationFailureHandler failureHandler;

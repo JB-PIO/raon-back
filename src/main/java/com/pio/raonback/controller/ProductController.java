@@ -41,6 +41,13 @@ public class ProductController {
     return response;
   }
 
+  @GetMapping("/{productId}/chat")
+  public ResponseEntity<? super GetChatResponseDto> getChat(@PathVariable("productId") Long productId,
+                                                            @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<? super GetChatResponseDto> response = productService.getChat(productId, principal);
+    return response;
+  }
+
   @PostMapping("")
   public ResponseEntity<? super PostProductResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
                                                                     @AuthenticationPrincipal RaonUser principal) {
