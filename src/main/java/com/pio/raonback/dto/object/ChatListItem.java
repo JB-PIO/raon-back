@@ -2,6 +2,7 @@ package com.pio.raonback.dto.object;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pio.raonback.entity.Chat;
+import com.pio.raonback.entity.Message;
 import com.pio.raonback.entity.Product;
 import com.pio.raonback.entity.User;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 public class ChatListItem {
@@ -18,10 +20,10 @@ public class ChatListItem {
   private ProductData product;
   private UserData buyer;
   private UserData seller;
+  private MessageData lastMessage;
+  private Long unreadCount;
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime createdAt;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDateTime lastMessageAt;
 
   @Getter
   private static class ProductData {
@@ -61,19 +63,38 @@ public class ChatListItem {
 
   }
 
-  public ChatListItem(Chat chat) {
+  @Getter
+  private static class MessageData {
+
+    private Long messageId;
+    private String content;
+    private String imageUrl;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime sentAt;
+
+    private MessageData(Message message) {
+      this.messageId = message.getMessageId();
+      this.content = message.getContent();
+      this.imageUrl = message.getImageUrl();
+      this.sentAt = message.getSentAt();
+    }
+
+  }
+
+  public ChatListItem(Chat chat, Long unreadCount) {
     this.chatId = chat.getChatId();
     this.product = new ProductData(chat.getProduct());
     this.buyer = new UserData(chat.getBuyer());
     this.seller = new UserData(chat.getSeller());
+    this.lastMessage = new MessageData(chat.getMessages().get(chat.getMessages().size() - 1));
+    this.unreadCount = unreadCount;
     this.createdAt = chat.getCreatedAt();
-    this.lastMessageAt = chat.getLastMessageAt();
   }
 
-  public static List<ChatListItem> copyList(Page<Chat> chatPage) {
+  public static List<ChatListItem> copyList(Page<Chat> chatPage, Map<Long, Long> unreadCounts) {
     List<ChatListItem> list = new ArrayList<>();
     for (Chat chat : chatPage.getContent()) {
-      ChatListItem chatListItem = new ChatListItem(chat);
+      ChatListItem chatListItem = new ChatListItem(chat, unreadCounts.get(chat.getChatId()));
       list.add(chatListItem);
     }
     return list;

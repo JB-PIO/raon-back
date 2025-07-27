@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -38,6 +40,9 @@ public class Chat {
   @Setter
   @Column(name = "last_message_at")
   private LocalDateTime lastMessageAt;
+
+  @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Message> messages = new ArrayList<>();
 
   public Chat(Product product, User buyer, User seller) {
     this.product = product;

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 public class GetChatListResponseDto extends ResponseDto {
@@ -25,8 +26,8 @@ public class GetChatListResponseDto extends ResponseDto {
     private int totalPages;
     private long totalElements;
 
-    private Data(Page<Chat> chatPage) {
-      this.chatList = ChatListItem.copyList(chatPage);
+    private Data(Page<Chat> chatPage, Map<Long, Long> unreadCounts) {
+      this.chatList = ChatListItem.copyList(chatPage, unreadCounts);
       this.currentPage = chatPage.getNumber();
       this.totalPages = chatPage.getTotalPages();
       this.totalElements = chatPage.getTotalElements();
@@ -34,13 +35,13 @@ public class GetChatListResponseDto extends ResponseDto {
 
   }
 
-  private GetChatListResponseDto(Page<Chat> chatPage) {
+  private GetChatListResponseDto(Page<Chat> chatPage, Map<Long, Long> unreadCounts) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.data = new Data(chatPage);
+    this.data = new Data(chatPage, unreadCounts);
   }
 
-  public static ResponseEntity<GetChatListResponseDto> ok(Page<Chat> chatPage) {
-    GetChatListResponseDto responseBody = new GetChatListResponseDto(chatPage);
+  public static ResponseEntity<GetChatListResponseDto> ok(Page<Chat> chatPage, Map<Long, Long> unreadCounts) {
+    GetChatListResponseDto responseBody = new GetChatListResponseDto(chatPage, unreadCounts);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

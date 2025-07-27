@@ -22,7 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +39,14 @@ public class ChatServiceImplement implements ChatService {
 
     Pageable pageable = PageRequest.of(page, size);
     Page<Chat> chatPage = chatRepository.findAllByBuyerOrSellerOrderByLastMessageAtDesc(user, user, pageable);
-    return GetChatListResponseDto.ok(chatPage);
+
+    Map<Long, Long> unreadCounts = new HashMap<>();
+    for (Chat chat : chatPage.getContent()) {
+      Long unreadMessageCount = messageRepository.countByChatAndSenderNotAndIsReadFalseAndIsDeletedFalse(chat, user);
+      unreadCounts.put(chat.getChatId(), unreadMessageCount);
+    }
+
+    return GetChatListResponseDto.ok(chatPage, unreadCounts);
   }
 
   @Override
