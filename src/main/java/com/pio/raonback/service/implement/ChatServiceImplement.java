@@ -4,6 +4,7 @@ import com.pio.raonback.dto.object.MessageListItem;
 import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.chat.GetChatListResponseDto;
+import com.pio.raonback.dto.response.chat.GetChatResponseDto;
 import com.pio.raonback.dto.response.chat.GetMessageListResponseDto;
 import com.pio.raonback.dto.response.chat.SendMessageResponseDto;
 import com.pio.raonback.entity.Chat;
@@ -39,6 +40,18 @@ public class ChatServiceImplement implements ChatService {
     Pageable pageable = PageRequest.of(page, size);
     Page<Chat> chatPage = chatRepository.findAllByBuyerOrSellerOrderByLastMessageAtDesc(user, user, pageable);
     return GetChatListResponseDto.ok(chatPage);
+  }
+
+  @Override
+  public ResponseEntity<? super GetChatResponseDto> getChat(Long chatId, RaonUser principal) {
+    User user = principal.getUser();
+
+    Optional<Chat> optionalChat = chatRepository.findById(chatId);
+    if (optionalChat.isEmpty()) return ResponseDto.chatNotFound();
+    Chat chat = optionalChat.get();
+    if (!chat.getSeller().equals(user) && !chat.getBuyer().equals(user)) return ResponseDto.noPermission();
+
+    return GetChatResponseDto.ok(chat);
   }
 
   @Override

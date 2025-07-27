@@ -2,6 +2,7 @@ package com.pio.raonback.controller;
 
 import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
 import com.pio.raonback.dto.response.chat.GetChatListResponseDto;
+import com.pio.raonback.dto.response.chat.GetChatResponseDto;
 import com.pio.raonback.dto.response.chat.GetMessageListResponseDto;
 import com.pio.raonback.dto.response.chat.SendMessageResponseDto;
 import com.pio.raonback.security.RaonUser;
@@ -24,6 +25,13 @@ public class ChatController {
                                                                     @RequestParam(defaultValue = "10") int size,
                                                                     @AuthenticationPrincipal RaonUser principal) {
     ResponseEntity<? super GetChatListResponseDto> response = chatService.getChatList(page, size, principal);
+    return response;
+  }
+
+  @GetMapping("/{chatId}")
+  public ResponseEntity<? super GetChatResponseDto> getChat(@PathVariable("chatId") Long chatId,
+                                                            @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<? super GetChatResponseDto> response = chatService.getChat(chatId, principal);
     return response;
   }
 
