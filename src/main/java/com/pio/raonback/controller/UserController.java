@@ -1,8 +1,6 @@
 package com.pio.raonback.controller;
 
-import com.pio.raonback.dto.request.user.UpdateLocationRequestDto;
-import com.pio.raonback.dto.request.user.UpdateNicknameRequestDto;
-import com.pio.raonback.dto.request.user.UpdateProfileImageRequestDto;
+import com.pio.raonback.dto.request.user.UpdateProfileRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.UserService;
@@ -22,24 +20,10 @@ public class UserController {
 
   private final UserService userService;
 
-  @PatchMapping("/nickname")
-  public ResponseEntity<ResponseDto> updateNickname(@RequestBody @Valid UpdateNicknameRequestDto requestBody,
-                                                    @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<ResponseDto> response = userService.updateNickname(requestBody, principal);
-    return response;
-  }
-
-  @PatchMapping("/profile-image")
-  public ResponseEntity<ResponseDto> updateProfileImage(@RequestBody @Valid UpdateProfileImageRequestDto requestBody,
-                                                        @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<ResponseDto> response = userService.updateProfileImage(requestBody, principal);
-    return response;
-  }
-
-  @PatchMapping("/location")
-  public ResponseEntity<ResponseDto> updateLocation(@RequestBody @Valid UpdateLocationRequestDto requestBody,
-                                                    @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<ResponseDto> response = userService.updateLocation(requestBody, principal);
+  @PatchMapping("/me")
+  public ResponseEntity<ResponseDto> updateProfile(@RequestBody @Valid UpdateProfileRequestDto requestBody,
+                                                   @AuthenticationPrincipal RaonUser principal) {
+    ResponseEntity<ResponseDto> response = userService.updateProfile(requestBody, principal);
     return response;
   }
 

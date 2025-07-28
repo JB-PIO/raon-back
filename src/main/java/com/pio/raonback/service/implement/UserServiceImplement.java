@@ -1,8 +1,6 @@
 package com.pio.raonback.service.implement;
 
-import com.pio.raonback.dto.request.user.UpdateLocationRequestDto;
-import com.pio.raonback.dto.request.user.UpdateNicknameRequestDto;
-import com.pio.raonback.dto.request.user.UpdateProfileImageRequestDto;
+import com.pio.raonback.dto.request.user.UpdateProfileRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.entity.Location;
 import com.pio.raonback.entity.User;
@@ -24,32 +22,26 @@ public class UserServiceImplement implements UserService {
   private final LocationRepository locationRepository;
 
   @Override
-  public ResponseEntity<ResponseDto> updateNickname(UpdateNicknameRequestDto dto, RaonUser principal) {
+  public ResponseEntity<ResponseDto> updateProfile(UpdateProfileRequestDto dto, RaonUser principal) {
     User user = principal.getUser();
-    String newNickname = dto.getNickname();
-    boolean isNicknameTaken = userRepository.existsByNickname(newNickname);
-    if (isNicknameTaken) return ResponseDto.nicknameExists();
-    user.updateNickname(newNickname);
-    userRepository.save(user);
-    return ResponseDto.ok();
-  }
 
-  @Override
-  public ResponseEntity<ResponseDto> updateProfileImage(UpdateProfileImageRequestDto dto, RaonUser principal) {
-    User user = principal.getUser();
-    String newProfileImage = dto.getProfileImage();
-    user.updateProfileImage(newProfileImage);
-    userRepository.save(user);
-    return ResponseDto.ok();
-  }
-
-  @Override
-  public ResponseEntity<ResponseDto> updateLocation(UpdateLocationRequestDto dto, RaonUser principal) {
-    User user = principal.getUser();
-    Optional<Location> optionalLocation = locationRepository.findById(dto.getLocationId());
-    if (optionalLocation.isEmpty()) return ResponseDto.locationNotFound();
-    Location location = optionalLocation.get();
-    user.updateLocation(location);
+    if (dto.getNickname() != null) {
+      String newNickname = dto.getNickname();
+      boolean isNicknameTaken = userRepository.existsByNickname(newNickname);
+      if (isNicknameTaken) return ResponseDto.nicknameExists();
+      user.updateNickname(newNickname);
+    }
+    if (dto.getProfileImage() != null) {
+      String newProfileImage = dto.getProfileImage();
+      user.updateProfileImage(newProfileImage);
+    }
+    if (dto.getLocationId() != null) {
+      Long locationId = dto.getLocationId();
+      Optional<Location> optionalLocation = locationRepository.findById(locationId);
+      if (optionalLocation.isEmpty()) return ResponseDto.locationNotFound();
+      Location location = optionalLocation.get();
+      user.updateLocation(location);
+    }
     userRepository.save(user);
     return ResponseDto.ok();
   }
