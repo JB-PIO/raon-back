@@ -32,7 +32,7 @@ public class User {
   @Column(name = "profile_image", length = 255)
   private String profileImage;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "location_id", nullable = false)
   private Location location;
 

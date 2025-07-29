@@ -2,6 +2,7 @@ package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.request.user.UpdateProfileRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
+import com.pio.raonback.dto.response.user.GetProfileResponseDto;
 import com.pio.raonback.entity.Location;
 import com.pio.raonback.entity.User;
 import com.pio.raonback.repository.LocationRepository;
@@ -20,6 +21,12 @@ public class UserServiceImplement implements UserService {
 
   private final UserRepository userRepository;
   private final LocationRepository locationRepository;
+
+  @Override
+  public ResponseEntity<? super GetProfileResponseDto> getProfile(RaonUser principal) {
+    User user = principal.getUser();
+    return GetProfileResponseDto.ok(user);
+  }
 
   @Override
   public ResponseEntity<ResponseDto> updateProfile(UpdateProfileRequestDto dto, RaonUser principal) {
