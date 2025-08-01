@@ -20,15 +20,13 @@ public class UserController {
 
   @GetMapping("/me")
   public ResponseEntity<? super GetProfileResponseDto> getProfile(@AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<? super GetProfileResponseDto> response = userService.getProfile(principal);
-    return response;
+    return userService.getProfile(principal);
   }
 
   @PatchMapping("/me")
   public ResponseEntity<ResponseDto> updateProfile(@RequestBody @Valid UpdateProfileRequestDto requestBody,
                                                    @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<ResponseDto> response = userService.updateProfile(requestBody, principal);
-    return response;
+    return userService.updateProfile(requestBody, principal);
   }
 
 }

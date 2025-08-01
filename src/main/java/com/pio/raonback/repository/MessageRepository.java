@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-  Page<Message> findAllByIsDeletedFalseAndChatOrderBySentAtDesc(Chat chat, Pageable pageable);
+  Page<Message> findAllByIsDeletedFalseAndChat(Chat chat, Pageable pageable);
 
   Long countByChatAndSenderNotAndIsReadFalseAndIsDeletedFalse(Chat chat, User user);
 

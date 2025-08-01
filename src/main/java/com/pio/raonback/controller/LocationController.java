@@ -4,6 +4,9 @@ import com.pio.raonback.dto.response.location.GetLocationListResponseDto;
 import com.pio.raonback.dto.response.location.GetSearchLocationListResponseDto;
 import com.pio.raonback.service.LocationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,18 +18,14 @@ public class LocationController {
   private final LocationService locationService;
 
   @GetMapping("")
-  public ResponseEntity<? super GetLocationListResponseDto> getLocationList(@RequestParam(defaultValue = "0") int page,
-                                                                            @RequestParam(defaultValue = "100") int size) {
-    ResponseEntity<? super GetLocationListResponseDto> response = locationService.getLocationList(page, size);
-    return response;
+  public ResponseEntity<? super GetLocationListResponseDto> getLocationList(@PageableDefault(size = 50) Pageable pageable) {
+    return locationService.getLocationList(pageable);
   }
 
   @GetMapping("/search/{keyword}")
   public ResponseEntity<? super GetSearchLocationListResponseDto> getSearchLocationList(@PathVariable("keyword") String keyword,
-                                                                                        @RequestParam(defaultValue = "0") int page,
-                                                                                        @RequestParam(defaultValue = "100") int size) {
-    ResponseEntity<? super GetSearchLocationListResponseDto> response = locationService.getSearchLocationList(keyword, page, size);
-    return response;
+                                                                                        @PageableDefault(size = 50) Pageable pageable) {
+    return locationService.getSearchLocationList(keyword, pageable);
   }
 
 }

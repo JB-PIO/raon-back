@@ -21,26 +21,22 @@ public class AuthController {
 
   @PostMapping("/sign-up")
   public ResponseEntity<? super SignUpResponseDto> signUp(@RequestBody @Valid SignUpRequestDto requestBody) {
-    ResponseEntity<? super SignUpResponseDto> response = authService.signUp(requestBody);
-    return response;
+    return authService.signUp(requestBody);
   }
 
   @PostMapping("/sign-in")
   public ResponseEntity<? super SignInResponseDto> signIn(@RequestBody @Valid SignInRequestDto requestBody) {
-    ResponseEntity<? super SignInResponseDto> response = authService.signIn(requestBody);
-    return response;
+    return authService.signIn(requestBody);
   }
 
   @PostMapping("/refresh")
   public ResponseEntity<? super RefreshTokenResponseDto> refreshToken(@CookieValue(value = "refreshToken") String refreshToken) {
-    ResponseEntity<? super RefreshTokenResponseDto> response = authService.refreshToken(refreshToken);
-    return response;
+    return authService.refreshToken(refreshToken);
   }
 
   @PostMapping("/sign-out")
   public ResponseEntity<ResponseDto> signOut(@CookieValue(value = "refreshToken") String refreshToken) {
-    ResponseEntity<ResponseDto> response = authService.signOut(refreshToken);
-    return response;
+    return authService.signOut(refreshToken);
   }
 
 }

@@ -9,6 +9,9 @@ import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,74 +24,62 @@ public class ProductController {
   private final ProductService productService;
 
   @GetMapping("")
-  public ResponseEntity<? super GetProductListResponseDto> getProductList(@RequestParam(defaultValue = "0") int page,
-                                                                          @RequestParam(defaultValue = "30") int size) {
-    ResponseEntity<? super GetProductListResponseDto> response = productService.getProductList(page, size);
-    return response;
+  public ResponseEntity<? super GetProductListResponseDto> getProductList(@PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    return productService.getProductList(pageable);
   }
 
   @GetMapping("/nearby/{locationId}")
   public ResponseEntity<? super GetNearbyProductListResponseDto> getNearbyProductList(@PathVariable("locationId") Long locationId,
-                                                                                      @RequestParam(defaultValue = "0") int page,
-                                                                                      @RequestParam(defaultValue = "30") int size) {
-    ResponseEntity<? super GetNearbyProductListResponseDto> response = productService.getNearbyProductList(locationId, page, size);
-    return response;
+                                                                                      @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    return productService.getNearbyProductList(locationId, pageable);
   }
 
   @GetMapping("/{productId}")
   public ResponseEntity<? super GetProductResponseDto> getProduct(@PathVariable("productId") Long productId) {
-    ResponseEntity<? super GetProductResponseDto> response = productService.getProduct(productId);
-    return response;
+    return productService.getProduct(productId);
   }
 
   @GetMapping("/{productId}/chat")
   public ResponseEntity<? super GetChatResponseDto> getChat(@PathVariable("productId") Long productId,
                                                             @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<? super GetChatResponseDto> response = productService.getChat(productId, principal);
-    return response;
+    return productService.getChat(productId, principal);
   }
 
   @PostMapping("")
   public ResponseEntity<? super PostProductResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
                                                                     @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<? super PostProductResponseDto> response = productService.postProduct(requestBody, principal);
-    return response;
+    return productService.postProduct(requestBody, principal);
   }
 
   @PostMapping("/{productId}/chat")
   public ResponseEntity<? super CreateChatResponseDto> createChat(@PathVariable("productId") Long productId,
                                                                   @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<? super CreateChatResponseDto> response = productService.createChat(productId, principal);
-    return response;
+    return productService.createChat(productId, principal);
   }
 
   @PutMapping("/{productId}")
   public ResponseEntity<? super UpdateProductResponseDto> updateProduct(@PathVariable("productId") Long productId,
                                                                         @RequestBody @Valid UpdateProductRequestDto requestBody,
                                                                         @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<? super UpdateProductResponseDto> response = productService.updateProduct(productId, requestBody, principal);
-    return response;
+    return productService.updateProduct(productId, requestBody, principal);
   }
 
   @PutMapping("/{productId}/favorite")
   public ResponseEntity<ResponseDto> putFavorite(@PathVariable("productId") Long productId,
                                                  @RequestBody @Valid PutFavoriteRequestDto requestBody,
                                                  @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<ResponseDto> response = productService.putFavorite(productId, requestBody, principal);
-    return response;
+    return productService.putFavorite(productId, requestBody, principal);
   }
 
   @PatchMapping("/{productId}/view")
   public ResponseEntity<ResponseDto> increaseViewCount(@PathVariable("productId") Long productId) {
-    ResponseEntity<ResponseDto> response = productService.increaseViewCount(productId);
-    return response;
+    return productService.increaseViewCount(productId);
   }
 
   @DeleteMapping("/{productId}")
   public ResponseEntity<ResponseDto> deleteProduct(@PathVariable("productId") Long productId,
                                                    @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<ResponseDto> response = productService.deleteProduct(productId, principal);
-    return response;
+    return productService.deleteProduct(productId, principal);
   }
 
 }

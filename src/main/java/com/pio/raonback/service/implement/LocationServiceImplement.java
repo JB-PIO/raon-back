@@ -19,15 +19,13 @@ public class LocationServiceImplement implements LocationService {
   private final LocationRepository locationRepository;
 
   @Override
-  public ResponseEntity<? super GetLocationListResponseDto> getLocationList(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
+  public ResponseEntity<? super GetLocationListResponseDto> getLocationList(Pageable pageable) {
     Page<Location> locationPage = locationRepository.findAll(pageable);
     return GetLocationListResponseDto.ok(locationPage);
   }
 
   @Override
-  public ResponseEntity<? super GetSearchLocationListResponseDto> getSearchLocationList(String keyword, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
+  public ResponseEntity<? super GetSearchLocationListResponseDto> getSearchLocationList(String keyword, Pageable pageable) {
     Page<Location> locationPage = locationRepository.findAllByAddressContains(keyword, pageable);
     return GetSearchLocationListResponseDto.ok(locationPage);
   }

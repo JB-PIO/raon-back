@@ -9,6 +9,9 @@ import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ChatService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,35 +24,29 @@ public class ChatController {
   private final ChatService chatService;
 
   @GetMapping("")
-  public ResponseEntity<? super GetChatListResponseDto> getChatList(@RequestParam(defaultValue = "0") int page,
-                                                                    @RequestParam(defaultValue = "10") int size,
+  public ResponseEntity<? super GetChatListResponseDto> getChatList(@PageableDefault(size = 10, sort = "lastMessageAt", direction = Sort.Direction.DESC) Pageable pageable,
                                                                     @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<? super GetChatListResponseDto> response = chatService.getChatList(page, size, principal);
-    return response;
+    return chatService.getChatList(pageable, principal);
   }
 
   @GetMapping("/{chatId}")
   public ResponseEntity<? super GetChatResponseDto> getChat(@PathVariable("chatId") Long chatId,
                                                             @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<? super GetChatResponseDto> response = chatService.getChat(chatId, principal);
-    return response;
+    return chatService.getChat(chatId, principal);
   }
 
   @GetMapping("/{chatId}/message")
   public ResponseEntity<? super GetMessageListResponseDto> getMessageList(@PathVariable("chatId") Long chatId,
-                                                                          @RequestParam(defaultValue = "0") int page,
-                                                                          @RequestParam(defaultValue = "20") int size,
+                                                                          @PageableDefault(size = 20, sort = "sentAt", direction = Sort.Direction.DESC) Pageable pageable,
                                                                           @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<? super GetMessageListResponseDto> response = chatService.getMessageList(chatId, page, size, principal);
-    return response;
+    return chatService.getMessageList(chatId, pageable, principal);
   }
 
   @PostMapping("/{chatId}/message")
   public ResponseEntity<? super SendMessageResponseDto> sendMessage(@PathVariable("chatId") Long chatId,
                                                                     @RequestBody @Valid SendMessageRequestDto requestBody,
                                                                     @AuthenticationPrincipal RaonUser principal) {
-    ResponseEntity<? super SendMessageResponseDto> response = chatService.sendMessage(chatId, requestBody, principal);
-    return response;
+    return chatService.sendMessage(chatId, requestBody, principal);
   }
 
 }

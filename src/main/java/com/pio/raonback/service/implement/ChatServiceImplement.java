@@ -34,11 +34,10 @@ public class ChatServiceImplement implements ChatService {
   private final SimpMessagingTemplate messagingTemplate;
 
   @Override
-  public ResponseEntity<? super GetChatListResponseDto> getChatList(int page, int size, RaonUser principal) {
+  public ResponseEntity<? super GetChatListResponseDto> getChatList(Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
 
-    Pageable pageable = PageRequest.of(page, size);
-    Page<Chat> chatPage = chatRepository.findAllByBuyerOrSellerOrderByLastMessageAtDesc(user, user, pageable);
+    Page<Chat> chatPage = chatRepository.findAllByBuyerOrSeller(user, user, pageable);
 
     Map<Long, Long> unreadCounts = new HashMap<>();
     for (Chat chat : chatPage.getContent()) {
@@ -62,7 +61,7 @@ public class ChatServiceImplement implements ChatService {
   }
 
   @Override
-  public ResponseEntity<? super GetMessageListResponseDto> getMessageList(Long chatId, int page, int size, RaonUser principal) {
+  public ResponseEntity<? super GetMessageListResponseDto> getMessageList(Long chatId, Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
 
     Optional<Chat> optionalChat = chatRepository.findById(chatId);
@@ -70,8 +69,7 @@ public class ChatServiceImplement implements ChatService {
     Chat chat = optionalChat.get();
     if (!chat.getSeller().equals(user) && !chat.getBuyer().equals(user)) return ResponseDto.noPermission();
 
-    Pageable pageable = PageRequest.of(page, size);
-    Page<Message> messagePage = messageRepository.findAllByIsDeletedFalseAndChatOrderBySentAtDesc(chat, pageable);
+    Page<Message> messagePage = messageRepository.findAllByIsDeletedFalseAndChat(chat, pageable);
     return GetMessageListResponseDto.ok(messagePage);
   }
 

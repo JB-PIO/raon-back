@@ -12,7 +12,6 @@ import com.pio.raonback.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,19 +32,17 @@ public class ProductServiceImplement implements ProductService {
   private final FavoriteRepository favoriteRepository;
 
   @Override
-  public ResponseEntity<? super GetProductListResponseDto> getProductList(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
-    Page<Product> productPage = productRepository.findAllByIsSoldFalseAndIsActiveTrueOrderByCreatedAtDesc(pageable);
+  public ResponseEntity<? super GetProductListResponseDto> getProductList(Pageable pageable) {
+    Page<Product> productPage = productRepository.findAllByIsSoldFalseAndIsActiveTrue(pageable);
     return GetProductListResponseDto.ok(productPage);
   }
 
   @Override
-  public ResponseEntity<? super GetNearbyProductListResponseDto> getNearbyProductList(Long locationId, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
+  public ResponseEntity<? super GetNearbyProductListResponseDto> getNearbyProductList(Long locationId, Pageable pageable) {
     boolean isLocationExists = locationRepository.existsById(locationId);
     if (!isLocationExists) return ResponseDto.locationNotFound();
     List<Location> nearbyLocations = locationRepository.findAllByWithinRadius(locationId, 10000L);
-    Page<Product> productPage = productRepository.findAllByIsSoldFalseAndIsActiveTrueAndLocationInOrderByCreatedAtDesc(nearbyLocations, pageable);
+    Page<Product> productPage = productRepository.findAllByIsSoldFalseAndIsActiveTrueAndLocationIn(nearbyLocations, pageable);
     return GetNearbyProductListResponseDto.ok(productPage);
   }
 
@@ -60,7 +57,7 @@ public class ProductServiceImplement implements ProductService {
   @Override
   public ResponseEntity<? super GetChatResponseDto> getChat(Long productId, RaonUser principal) {
     User buyer = principal.getUser();
-    
+
     Optional<Product> optionalProduct = productRepository.findById(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();

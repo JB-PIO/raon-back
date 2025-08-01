@@ -11,12 +11,12 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, QProductRepository {
 
   Optional<Product> findByIsActiveTrueAndProductId(Long productId);
 
-  Page<Product> findAllByIsSoldFalseAndIsActiveTrueOrderByCreatedAtDesc(Pageable pageable);
+  Page<Product> findAllByIsSoldFalseAndIsActiveTrue(Pageable pageable);
 
-  Page<Product> findAllByIsSoldFalseAndIsActiveTrueAndLocationInOrderByCreatedAtDesc(Collection<Location> locations, Pageable pageable);
+  Page<Product> findAllByIsSoldFalseAndIsActiveTrueAndLocationIn(Collection<Location> locations, Pageable pageable);
 
 }
