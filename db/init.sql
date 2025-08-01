@@ -43,6 +43,7 @@ CREATE TABLE category
     category_id BIGINT      NOT NULL AUTO_INCREMENT COMMENT '카테고리 고유 ID',
     level       BIGINT      NOT NULL DEFAULT 1 COMMENT '카테고리 레벨',
     parent_id   BIGINT      NULL COMMENT '상위 카테고리 ID',
+    path        VARCHAR(30) NOT NULL COMMENT '카테고리 경로',
     name        VARCHAR(30) NOT NULL COMMENT '카테고리 이름',
     is_leaf     BOOLEAN     NOT NULL DEFAULT FALSE COMMENT '최하위 카테고리 여부',
     PRIMARY KEY (category_id),
@@ -194,10 +195,11 @@ LOAD DATA INFILE '/var/lib/mysql-files/category.csv'
     ENCLOSED BY '"'
     LINES TERMINATED BY '\n'
     IGNORE 1 LINES
-    (@category_id, @level, @parent_id, @name, @is_leaf)
+    (@category_id, @level, @parent_id, @path, @name, @is_leaf)
     SET
         category_id = @category_id,
         level = @level,
         parent_id = NULLIF(@parent_id, ''),
+        path = @path,
         name = @name,
         is_leaf = @is_leaf;

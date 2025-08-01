@@ -24,6 +24,9 @@ public class Category {
   @JoinColumn(name = "parent_id")
   private Category parent;
 
+  @Column(name = "path", nullable = false, length = 30)
+  private String path;
+
   @Column(name = "name", nullable = false, length = 30)
   private String name;
 
