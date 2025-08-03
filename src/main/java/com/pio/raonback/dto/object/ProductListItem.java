@@ -2,7 +2,7 @@ package com.pio.raonback.dto.object;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pio.raonback.entity.Location;
-import com.pio.raonback.entity.Product;
+import com.pio.raonback.entity.ProductDetail;
 import com.pio.raonback.entity.User;
 import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.entity.enums.TradeType;
@@ -58,25 +58,25 @@ public class ProductListItem {
 
   }
 
-  public ProductListItem(Product product) {
-    this.productId = product.getProductId();
-    this.seller = new UserData(product.getSeller());
-    this.location = new LocationData(product.getLocation());
-    this.thumbnail = product.getImages().get(0).getImageUrl();
-    this.title = product.getTitle();
-    this.price = product.getPrice();
-    this.viewCount = product.getViewCount();
-    this.favoriteCount = (long) product.getFavorites().size();
-    this.status = product.getStatus();
-    this.tradeType = product.getTradeType();
-    this.isSold = product.getIsSold();
-    this.createdAt = product.getCreatedAt();
+  public ProductListItem(ProductDetail productDetail) {
+    this.productId = productDetail.getProductId();
+    this.seller = new UserData(productDetail.getSeller());
+    this.location = new LocationData(productDetail.getLocation());
+    this.thumbnail = productDetail.getThumbnail();
+    this.title = productDetail.getTitle();
+    this.price = productDetail.getPrice();
+    this.viewCount = productDetail.getViewCount();
+    this.favoriteCount = productDetail.getFavoriteCount();
+    this.status = productDetail.getStatus();
+    this.tradeType = productDetail.getTradeType();
+    this.isSold = productDetail.getIsSold();
+    this.createdAt = productDetail.getCreatedAt();
   }
 
-  public static List<ProductListItem> copyList(Page<Product> productPage) {
+  public static List<ProductListItem> copyList(Page<ProductDetail> productDetailPage) {
     List<ProductListItem> list = new ArrayList<>();
-    for (Product product : productPage.getContent()) {
-      ProductListItem productListItem = new ProductListItem(product);
+    for (ProductDetail productDetail : productDetailPage.getContent()) {
+      ProductListItem productListItem = new ProductListItem(productDetail);
       list.add(productListItem);
     }
     return list;

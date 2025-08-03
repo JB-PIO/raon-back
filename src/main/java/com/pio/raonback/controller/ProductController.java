@@ -1,5 +1,6 @@
 package com.pio.raonback.controller;
 
+import com.pio.raonback.dto.request.product.GetProductListRequestDto;
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.PutFavoriteRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
@@ -24,14 +25,10 @@ public class ProductController {
   private final ProductService productService;
 
   @GetMapping("")
-  public ResponseEntity<? super GetProductListResponseDto> getProductList(@PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-    return productService.getProductList(pageable);
-  }
-
-  @GetMapping("/nearby/{locationId}")
-  public ResponseEntity<? super GetNearbyProductListResponseDto> getNearbyProductList(@PathVariable("locationId") Long locationId,
-                                                                                      @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-    return productService.getNearbyProductList(locationId, pageable);
+  public ResponseEntity<? super GetProductListResponseDto> getProductList(
+      @ModelAttribute @Valid GetProductListRequestDto requestParam,
+      @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    return productService.getProductList(requestParam, pageable);
   }
 
   @GetMapping("/{productId}")

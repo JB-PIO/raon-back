@@ -1,5 +1,6 @@
 package com.pio.raonback.service;
 
+import com.pio.raonback.dto.request.product.GetProductListRequestDto;
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.PutFavoriteRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
@@ -11,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface ProductService {
 
-  ResponseEntity<? super GetProductListResponseDto> getProductList(Pageable pageable);
-
-  ResponseEntity<? super GetNearbyProductListResponseDto> getNearbyProductList(Long locationId, Pageable pageable);
+  ResponseEntity<? super GetProductListResponseDto> getProductList(GetProductListRequestDto dto, Pageable pageable);
 
   ResponseEntity<? super GetProductResponseDto> getProduct(Long productId);
 

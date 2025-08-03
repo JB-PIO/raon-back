@@ -1,5 +1,6 @@
 package com.pio.raonback.service.implement;
 
+import com.pio.raonback.dto.request.product.GetProductListRequestDto;
 import com.pio.raonback.dto.request.product.PostProductRequestDto;
 import com.pio.raonback.dto.request.product.PutFavoriteRequestDto;
 import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
@@ -25,6 +26,7 @@ import java.util.Optional;
 public class ProductServiceImplement implements ProductService {
 
   private final ProductRepository productRepository;
+  private final ProductDetailRepository productDetailRepository;
   private final ProductImageRepository productImageRepository;
   private final LocationRepository locationRepository;
   private final CategoryRepository categoryRepository;
@@ -32,18 +34,25 @@ public class ProductServiceImplement implements ProductService {
   private final FavoriteRepository favoriteRepository;
 
   @Override
-  public ResponseEntity<? super GetProductListResponseDto> getProductList(Pageable pageable) {
-    Page<Product> productPage = productRepository.findAllByIsSoldFalseAndIsActiveTrue(pageable);
-    return GetProductListResponseDto.ok(productPage);
-  }
+  public ResponseEntity<? super GetProductListResponseDto> getProductList(GetProductListRequestDto dto, Pageable pageable) {
+    Category category = null;
+    List<Location> nearbyLocations = null;
 
-  @Override
-  public ResponseEntity<? super GetNearbyProductListResponseDto> getNearbyProductList(Long locationId, Pageable pageable) {
-    boolean isLocationExists = locationRepository.existsById(locationId);
-    if (!isLocationExists) return ResponseDto.locationNotFound();
-    List<Location> nearbyLocations = locationRepository.findAllByWithinRadius(locationId, 10000L);
-    Page<Product> productPage = productRepository.findAllByIsSoldFalseAndIsActiveTrueAndLocationIn(nearbyLocations, pageable);
-    return GetNearbyProductListResponseDto.ok(productPage);
+    if (dto.getCategoryId() != null) {
+      Optional<Category> optionalCategory = categoryRepository.findById(dto.getCategoryId());
+      if (optionalCategory.isEmpty()) return ResponseDto.categoryNotFound();
+      category = optionalCategory.get();
+    }
+    if (dto.getLocationId() != null) {
+      boolean isLocationExists = locationRepository.existsById(dto.getLocationId());
+      if (!isLocationExists) return ResponseDto.locationNotFound();
+      nearbyLocations = locationRepository.findAllByWithinRadius(dto.getLocationId(), 10000L);
+    }
+
+    Page<ProductDetail> productDetailPage =
+        productDetailRepository.findAllWithFilters(category, nearbyLocations, dto.getMinPrice(), dto.getMaxPrice(),
+            dto.getKeyword(), dto.getStatus(), dto.getTradeType(), pageable);
+    return GetProductListResponseDto.ok(productDetailPage);
   }
 
   @Override
