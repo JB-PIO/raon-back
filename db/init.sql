@@ -176,6 +176,33 @@ CREATE TABLE block
     FOREIGN KEY (blocked_user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
+CREATE VIEW product_detail AS
+SELECT p.product_id,
+       p.seller_id,
+       p.category_id,
+       p.location_id,
+       (SELECT pi.image_url
+        FROM product_image AS pi
+        WHERE pi.product_id = p.product_id
+        ORDER BY pi.image_id
+        LIMIT 1)            AS thumbnail,
+       p.title,
+       p.description,
+       p.price,
+       p.view_count,
+       COUNT(f.favorite_id) AS favorite_count,
+       p.status,
+       p.trade_type,
+       p.is_sold,
+       p.is_active,
+       p.is_deleted,
+       p.created_at,
+       p.updated_at,
+       p.deleted_at
+FROM product AS p
+         LEFT JOIN favorite AS f ON p.product_id = f.product_id
+GROUP BY p.product_id;
+
 LOAD DATA INFILE '/var/lib/mysql-files/location.csv'
     INTO TABLE location
     FIELDS TERMINATED BY ','
