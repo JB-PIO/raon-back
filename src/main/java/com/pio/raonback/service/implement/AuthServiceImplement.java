@@ -75,7 +75,7 @@ public class AuthServiceImplement implements AuthService {
   @Transactional
   public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
     String email = dto.getEmail();
-    Optional<User> optionalUser = userRepository.findByIsDeletedFalseAndEmail(email);
+    Optional<User> optionalUser = userRepository.findByEmailAndIsDeletedFalse(email);
     if (optionalUser.isEmpty()) return ResponseDto.signInFailed();
     User user = optionalUser.get();
 

@@ -22,6 +22,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -70,7 +71,7 @@ public class ChatServiceImplement implements ChatService {
     Chat chat = optionalChat.get();
     if (!chat.getSeller().equals(user) && !chat.getBuyer().equals(user)) return ResponseDto.noPermission();
 
-    Page<Message> messagePage = messageRepository.findAllByIsDeletedFalseAndChat(chat, pageable);
+    Page<Message> messagePage = messageRepository.findAllByChatAndIsDeletedFalse(chat, pageable);
     return GetMessageListResponseDto.ok(messagePage);
   }
 
@@ -93,6 +94,22 @@ public class ChatServiceImplement implements ChatService {
     messagingTemplate.convertAndSend("/user/" + receiver.getUserId() + "/chat", messageListItem);
 
     return SendMessageResponseDto.ok(message);
+  }
+
+  @Override
+  public ResponseEntity<ResponseDto> readMessages(Long chatId, RaonUser principal) {
+    User reader = principal.getUser();
+
+    Optional<Chat> optionalChat = chatRepository.findById(chatId);
+    if (optionalChat.isEmpty()) return ResponseDto.chatNotFound();
+    Chat chat = optionalChat.get();
+    if (!chat.getSeller().equals(reader) && !chat.getBuyer().equals(reader)) return ResponseDto.noPermission();
+
+    List<Message> unreadMessages = messageRepository.findAllByChatAndSenderNotAndIsReadFalseAndIsDeletedFalse(chat, reader);
+    for (Message unreadMessage : unreadMessages) unreadMessage.read();
+    messageRepository.saveAll(unreadMessages);
+
+    return ResponseDto.ok();
   }
 
 }

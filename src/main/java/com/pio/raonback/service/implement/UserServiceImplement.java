@@ -37,7 +37,7 @@ public class UserServiceImplement implements UserService {
   @Override
   public ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
-    Page<Favorite> favoritePage = favoriteRepository.findAllByProductIsActiveTrueAndUser(user, pageable);
+    Page<Favorite> favoritePage = favoriteRepository.findAllByUserAndProductIsActiveTrue(user, pageable);
     return GetFavoriteListResponseDto.ok(favoritePage);
   }
 

@@ -1,6 +1,7 @@
 package com.pio.raonback.service;
 
 import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
+import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.chat.GetChatListResponseDto;
 import com.pio.raonback.dto.response.chat.GetChatResponseDto;
 import com.pio.raonback.dto.response.chat.GetMessageListResponseDto;
@@ -18,5 +19,7 @@ public interface ChatService {
   ResponseEntity<? super GetMessageListResponseDto> getMessageList(Long chatId, Pageable pageable, RaonUser principal);
 
   ResponseEntity<? super SendMessageResponseDto> sendMessage(Long chatId, SendMessageRequestDto dto, RaonUser principal);
+
+  ResponseEntity<ResponseDto> readMessages(Long chatId, RaonUser principal);
 
 }

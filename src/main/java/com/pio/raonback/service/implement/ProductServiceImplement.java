@@ -57,7 +57,7 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   public ResponseEntity<? super GetProductResponseDto> getProduct(Long productId) {
-    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
     return GetProductResponseDto.ok(product);
@@ -116,7 +116,7 @@ public class ProductServiceImplement implements ProductService {
   public ResponseEntity<? super CreateChatResponseDto> createChat(Long productId, RaonUser principal) {
     User buyer = principal.getUser();
 
-    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
 
@@ -137,7 +137,7 @@ public class ProductServiceImplement implements ProductService {
   public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser principal) {
     User seller = principal.getUser();
 
-    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
 
@@ -176,7 +176,7 @@ public class ProductServiceImplement implements ProductService {
   public ResponseEntity<ResponseDto> putFavorite(Long productId, PutFavoriteRequestDto dto, RaonUser principal) {
     User user = principal.getUser();
 
-    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
     if (product.getSeller().equals(user)) return ResponseDto.ownProduct();
@@ -197,7 +197,7 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   public ResponseEntity<ResponseDto> increaseViewCount(Long productId) {
-    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
     product.increaseViewCount();
@@ -209,7 +209,7 @@ public class ProductServiceImplement implements ProductService {
   public ResponseEntity<ResponseDto> deleteProduct(Long productId, RaonUser principal) {
     User seller = principal.getUser();
 
-    Optional<Product> optionalProduct = productRepository.findByIsActiveTrueAndProductId(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
 

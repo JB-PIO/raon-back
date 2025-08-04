@@ -21,7 +21,7 @@ public class RaonUserService implements UserDetailsService {
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     Optional<User> optionalUser;
     try {
-      optionalUser = userRepository.findByIsDeletedFalseAndEmail(email);
+      optionalUser = userRepository.findByEmailAndIsDeletedFalse(email);
     } catch (Exception exception) {
       throw new UsernameCannotFoundException(exception.getMessage());
     }

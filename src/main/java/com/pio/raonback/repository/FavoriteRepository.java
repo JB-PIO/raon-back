@@ -13,6 +13,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
   Optional<Favorite> findByUserAndProduct(User user, Product product);
 
-  Page<Favorite> findAllByProductIsActiveTrueAndUser(User user, Pageable pageable);
+  Page<Favorite> findAllByUserAndProductIsActiveTrue(User user, Pageable pageable);
 
 }

@@ -1,6 +1,7 @@
 package com.pio.raonback.controller;
 
 import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
+import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.chat.GetChatListResponseDto;
 import com.pio.raonback.dto.response.chat.GetChatResponseDto;
 import com.pio.raonback.dto.response.chat.GetMessageListResponseDto;
@@ -47,6 +48,12 @@ public class ChatController {
                                                                     @RequestBody @Valid SendMessageRequestDto requestBody,
                                                                     @AuthenticationPrincipal RaonUser principal) {
     return chatService.sendMessage(chatId, requestBody, principal);
+  }
+
+  @PutMapping("/{chatId}/read")
+  public ResponseEntity<ResponseDto> readMessages(@PathVariable("chatId") Long chatId,
+                                                  @AuthenticationPrincipal RaonUser principal) {
+    return chatService.readMessages(chatId, principal);
   }
 
 }

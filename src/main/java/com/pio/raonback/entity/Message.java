@@ -53,6 +53,10 @@ public class Message {
     this.sentAt = LocalDateTime.now();
   }
 
+  public void read() {
+    this.isRead = true;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) return true;
