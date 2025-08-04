@@ -18,7 +18,7 @@ public class LocationListItem {
     this.address = location.getAddress();
   }
 
-  public static List<LocationListItem> copyList(Page<Location> locationPage) {
+  public static List<LocationListItem> fromLocationPage(Page<Location> locationPage) {
     List<LocationListItem> list = new ArrayList<>();
     for (Location location : locationPage.getContent()) {
       LocationListItem locationListItem = new LocationListItem(location);

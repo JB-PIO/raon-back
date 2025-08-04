@@ -27,7 +27,7 @@ public class GetChatListResponseDto extends ResponseDto {
     private long totalElements;
 
     private Data(Page<Chat> chatPage, Map<Long, Long> unreadCounts) {
-      this.chatList = ChatListItem.copyList(chatPage, unreadCounts);
+      this.chatList = ChatListItem.fromChatPage(chatPage, unreadCounts);
       this.currentPage = chatPage.getNumber();
       this.totalPages = chatPage.getTotalPages();
       this.totalElements = chatPage.getTotalElements();

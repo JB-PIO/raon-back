@@ -2,14 +2,19 @@ package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.request.user.UpdateProfileRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
+import com.pio.raonback.dto.response.user.GetFavoriteListResponseDto;
 import com.pio.raonback.dto.response.user.GetProfileResponseDto;
+import com.pio.raonback.entity.Favorite;
 import com.pio.raonback.entity.Location;
 import com.pio.raonback.entity.User;
+import com.pio.raonback.repository.FavoriteRepository;
 import com.pio.raonback.repository.LocationRepository;
 import com.pio.raonback.repository.UserRepository;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +25,20 @@ import java.util.Optional;
 public class UserServiceImplement implements UserService {
 
   private final UserRepository userRepository;
+  private final FavoriteRepository favoriteRepository;
   private final LocationRepository locationRepository;
 
   @Override
   public ResponseEntity<? super GetProfileResponseDto> getProfile(RaonUser principal) {
     User user = principal.getUser();
     return GetProfileResponseDto.ok(user);
+  }
+
+  @Override
+  public ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(Pageable pageable, RaonUser principal) {
+    User user = principal.getUser();
+    Page<Favorite> favoritePage = favoriteRepository.findAllByProductIsActiveTrueAndUser(user, pageable);
+    return GetFavoriteListResponseDto.ok(favoritePage);
   }
 
   @Override

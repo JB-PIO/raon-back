@@ -51,7 +51,7 @@ public class MessageListItem {
     this.sentAt = message.getSentAt();
   }
 
-  public static List<MessageListItem> copyList(Page<Message> messagePage) {
+  public static List<MessageListItem> fromMessagePage(Page<Message> messagePage) {
     List<MessageListItem> list = new ArrayList<>();
     for (Message message : messagePage.getContent()) {
       MessageListItem messageListItem = new MessageListItem(message);

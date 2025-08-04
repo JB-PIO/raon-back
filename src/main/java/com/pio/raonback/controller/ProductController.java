@@ -27,7 +27,8 @@ public class ProductController {
   @GetMapping("")
   public ResponseEntity<? super GetProductListResponseDto> getProductList(
       @ModelAttribute @Valid GetProductListRequestDto requestParam,
-      @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+      @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+  ) {
     return productService.getProductList(requestParam, pageable);
   }
 

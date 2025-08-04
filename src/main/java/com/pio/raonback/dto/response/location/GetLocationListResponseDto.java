@@ -26,7 +26,7 @@ public class GetLocationListResponseDto extends ResponseDto {
     private long totalElements;
 
     private Data(Page<Location> locationPage) {
-      this.locationList = LocationListItem.copyList(locationPage);
+      this.locationList = LocationListItem.fromLocationPage(locationPage);
       this.currentPage = locationPage.getNumber();
       this.totalPages = locationPage.getTotalPages();
       this.totalElements = locationPage.getTotalElements();

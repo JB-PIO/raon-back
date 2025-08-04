@@ -1,9 +1,7 @@
 package com.pio.raonback.dto.object;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pio.raonback.entity.Location;
-import com.pio.raonback.entity.ProductDetail;
-import com.pio.raonback.entity.User;
+import com.pio.raonback.entity.*;
 import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.entity.enums.TradeType;
 import lombok.Getter;
@@ -58,6 +56,21 @@ public class ProductListItem {
 
   }
 
+  public ProductListItem(Product product) {
+    this.productId = product.getProductId();
+    this.seller = new UserData(product.getSeller());
+    this.location = new LocationData(product.getLocation());
+    this.thumbnail = product.getImages().get(0).getImageUrl();
+    this.title = product.getTitle();
+    this.price = product.getPrice();
+    this.viewCount = product.getViewCount();
+    this.favoriteCount = (long) product.getFavorites().size();
+    this.status = product.getStatus();
+    this.tradeType = product.getTradeType();
+    this.isSold = product.getIsSold();
+    this.createdAt = product.getCreatedAt();
+  }
+
   public ProductListItem(ProductDetail productDetail) {
     this.productId = productDetail.getProductId();
     this.seller = new UserData(productDetail.getSeller());
@@ -73,10 +86,19 @@ public class ProductListItem {
     this.createdAt = productDetail.getCreatedAt();
   }
 
-  public static List<ProductListItem> copyList(Page<ProductDetail> productDetailPage) {
+  public static List<ProductListItem> fromProductDetailPage(Page<ProductDetail> productDetailPage) {
     List<ProductListItem> list = new ArrayList<>();
     for (ProductDetail productDetail : productDetailPage.getContent()) {
       ProductListItem productListItem = new ProductListItem(productDetail);
+      list.add(productListItem);
+    }
+    return list;
+  }
+
+  public static List<ProductListItem> fromFavoritePage(Page<Favorite> favoritePage) {
+    List<ProductListItem> list = new ArrayList<>();
+    for (Favorite favorite : favoritePage.getContent()) {
+      ProductListItem productListItem = new ProductListItem(favorite.getProduct());
       list.add(productListItem);
     }
     return list;

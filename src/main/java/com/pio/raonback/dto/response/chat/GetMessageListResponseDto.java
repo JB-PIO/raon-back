@@ -26,7 +26,7 @@ public class GetMessageListResponseDto extends ResponseDto {
     private long totalElements;
 
     private Data(Page<Message> messagePage) {
-      this.messageList = MessageListItem.copyList(messagePage);
+      this.messageList = MessageListItem.fromMessagePage(messagePage);
       this.currentPage = messagePage.getNumber();
       this.totalPages = messagePage.getTotalPages();
       this.totalElements = messagePage.getTotalElements();

@@ -91,7 +91,7 @@ public class ChatListItem {
     this.createdAt = chat.getCreatedAt();
   }
 
-  public static List<ChatListItem> copyList(Page<Chat> chatPage, Map<Long, Long> unreadCounts) {
+  public static List<ChatListItem> fromChatPage(Page<Chat> chatPage, Map<Long, Long> unreadCounts) {
     List<ChatListItem> list = new ArrayList<>();
     for (Chat chat : chatPage.getContent()) {
       ChatListItem chatListItem = new ChatListItem(chat, unreadCounts.get(chat.getChatId()));

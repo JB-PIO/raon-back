@@ -26,7 +26,7 @@ public class GetProductListResponseDto extends ResponseDto {
     private long totalElements;
 
     private Data(Page<ProductDetail> productDetailPage) {
-      this.productList = ProductListItem.copyList(productDetailPage);
+      this.productList = ProductListItem.fromProductDetailPage(productDetailPage);
       this.currentPage = productDetailPage.getNumber();
       this.totalPages = productDetailPage.getTotalPages();
       this.totalElements = productDetailPage.getTotalElements();
