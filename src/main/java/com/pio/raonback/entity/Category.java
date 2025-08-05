@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +35,9 @@ public class Category {
 
   @Column(name = "is_leaf", nullable = false)
   private Boolean isLeaf = false;
+
+  @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Category> children = new ArrayList<>();
 
   @Override
   public boolean equals(Object obj) {
