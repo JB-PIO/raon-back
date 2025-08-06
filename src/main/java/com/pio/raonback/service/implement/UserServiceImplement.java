@@ -2,6 +2,7 @@ package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.user.GetProductListResponseDto;
+import com.pio.raonback.dto.response.user.GetProfileResponseDto;
 import com.pio.raonback.entity.ProductDetail;
 import com.pio.raonback.entity.User;
 import com.pio.raonback.repository.ProductDetailRepository;
@@ -21,6 +22,14 @@ public class UserServiceImplement implements UserService {
 
   private final UserRepository userRepository;
   private final ProductDetailRepository productDetailRepository;
+
+  @Override
+  public ResponseEntity<? super GetProfileResponseDto> getProfile(Long userId) {
+    Optional<User> optionalUser = userRepository.findByUserIdAndIsDeletedFalseAndIsSuspendedFalse(userId);
+    if (optionalUser.isEmpty()) return ResponseDto.userNotFound();
+    User user = optionalUser.get();
+    return GetProfileResponseDto.ok(user);
+  }
 
   @Override
   public ResponseEntity<? super GetProductListResponseDto> getProductList(Long userId, Pageable pageable) {

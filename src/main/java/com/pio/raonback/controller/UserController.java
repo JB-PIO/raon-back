@@ -1,6 +1,7 @@
 package com.pio.raonback.controller;
 
 import com.pio.raonback.dto.response.user.GetProductListResponseDto;
+import com.pio.raonback.dto.response.user.GetProfileResponseDto;
 import com.pio.raonback.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
+
+  @GetMapping("/{userId}")
+  public ResponseEntity<? super GetProfileResponseDto> getProfile(@PathVariable("userId") Long userId) {
+    return userService.getProfile(userId);
+  }
 
   @GetMapping("/{userId}/product")
   public ResponseEntity<? super GetProductListResponseDto> getProductList(
