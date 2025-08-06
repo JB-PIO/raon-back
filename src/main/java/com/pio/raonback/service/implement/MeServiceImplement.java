@@ -3,12 +3,15 @@ package com.pio.raonback.service.implement;
 import com.pio.raonback.dto.request.me.UpdateProfileRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.me.GetFavoriteListResponseDto;
+import com.pio.raonback.dto.response.me.GetProductListResponseDto;
 import com.pio.raonback.dto.response.me.GetProfileResponseDto;
 import com.pio.raonback.entity.Favorite;
 import com.pio.raonback.entity.Location;
+import com.pio.raonback.entity.ProductDetail;
 import com.pio.raonback.entity.User;
 import com.pio.raonback.repository.FavoriteRepository;
 import com.pio.raonback.repository.LocationRepository;
+import com.pio.raonback.repository.ProductDetailRepository;
 import com.pio.raonback.repository.UserRepository;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.MeService;
@@ -25,6 +28,7 @@ import java.util.Optional;
 public class MeServiceImplement implements MeService {
 
   private final UserRepository userRepository;
+  private final ProductDetailRepository productDetailRepository;
   private final FavoriteRepository favoriteRepository;
   private final LocationRepository locationRepository;
 
@@ -32,6 +36,13 @@ public class MeServiceImplement implements MeService {
   public ResponseEntity<? super GetProfileResponseDto> getProfile(RaonUser principal) {
     User user = principal.getUser();
     return GetProfileResponseDto.ok(user);
+  }
+
+  @Override
+  public ResponseEntity<? super GetProductListResponseDto> getProductList(Pageable pageable, RaonUser principal) {
+    User user = principal.getUser();
+    Page<ProductDetail> productDetailPage = productDetailRepository.findAllBySellerAndIsActiveTrue(user, pageable);
+    return GetProductListResponseDto.ok(productDetailPage);
   }
 
   @Override

@@ -3,6 +3,7 @@ package com.pio.raonback.controller;
 import com.pio.raonback.dto.request.me.UpdateProfileRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.me.GetFavoriteListResponseDto;
+import com.pio.raonback.dto.response.me.GetProductListResponseDto;
 import com.pio.raonback.dto.response.me.GetProfileResponseDto;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.MeService;
@@ -26,6 +27,18 @@ public class MeController {
   @GetMapping("")
   public ResponseEntity<? super GetProfileResponseDto> getProfile(@AuthenticationPrincipal RaonUser principal) {
     return meService.getProfile(principal);
+  }
+
+  @GetMapping("/product")
+  public ResponseEntity<? super GetProductListResponseDto> getProductList(
+      @PageableDefault(size = 20)
+      @SortDefault.SortDefaults({
+          @SortDefault(sort = "isSold", direction = Sort.Direction.ASC),
+          @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+      }) Pageable pageable,
+      @AuthenticationPrincipal RaonUser principal
+  ) {
+    return meService.getProductList(pageable, principal);
   }
 
   @GetMapping("/favorite")
