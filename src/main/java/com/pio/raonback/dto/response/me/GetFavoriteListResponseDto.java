@@ -1,4 +1,4 @@
-package com.pio.raonback.dto.response.user;
+package com.pio.raonback.dto.response.me;
 
 import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;

@@ -1,4 +1,4 @@
-package com.pio.raonback.dto.response.user;
+package com.pio.raonback.dto.response.me;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pio.raonback.common.ResponseCode;

@@ -1,4 +1,4 @@
-package com.pio.raonback.dto.request.user;
+package com.pio.raonback.dto.request.me;
 
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
