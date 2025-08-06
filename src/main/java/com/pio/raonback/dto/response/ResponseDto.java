@@ -86,6 +86,11 @@ public class ResponseDto {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
   }
 
+  public static ResponseEntity<ResponseDto> userNotFound() {
+    ResponseDto responseBody = new ResponseDto(ResponseCode.USER_NOT_FOUND, ResponseMessage.USER_NOT_FOUND);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
+  }
+
   public static ResponseEntity<ResponseDto> notLeafCategory() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_LEAF_CATEGORY, ResponseMessage.NOT_LEAF_CATEGORY);
     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseBody);

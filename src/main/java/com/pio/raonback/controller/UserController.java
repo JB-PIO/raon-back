@@ -3,6 +3,7 @@ package com.pio.raonback.controller;
 import com.pio.raonback.dto.request.user.UpdateProfileRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.user.GetFavoriteListResponseDto;
+import com.pio.raonback.dto.response.user.GetProductListResponseDto;
 import com.pio.raonback.dto.response.user.GetProfileResponseDto;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.UserService;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,10 +31,26 @@ public class UserController {
 
   @GetMapping("/me/favorite")
   public ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(
-      @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+      @PageableDefault(size = 20)
+      @SortDefault.SortDefaults({
+          @SortDefault(sort = "product.isSold", direction = Sort.Direction.ASC),
+          @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+      }) Pageable pageable,
       @AuthenticationPrincipal RaonUser principal
   ) {
     return userService.getFavoriteList(pageable, principal);
+  }
+
+  @GetMapping("/{userId}/product")
+  public ResponseEntity<? super GetProductListResponseDto> getProductList(
+      @PathVariable("userId") Long userId,
+      @PageableDefault(size = 20)
+      @SortDefault.SortDefaults({
+          @SortDefault(sort = "isSold", direction = Sort.Direction.ASC),
+          @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+      }) Pageable pageable
+  ) {
+    return userService.getProductList(userId, pageable);
   }
 
   @PatchMapping("/me")

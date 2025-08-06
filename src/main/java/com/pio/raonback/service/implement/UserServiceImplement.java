@@ -3,12 +3,15 @@ package com.pio.raonback.service.implement;
 import com.pio.raonback.dto.request.user.UpdateProfileRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.user.GetFavoriteListResponseDto;
+import com.pio.raonback.dto.response.user.GetProductListResponseDto;
 import com.pio.raonback.dto.response.user.GetProfileResponseDto;
 import com.pio.raonback.entity.Favorite;
 import com.pio.raonback.entity.Location;
+import com.pio.raonback.entity.ProductDetail;
 import com.pio.raonback.entity.User;
 import com.pio.raonback.repository.FavoriteRepository;
 import com.pio.raonback.repository.LocationRepository;
+import com.pio.raonback.repository.ProductDetailRepository;
 import com.pio.raonback.repository.UserRepository;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.UserService;
@@ -27,6 +30,7 @@ public class UserServiceImplement implements UserService {
   private final UserRepository userRepository;
   private final FavoriteRepository favoriteRepository;
   private final LocationRepository locationRepository;
+  private final ProductDetailRepository productDetailRepository;
 
   @Override
   public ResponseEntity<? super GetProfileResponseDto> getProfile(RaonUser principal) {
@@ -39,6 +43,16 @@ public class UserServiceImplement implements UserService {
     User user = principal.getUser();
     Page<Favorite> favoritePage = favoriteRepository.findAllByUserAndProductIsActiveTrue(user, pageable);
     return GetFavoriteListResponseDto.ok(favoritePage);
+  }
+
+  @Override
+  public ResponseEntity<? super GetProductListResponseDto> getProductList(Long userId, Pageable pageable) {
+    Optional<User> optionalUser = userRepository.findByUserIdAndIsDeletedFalseAndIsSuspendedFalse(userId);
+    if (optionalUser.isEmpty()) return ResponseDto.userNotFound();
+    User user = optionalUser.get();
+
+    Page<ProductDetail> productDetailPage = productDetailRepository.findAllBySellerAndIsActiveTrue(user, pageable);
+    return GetProductListResponseDto.ok(productDetailPage);
   }
 
   @Override

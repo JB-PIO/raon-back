@@ -40,7 +40,8 @@ public class SecurityConfig {
       PathPatternRequestMatcher.withDefaults().matcher("/api/v1/category/**"),
       PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/product"),
       PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/product/{productId}"),
-      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.PATCH, "/api/v1/product/{productId}/view")
+      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.PATCH, "/api/v1/product/{productId}/view"),
+      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/user/{userId}/product")
   );
 
   private final AuthenticationFailureHandler failureHandler;

@@ -15,8 +15,8 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
   Page<Message> findAllByChatAndIsDeletedFalse(Chat chat, Pageable pageable);
 
-  Long countByChatAndSenderNotAndIsReadFalseAndIsDeletedFalse(Chat chat, User user);
-
   List<Message> findAllByChatAndSenderNotAndIsReadFalseAndIsDeletedFalse(Chat chat, User sender);
+
+  Long countByChatAndSenderNotAndIsReadFalseAndIsDeletedFalse(Chat chat, User user);
 
 }
