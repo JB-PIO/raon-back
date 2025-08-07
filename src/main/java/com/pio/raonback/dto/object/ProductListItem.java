@@ -2,7 +2,7 @@ package com.pio.raonback.dto.object;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pio.raonback.entity.*;
-import com.pio.raonback.entity.enums.ProductStatus;
+import com.pio.raonback.entity.enums.Condition;
 import com.pio.raonback.entity.enums.TradeType;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
@@ -22,7 +22,7 @@ public class ProductListItem {
   private Long price;
   private Long viewCount;
   private Long favoriteCount;
-  private ProductStatus status;
+  private Condition condition;
   private TradeType tradeType;
   private Boolean isSold;
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -65,7 +65,7 @@ public class ProductListItem {
     this.price = product.getPrice();
     this.viewCount = product.getViewCount();
     this.favoriteCount = (long) product.getFavorites().size();
-    this.status = product.getStatus();
+    this.condition = product.getCondition();
     this.tradeType = product.getTradeType();
     this.isSold = product.getIsSold();
     this.createdAt = product.getCreatedAt();
@@ -80,7 +80,7 @@ public class ProductListItem {
     this.price = productDetail.getPrice();
     this.viewCount = productDetail.getViewCount();
     this.favoriteCount = productDetail.getFavoriteCount();
-    this.status = productDetail.getStatus();
+    this.condition = productDetail.getCondition();
     this.tradeType = productDetail.getTradeType();
     this.isSold = productDetail.getIsSold();
     this.createdAt = productDetail.getCreatedAt();

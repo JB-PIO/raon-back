@@ -1,5 +1,5 @@
 package com.pio.raonback.entity.enums;
 
-public enum ProductStatus {
+public enum Condition {
   NEW, USED
 }

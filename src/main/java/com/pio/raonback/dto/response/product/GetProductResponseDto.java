@@ -8,7 +8,7 @@ import com.pio.raonback.entity.Category;
 import com.pio.raonback.entity.Location;
 import com.pio.raonback.entity.Product;
 import com.pio.raonback.entity.User;
-import com.pio.raonback.entity.enums.ProductStatus;
+import com.pio.raonback.entity.enums.Condition;
 import com.pio.raonback.entity.enums.TradeType;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -37,7 +37,7 @@ public class GetProductResponseDto extends ResponseDto {
     private Long price;
     private Long viewCount;
     private Long favoriteCount;
-    private ProductStatus status;
+    private Condition condition;
     private TradeType tradeType;
     private Boolean isSold;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -109,7 +109,7 @@ public class GetProductResponseDto extends ResponseDto {
       this.price = product.getPrice();
       this.viewCount = product.getViewCount();
       this.favoriteCount = (long) product.getFavorites().size();
-      this.status = product.getStatus();
+      this.condition = product.getCondition();
       this.tradeType = product.getTradeType();
       this.isSold = product.getIsSold();
       this.createdAt = product.getCreatedAt();

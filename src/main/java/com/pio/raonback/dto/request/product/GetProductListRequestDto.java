@@ -1,6 +1,6 @@
 package com.pio.raonback.dto.request.product;
 
-import com.pio.raonback.entity.enums.ProductStatus;
+import com.pio.raonback.entity.enums.Condition;
 import com.pio.raonback.entity.enums.TradeType;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class GetProductListRequestDto {
 
   private String keyword;
 
-  private ProductStatus status;
+  private Condition condition;
 
   private TradeType tradeType;
 

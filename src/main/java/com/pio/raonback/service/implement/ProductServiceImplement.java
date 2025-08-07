@@ -51,7 +51,7 @@ public class ProductServiceImplement implements ProductService {
 
     Page<ProductDetail> productDetailPage =
         productDetailRepository.findAllWithFilters(category, nearbyLocations, dto.getMinPrice(), dto.getMaxPrice(),
-            dto.getKeyword(), dto.getStatus(), dto.getTradeType(), pageable);
+            dto.getKeyword(), dto.getCondition(), dto.getTradeType(), pageable);
     return GetProductListResponseDto.ok(productDetailPage);
   }
 
@@ -96,7 +96,7 @@ public class ProductServiceImplement implements ProductService {
     Location location = optionalLocation.get();
 
     Product product =
-        new Product(seller, category, location, dto.getTitle(), dto.getDescription(), dto.getPrice(), dto.getStatus(), dto.getTradeType());
+        new Product(seller, category, location, dto.getTitle(), dto.getDescription(), dto.getPrice(), dto.getCondition(), dto.getTradeType());
     productRepository.save(product);
 
     List<String> imageUrls = dto.getImageUrlList();
@@ -153,7 +153,7 @@ public class ProductServiceImplement implements ProductService {
     if (optionalLocation.isEmpty()) return ResponseDto.locationNotFound();
     Location location = optionalLocation.get();
 
-    product.update(category, location, dto.getTitle(), dto.getDescription(), dto.getPrice(), dto.getStatus(), dto.getTradeType());
+    product.update(category, location, dto.getTitle(), dto.getDescription(), dto.getPrice(), dto.getCondition(), dto.getTradeType());
     productRepository.save(product);
 
     productImageRepository.deleteAllByProduct(product);

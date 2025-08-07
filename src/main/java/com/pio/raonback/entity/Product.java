@@ -1,6 +1,6 @@
 package com.pio.raonback.entity;
 
-import com.pio.raonback.entity.enums.ProductStatus;
+import com.pio.raonback.entity.enums.Condition;
 import com.pio.raonback.entity.enums.TradeType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -48,8 +48,8 @@ public class Product {
   private Long viewCount = 0L;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "status", nullable = false)
-  private ProductStatus status;
+  @Column(name = "`condition`", nullable = false)
+  private Condition condition;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "trade_type", nullable = false)
@@ -79,25 +79,25 @@ public class Product {
   @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ProductImage> images = new ArrayList<>();
 
-  public Product(User seller, Category category, Location location, String title, String description, Long price, ProductStatus status, TradeType tradeType) {
+  public Product(User seller, Category category, Location location, String title, String description, Long price, Condition condition, TradeType tradeType) {
     this.seller = seller;
     this.category = category;
     this.location = location;
     this.title = title;
     this.description = description;
     this.price = price;
-    this.status = status;
+    this.condition = condition;
     this.tradeType = tradeType;
     this.createdAt = LocalDateTime.now();
   }
 
-  public void update(Category category, Location location, String title, String description, Long price, ProductStatus status, TradeType tradeType) {
+  public void update(Category category, Location location, String title, String description, Long price, Condition condition, TradeType tradeType) {
     this.category = category;
     this.location = location;
     this.title = title;
     this.description = description;
     this.price = price;
-    this.status = status;
+    this.condition = condition;
     this.tradeType = tradeType;
     this.updatedAt = LocalDateTime.now();
   }

@@ -1,6 +1,6 @@
 package com.pio.raonback.entity;
 
-import com.pio.raonback.entity.enums.ProductStatus;
+import com.pio.raonback.entity.enums.Condition;
 import com.pio.raonback.entity.enums.TradeType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,7 +46,8 @@ public class ProductDetail {
   private Long favoriteCount;
 
   @Enumerated(EnumType.STRING)
-  private ProductStatus status;
+  @Column(name = "`condition`")
+  private Condition condition;
 
   @Enumerated(EnumType.STRING)
   private TradeType tradeType;

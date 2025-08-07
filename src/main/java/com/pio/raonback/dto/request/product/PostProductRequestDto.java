@@ -1,6 +1,6 @@
 package com.pio.raonback.dto.request.product;
 
-import com.pio.raonback.entity.enums.ProductStatus;
+import com.pio.raonback.entity.enums.Condition;
 import com.pio.raonback.entity.enums.TradeType;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -29,7 +29,7 @@ public class PostProductRequestDto {
   private Long price;
 
   @NotNull(message = "상품 상태를 선택해주세요.")
-  private ProductStatus status;
+  private Condition condition;
 
   @NotNull(message = "거래 방식을 선택해주세요.")
   private TradeType tradeType;

@@ -3,7 +3,7 @@ package com.pio.raonback.repository.querydsl.implement;
 import com.pio.raonback.entity.Category;
 import com.pio.raonback.entity.Location;
 import com.pio.raonback.entity.ProductDetail;
-import com.pio.raonback.entity.enums.ProductStatus;
+import com.pio.raonback.entity.enums.Condition;
 import com.pio.raonback.entity.enums.TradeType;
 import com.pio.raonback.repository.querydsl.QProductDetailRepository;
 import com.querydsl.core.BooleanBuilder;
@@ -26,7 +26,7 @@ public class QProductDetailRepositoryImpl extends QuerydslRepositorySupport impl
 
   @Override
   public Page<ProductDetail> findAllWithFilters(Category category, List<Location> locations, Long minPrice, Long maxPrice,
-                                                String keyword, ProductStatus status, TradeType tradeType, Pageable pageable) {
+                                                String keyword, Condition condition, TradeType tradeType, Pageable pageable) {
     BooleanBuilder builder = new BooleanBuilder();
 
     builder.and(productDetail.isSold.eq(false))
@@ -39,7 +39,7 @@ public class QProductDetailRepositoryImpl extends QuerydslRepositorySupport impl
     if (keyword != null) builder.and(productDetail.title.containsIgnoreCase(keyword)
                                                         .or(productDetail.description.containsIgnoreCase(keyword))
                                                         .or(productDetail.seller.nickname.containsIgnoreCase(keyword)));
-    if (status != null) builder.and(productDetail.status.eq(status));
+    if (condition != null) builder.and(productDetail.condition.eq(condition));
     if (tradeType != null) builder.and(productDetail.tradeType.eq(tradeType)
                                                               .or(productDetail.tradeType.eq(TradeType.BOTH)));
 
