@@ -3,6 +3,7 @@ package com.pio.raonback.dto.object;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pio.raonback.entity.*;
 import com.pio.raonback.entity.enums.Condition;
+import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.entity.enums.TradeType;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ public class ProductListItem {
   private Long favoriteCount;
   private Condition condition;
   private TradeType tradeType;
-  private Boolean isSold;
+  private ProductStatus status;
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime createdAt;
 
@@ -67,7 +68,7 @@ public class ProductListItem {
     this.favoriteCount = (long) product.getFavorites().size();
     this.condition = product.getCondition();
     this.tradeType = product.getTradeType();
-    this.isSold = product.getIsSold();
+    this.status = product.getStatus();
     this.createdAt = product.getCreatedAt();
   }
 
@@ -82,7 +83,7 @@ public class ProductListItem {
     this.favoriteCount = productDetail.getFavoriteCount();
     this.condition = productDetail.getCondition();
     this.tradeType = productDetail.getTradeType();
-    this.isSold = productDetail.getIsSold();
+    this.status = productDetail.getStatus();
     this.createdAt = productDetail.getCreatedAt();
   }
 

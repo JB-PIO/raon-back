@@ -5,6 +5,7 @@ import com.pio.raonback.entity.Chat;
 import com.pio.raonback.entity.Message;
 import com.pio.raonback.entity.Product;
 import com.pio.raonback.entity.User;
+import com.pio.raonback.entity.enums.ProductStatus;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
@@ -31,7 +32,7 @@ public class ChatListItem {
     private Long productId;
     private String thumbnail;
     private String title;
-    private Boolean isSold;
+    private ProductStatus status;
     private Boolean isActive;
     private Boolean isDeleted;
 
@@ -39,7 +40,7 @@ public class ChatListItem {
       this.productId = product.getProductId();
       this.thumbnail = product.getImages().get(0).getImageUrl();
       this.title = product.getTitle();
-      this.isSold = product.getIsSold();
+      this.status = product.getStatus();
       this.isActive = product.getIsActive();
       this.isDeleted = product.getIsDeleted();
     }

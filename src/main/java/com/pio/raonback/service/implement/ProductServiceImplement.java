@@ -7,6 +7,7 @@ import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.entity.*;
+import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.repository.*;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ProductService;
@@ -142,7 +143,7 @@ public class ProductServiceImplement implements ProductService {
     Product product = optionalProduct.get();
 
     if (!product.getSeller().equals(seller)) return ResponseDto.noPermission();
-    if (product.getIsSold()) return ResponseDto.soldProduct();
+    if (product.getStatus() == ProductStatus.SOLD) return ResponseDto.soldProduct();
 
     Optional<Category> optionalCategory = categoryRepository.findById(dto.getCategoryId());
     if (optionalCategory.isEmpty()) return ResponseDto.categoryNotFound();

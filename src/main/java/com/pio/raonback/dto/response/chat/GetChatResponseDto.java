@@ -7,6 +7,7 @@ import com.pio.raonback.entity.Chat;
 import com.pio.raonback.entity.Location;
 import com.pio.raonback.entity.Product;
 import com.pio.raonback.entity.User;
+import com.pio.raonback.entity.enums.ProductStatus;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class GetChatResponseDto extends ResponseDto {
       private String thumbnail;
       private String title;
       private Long price;
-      private Boolean isSold;
+      private ProductStatus status;
       private Boolean isActive;
       private Boolean isDeleted;
 
@@ -55,7 +56,7 @@ public class GetChatResponseDto extends ResponseDto {
         this.thumbnail = product.getImages().get(0).getImageUrl();
         this.title = product.getTitle();
         this.price = product.getPrice();
-        this.isSold = product.getIsSold();
+        this.status = product.getStatus();
         this.isActive = product.getIsActive();
         this.isDeleted = product.getIsDeleted();
       }

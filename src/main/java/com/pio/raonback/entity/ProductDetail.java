@@ -1,6 +1,7 @@
 package com.pio.raonback.entity;
 
 import com.pio.raonback.entity.enums.Condition;
+import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.entity.enums.TradeType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -52,7 +53,8 @@ public class ProductDetail {
   @Enumerated(EnumType.STRING)
   private TradeType tradeType;
 
-  private Boolean isSold;
+  @Enumerated(EnumType.STRING)
+  private ProductStatus status;
 
   private Boolean isActive;
 

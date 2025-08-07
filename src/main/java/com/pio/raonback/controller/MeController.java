@@ -33,7 +33,7 @@ public class MeController {
   public ResponseEntity<? super GetProductListResponseDto> getProductList(
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
-          @SortDefault(sort = "isSold", direction = Sort.Direction.ASC),
+          @SortDefault(sort = "status", direction = Sort.Direction.ASC),
           @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
       }) Pageable pageable,
       @AuthenticationPrincipal RaonUser principal
@@ -45,7 +45,7 @@ public class MeController {
   public ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
-          @SortDefault(sort = "product.isSold", direction = Sort.Direction.ASC),
+          @SortDefault(sort = "product.status", direction = Sort.Direction.ASC),
           @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
       }) Pageable pageable,
       @AuthenticationPrincipal RaonUser principal

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,11 @@ public class ProductController {
   @GetMapping("")
   public ResponseEntity<? super GetProductListResponseDto> getProductList(
       @ModelAttribute @Valid GetProductListRequestDto requestParam,
-      @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+      @PageableDefault(size = 20)
+      @SortDefault.SortDefaults({
+          @SortDefault(sort = "status", direction = Sort.Direction.ASC),
+          @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+      }) Pageable pageable
   ) {
     return productService.getProductList(requestParam, pageable);
   }

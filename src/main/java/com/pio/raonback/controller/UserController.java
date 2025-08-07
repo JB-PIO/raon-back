@@ -31,7 +31,7 @@ public class UserController {
       @PathVariable("userId") Long userId,
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
-          @SortDefault(sort = "isSold", direction = Sort.Direction.ASC),
+          @SortDefault(sort = "status", direction = Sort.Direction.ASC),
           @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
       }) Pageable pageable
   ) {

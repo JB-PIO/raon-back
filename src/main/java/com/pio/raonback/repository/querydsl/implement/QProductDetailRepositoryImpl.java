@@ -4,6 +4,7 @@ import com.pio.raonback.entity.Category;
 import com.pio.raonback.entity.Location;
 import com.pio.raonback.entity.ProductDetail;
 import com.pio.raonback.entity.enums.Condition;
+import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.entity.enums.TradeType;
 import com.pio.raonback.repository.querydsl.QProductDetailRepository;
 import com.querydsl.core.BooleanBuilder;
@@ -29,7 +30,7 @@ public class QProductDetailRepositoryImpl extends QuerydslRepositorySupport impl
                                                 String keyword, Condition condition, TradeType tradeType, Pageable pageable) {
     BooleanBuilder builder = new BooleanBuilder();
 
-    builder.and(productDetail.isSold.eq(false))
+    builder.and(productDetail.status.ne(ProductStatus.SOLD))
            .and(productDetail.isActive.eq(true));
 
     if (category != null) builder.and(productDetail.category.path.startsWith(category.getPath()));
