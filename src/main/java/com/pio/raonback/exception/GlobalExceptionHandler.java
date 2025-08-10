@@ -1,6 +1,5 @@
 package com.pio.raonback.exception;
 
-import com.pio.raonback.dto.response.InvalidInputResponseDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler({MethodArgumentNotValidException.class})
-  public ResponseEntity<InvalidInputResponseDto> validationExceptionHandler(MethodArgumentNotValidException exception) {
+  public ResponseEntity<ResponseDto> validationExceptionHandler(MethodArgumentNotValidException exception) {
     List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
     Map<String, String> errors = new HashMap<>();
     fieldErrors.forEach(fieldError -> {
@@ -34,7 +33,7 @@ public class GlobalExceptionHandler {
       String message = fieldError.getDefaultMessage();
       errors.put(field, message);
     });
-    return InvalidInputResponseDto.invalidInput(errors);
+    return ResponseDto.invalidInput(errors);
   }
 
   @ExceptionHandler({MissingRequestCookieException.class})

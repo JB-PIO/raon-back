@@ -1,7 +1,6 @@
 package com.pio.raonback.service.implement;
 
 import com.pio.raonback.dto.request.product.*;
-import com.pio.raonback.dto.response.InvalidInputResponseDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.entity.*;
@@ -193,13 +192,13 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
-  public ResponseEntity<? super InvalidInputResponseDto> updateProductStatus(Long productId, UpdateProductStatusRequestDto dto, RaonUser principal) {
+  public ResponseEntity<ResponseDto> updateProductStatus(Long productId, UpdateProductStatusRequestDto dto, RaonUser principal) {
     User seller = principal.getUser();
 
     if (dto.getStatus() == ProductStatus.SOLD) {
       Map<String, String> errors = new HashMap<>();
       errors.put("status", "'판매 완료'는 선택할 수 없습니다.");
-      return InvalidInputResponseDto.invalidInput(errors);
+      return ResponseDto.invalidInput(errors);
     }
 
     Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);

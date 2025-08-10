@@ -1,20 +1,34 @@
 package com.pio.raonback.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
+
 @Getter
-@AllArgsConstructor
-@JsonPropertyOrder({"code", "message"})
+@JsonPropertyOrder({"code", "message", "errors"})
 public class ResponseDto {
 
   private String code;
   private String message;
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private Map<String, String> errors;
+
+  public ResponseDto(String code, String message) {
+    this.code = code;
+    this.message = message;
+  }
+
+  public ResponseDto(String code, String message, Map<String, String> errors) {
+    this.code = code;
+    this.message = message;
+    this.errors = errors;
+  }
 
   public static ResponseEntity<ResponseDto> ok() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.OK, ResponseMessage.OK);
@@ -23,6 +37,11 @@ public class ResponseDto {
 
   public static ResponseEntity<ResponseDto> badRequest() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.BAD_REQUEST, ResponseMessage.BAD_REQUEST);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+  }
+
+  public static ResponseEntity<ResponseDto> invalidInput(Map<String, String> errors) {
+    ResponseDto responseBody = new ResponseDto(ResponseCode.INVALID_INPUT, ResponseMessage.INVALID_INPUT, errors);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
   }
 
