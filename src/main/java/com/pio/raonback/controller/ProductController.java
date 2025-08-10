@@ -1,9 +1,7 @@
 package com.pio.raonback.controller;
 
-import com.pio.raonback.dto.request.product.GetProductListRequestDto;
-import com.pio.raonback.dto.request.product.PostProductRequestDto;
-import com.pio.raonback.dto.request.product.PutFavoriteRequestDto;
-import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
+import com.pio.raonback.dto.request.product.*;
+import com.pio.raonback.dto.response.InvalidInputResponseDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.security.RaonUser;
@@ -72,6 +70,13 @@ public class ProductController {
                                                  @RequestBody @Valid PutFavoriteRequestDto requestBody,
                                                  @AuthenticationPrincipal RaonUser principal) {
     return productService.putFavorite(productId, requestBody, principal);
+  }
+
+  @PatchMapping("/{productId}/status")
+  public ResponseEntity<? super InvalidInputResponseDto> updateProductStatus(@PathVariable("productId") Long productId,
+                                                                             @RequestBody @Valid UpdateProductStatusRequestDto requestBody,
+                                                                             @AuthenticationPrincipal RaonUser principal) {
+    return productService.updateProductStatus(productId, requestBody, principal);
   }
 
   @PatchMapping("/{productId}/view")

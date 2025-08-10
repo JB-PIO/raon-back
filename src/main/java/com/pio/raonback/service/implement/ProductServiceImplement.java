@@ -1,9 +1,7 @@
 package com.pio.raonback.service.implement;
 
-import com.pio.raonback.dto.request.product.GetProductListRequestDto;
-import com.pio.raonback.dto.request.product.PostProductRequestDto;
-import com.pio.raonback.dto.request.product.PutFavoriteRequestDto;
-import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
+import com.pio.raonback.dto.request.product.*;
+import com.pio.raonback.dto.response.InvalidInputResponseDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.entity.*;
@@ -18,9 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -193,6 +189,28 @@ public class ProductServiceImplement implements ProductService {
       favoriteRepository.delete(favorite);
     }
 
+    return ResponseDto.ok();
+  }
+
+  @Override
+  public ResponseEntity<? super InvalidInputResponseDto> updateProductStatus(Long productId, UpdateProductStatusRequestDto dto, RaonUser principal) {
+    User seller = principal.getUser();
+
+    if (dto.getStatus() == ProductStatus.SOLD) {
+      Map<String, String> errors = new HashMap<>();
+      errors.put("status", "'판매 완료'는 선택할 수 없습니다.");
+      return InvalidInputResponseDto.invalidInput(errors);
+    }
+
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
+    if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
+    Product product = optionalProduct.get();
+
+    if (!product.getSeller().equals(seller)) return ResponseDto.noPermission();
+    if (product.getStatus() == ProductStatus.SOLD) return ResponseDto.soldProduct();
+
+    product.updateStatus(dto.getStatus());
+    productRepository.save(product);
     return ResponseDto.ok();
   }
 

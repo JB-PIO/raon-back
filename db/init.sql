@@ -113,7 +113,7 @@ CREATE TABLE chat
 CREATE TABLE message
 (
     message_id BIGINT       NOT NULL AUTO_INCREMENT COMMENT '메시지 고유 ID',
-    chat_id    BIGINT       NOT NULL COMMENT '채팅방 고유 ID',
+    chat_id    BIGINT       NOT NULL COMMENT '채팅방 ID',
     sender_id  BIGINT       NOT NULL COMMENT '발신자 ID',
     content    TEXT         NULL COMMENT '메시지 내용(텍스트)',
     image_url  VARCHAR(255) NULL COMMENT '이미지 URL(옵션)',
@@ -124,56 +124,6 @@ CREATE TABLE message
     PRIMARY KEY (message_id),
     FOREIGN KEY (chat_id) REFERENCES chat (chat_id) ON DELETE CASCADE,
     FOREIGN KEY (sender_id) REFERENCES user (user_id) ON DELETE RESTRICT
-);
-
-CREATE TABLE transaction
-(
-    transaction_id BIGINT                                     NOT NULL AUTO_INCREMENT COMMENT '거래 고유 ID',
-    product_id     BIGINT                                     NOT NULL COMMENT '상품 ID',
-    buyer_id       BIGINT                                     NOT NULL COMMENT '구매자 ID',
-    seller_id      BIGINT                                     NOT NULL COMMENT '판매자 ID',
-    status         ENUM ('PENDING', 'COMPLETED', 'CANCELLED') NOT NULL DEFAULT 'PENDING' COMMENT '거래 상태',
-    created_at     DATETIME                                   NOT NULL COMMENT '거래 시작 일시',
-    completed_at   DATETIME                                   NULL COMMENT '거래 완료 일시',
-    PRIMARY KEY (transaction_id),
-    FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE RESTRICT,
-    FOREIGN KEY (buyer_id) REFERENCES user (user_id) ON DELETE RESTRICT,
-    FOREIGN KEY (seller_id) REFERENCES user (user_id) ON DELETE RESTRICT
-);
-
-CREATE TABLE report
-(
-    report_id        BIGINT   NOT NULL AUTO_INCREMENT COMMENT '신고 고유 ID',
-    reporter_id      BIGINT   NOT NULL COMMENT '신고자 ID',
-    product_id       BIGINT   NULL COMMENT '신고된 상품 ID(옵션)',
-    reported_user_id BIGINT   NULL COMMENT '신고된 사용자 ID(옵션)',
-    reason           TEXT     NOT NULL COMMENT '신고 사유',
-    created_at       DATETIME NOT NULL COMMENT '신고 일시',
-    PRIMARY KEY (report_id),
-    FOREIGN KEY (reporter_id) REFERENCES user (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE CASCADE,
-    FOREIGN KEY (reported_user_id) REFERENCES user (user_id) ON DELETE CASCADE
-);
-
-CREATE TABLE search_history
-(
-    search_id   BIGINT       NOT NULL AUTO_INCREMENT COMMENT '검색 기록 ID',
-    user_id     BIGINT       NOT NULL COMMENT '사용자 ID',
-    keyword     VARCHAR(100) NOT NULL COMMENT '검색어',
-    searched_at DATETIME     NOT NULL COMMENT '검색 일시',
-    PRIMARY KEY (search_id),
-    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
-);
-
-CREATE TABLE block
-(
-    block_id        BIGINT   NOT NULL AUTO_INCREMENT COMMENT '차단 고유 ID',
-    user_id         BIGINT   NOT NULL COMMENT '차단한 사용자 ID',
-    blocked_user_id BIGINT   NOT NULL COMMENT '차단된 사용자 ID',
-    created_at      DATETIME NOT NULL COMMENT '차단 일시',
-    PRIMARY KEY (block_id),
-    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (blocked_user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
 CREATE VIEW product_detail AS

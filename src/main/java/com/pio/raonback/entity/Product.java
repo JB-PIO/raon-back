@@ -104,6 +104,10 @@ public class Product {
     this.updatedAt = LocalDateTime.now();
   }
 
+  public void updateStatus(ProductStatus status) {
+    this.status = status;
+  }
+
   public void delete() {
     this.isActive = false;
     this.isDeleted = true;

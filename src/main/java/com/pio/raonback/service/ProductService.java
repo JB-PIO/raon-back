@@ -1,9 +1,7 @@
 package com.pio.raonback.service;
 
-import com.pio.raonback.dto.request.product.GetProductListRequestDto;
-import com.pio.raonback.dto.request.product.PostProductRequestDto;
-import com.pio.raonback.dto.request.product.PutFavoriteRequestDto;
-import com.pio.raonback.dto.request.product.UpdateProductRequestDto;
+import com.pio.raonback.dto.request.product.*;
+import com.pio.raonback.dto.response.InvalidInputResponseDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.product.*;
 import com.pio.raonback.security.RaonUser;
@@ -25,6 +23,8 @@ public interface ProductService {
   ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser principal);
 
   ResponseEntity<ResponseDto> putFavorite(Long productId, PutFavoriteRequestDto dto, RaonUser principal);
+
+  ResponseEntity<? super InvalidInputResponseDto> updateProductStatus(Long productId, UpdateProductStatusRequestDto dto, RaonUser principal);
 
   ResponseEntity<ResponseDto> increaseViewCount(Long productId);
 
