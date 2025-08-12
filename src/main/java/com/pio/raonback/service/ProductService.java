@@ -15,6 +15,8 @@ public interface ProductService {
 
   ResponseEntity<? super GetChatResponseDto> getChat(Long productId, RaonUser principal);
 
+  ResponseEntity<? super GetBuyerListResponseDto> getBuyerList(Long productId, Pageable pageable, RaonUser principal);
+
   ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser principal);
 
   ResponseEntity<? super CreateChatResponseDto> createChat(Long productId, RaonUser principal);

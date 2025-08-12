@@ -78,6 +78,20 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
+  public ResponseEntity<? super GetBuyerListResponseDto> getBuyerList(Long productId, Pageable pageable, RaonUser principal) {
+    User seller = principal.getUser();
+
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
+    if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
+    Product product = optionalProduct.get();
+
+    if (!product.getSeller().equals(seller)) return ResponseDto.noPermission();
+
+    Page<Chat> chatPage = chatRepository.findAllByProductAndLastMessageAtNotNull(product, pageable);
+    return GetBuyerListResponseDto.ok(chatPage);
+  }
+
+  @Override
   @Transactional
   public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser principal) {
     User seller = principal.getUser();

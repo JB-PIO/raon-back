@@ -45,6 +45,15 @@ public class ProductController {
     return productService.getChat(productId, principal);
   }
 
+  @GetMapping("/{productId}/buyer")
+  public ResponseEntity<? super GetBuyerListResponseDto> getBuyerList(
+      @PathVariable("productId") Long productId,
+      @PageableDefault(size = 10, sort = "lastMessageAt", direction = Sort.Direction.DESC) Pageable pageable,
+      @AuthenticationPrincipal RaonUser principal
+  ) {
+    return productService.getBuyerList(productId, pageable, principal);
+  }
+
   @PostMapping("")
   public ResponseEntity<? super PostProductResponseDto> postProduct(@RequestBody @Valid PostProductRequestDto requestBody,
                                                                     @AuthenticationPrincipal RaonUser principal) {
