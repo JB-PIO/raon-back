@@ -17,9 +17,9 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
   boolean existsByProductAndBuyerAndLastMessageAtNotNull(Product product, User buyer);
 
-  Page<Chat> findAllByProductAndLastMessageAtNotNull(Product product, Pageable pageable);
-
   Page<Chat> findAllByBuyerOrSellerAndLastMessageAtNotNull(User buyer, User seller, Pageable pageable);
+
+  Page<Chat> findAllByProductAndBuyerIsDeletedFalseAndBuyerIsSuspendedFalseAndLastMessageAtNotNull(Product product, Pageable pageable);
 
   Optional<Chat> findByProductAndBuyerAndSeller(Product product, User buyer, User seller);
 

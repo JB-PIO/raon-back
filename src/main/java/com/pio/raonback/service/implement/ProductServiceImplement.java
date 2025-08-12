@@ -91,7 +91,8 @@ public class ProductServiceImplement implements ProductService {
 
     if (!product.getSeller().equals(seller)) return ResponseDto.noPermission();
 
-    Page<Chat> chatPage = chatRepository.findAllByProductAndLastMessageAtNotNull(product, pageable);
+    Page<Chat> chatPage =
+        chatRepository.findAllByProductAndBuyerIsDeletedFalseAndBuyerIsSuspendedFalseAndLastMessageAtNotNull(product, pageable);
     return GetBuyerListResponseDto.ok(chatPage);
   }
 
