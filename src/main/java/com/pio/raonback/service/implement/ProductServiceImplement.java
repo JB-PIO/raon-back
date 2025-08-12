@@ -192,7 +192,7 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
-  public ResponseEntity<ResponseDto> updateProductStatus(Long productId, UpdateProductStatusRequestDto dto, RaonUser principal) {
+  public ResponseEntity<ResponseDto> updateStatus(Long productId, UpdateStatusRequestDto dto, RaonUser principal) {
     User seller = principal.getUser();
 
     if (dto.getStatus() == ProductStatus.SOLD) {

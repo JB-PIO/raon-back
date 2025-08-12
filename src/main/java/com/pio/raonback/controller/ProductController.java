@@ -72,10 +72,10 @@ public class ProductController {
   }
 
   @PatchMapping("/{productId}/status")
-  public ResponseEntity<ResponseDto> updateProductStatus(@PathVariable("productId") Long productId,
-                                                         @RequestBody @Valid UpdateProductStatusRequestDto requestBody,
-                                                         @AuthenticationPrincipal RaonUser principal) {
-    return productService.updateProductStatus(productId, requestBody, principal);
+  public ResponseEntity<ResponseDto> updateStatus(@PathVariable("productId") Long productId,
+                                                  @RequestBody @Valid UpdateStatusRequestDto requestBody,
+                                                  @AuthenticationPrincipal RaonUser principal) {
+    return productService.updateStatus(productId, requestBody, principal);
   }
 
   @PatchMapping("/{productId}/view")

@@ -23,7 +23,7 @@ public interface ProductService {
 
   ResponseEntity<ResponseDto> putFavorite(Long productId, PutFavoriteRequestDto dto, RaonUser principal);
 
-  ResponseEntity<ResponseDto> updateProductStatus(Long productId, UpdateProductStatusRequestDto dto, RaonUser principal);
+  ResponseEntity<ResponseDto> updateStatus(Long productId, UpdateStatusRequestDto dto, RaonUser principal);
 
   ResponseEntity<ResponseDto> increaseViewCount(Long productId);
 
