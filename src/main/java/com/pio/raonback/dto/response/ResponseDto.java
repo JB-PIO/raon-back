@@ -115,6 +115,11 @@ public class ResponseDto {
     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseBody);
   }
 
+  public static ResponseEntity<ResponseDto> notBuyer() {
+    ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_BUYER, ResponseMessage.NOT_BUYER);
+    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseBody);
+  }
+
   public static ResponseEntity<ResponseDto> emailExists() {
     ResponseDto responseBody = new ResponseDto(ResponseCode.EMAIL_EXISTS, ResponseMessage.EMAIL_EXISTS);
     return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);

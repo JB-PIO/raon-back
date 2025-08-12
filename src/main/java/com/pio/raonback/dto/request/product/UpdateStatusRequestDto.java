@@ -10,4 +10,6 @@ public class UpdateStatusRequestDto {
   @NotNull(message = "상품 상태를 선택해주세요.")
   private ProductStatus status;
 
+  private Long buyerId;
+
 }

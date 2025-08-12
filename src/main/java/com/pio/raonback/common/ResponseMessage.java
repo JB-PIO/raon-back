@@ -30,6 +30,7 @@ public interface ResponseMessage {
 
   // HTTP Status 406 - Not Acceptable
   String NOT_LEAF_CATEGORY = "최하위 카테고리를 선택해주세요.";
+  String NOT_BUYER = "구매 희망자가 아닙니다.";
 
   // HTTP Status 409 - Conflict
   String EMAIL_EXISTS = "이미 사용 중인 이메일입니다.";

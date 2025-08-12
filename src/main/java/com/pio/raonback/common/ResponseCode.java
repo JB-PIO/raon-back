@@ -30,6 +30,7 @@ public interface ResponseCode {
 
   // HTTP Status 406 - Not Acceptable
   String NOT_LEAF_CATEGORY = "NOT_LEAF";
+  String NOT_BUYER = "NOT_BUYER";
 
   // HTTP Status 409 - Conflict
   String EMAIL_EXISTS = "EMAIL_DUP";

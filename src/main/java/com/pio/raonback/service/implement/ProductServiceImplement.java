@@ -15,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,8 @@ public class ProductServiceImplement implements ProductService {
   private final CategoryRepository categoryRepository;
   private final ChatRepository chatRepository;
   private final FavoriteRepository favoriteRepository;
+  private final UserRepository userRepository;
+  private final TradeRepository tradeRepository;
 
   @Override
   public ResponseEntity<? super GetProductListResponseDto> getProductList(GetProductListRequestDto dto, Pageable pageable) {
@@ -206,14 +210,9 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
+  @Transactional
   public ResponseEntity<ResponseDto> updateStatus(Long productId, UpdateStatusRequestDto dto, RaonUser principal) {
     User seller = principal.getUser();
-
-    if (dto.getStatus() == ProductStatus.SOLD) {
-      Map<String, String> errors = new HashMap<>();
-      errors.put("status", "'판매 완료'는 선택할 수 없습니다.");
-      return ResponseDto.invalidInput(errors);
-    }
 
     Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
@@ -222,7 +221,26 @@ public class ProductServiceImplement implements ProductService {
     if (!product.getSeller().equals(seller)) return ResponseDto.noPermission();
     if (product.getStatus() == ProductStatus.SOLD) return ResponseDto.soldProduct();
 
-    product.updateStatus(dto.getStatus());
+    ProductStatus newStatus = dto.getStatus();
+
+    if (newStatus == ProductStatus.SOLD) {
+      Long buyerId = dto.getBuyerId();
+      User buyer = null;
+
+      if (buyerId != null) {
+        Optional<User> optionalBuyer = userRepository.findByUserIdAndIsDeletedFalseAndIsSuspendedFalse(buyerId);
+        if (optionalBuyer.isEmpty()) return ResponseDto.userNotFound();
+        buyer = optionalBuyer.get();
+
+        boolean isBuyer = chatRepository.existsByProductAndBuyerAndLastMessageAtNotNull(product, buyer);
+        if (!isBuyer) return ResponseDto.notBuyer();
+      }
+
+      Trade trade = new Trade(product, buyer, seller);
+      tradeRepository.save(trade);
+    }
+
+    product.updateStatus(newStatus);
     productRepository.save(product);
     return ResponseDto.ok();
   }
