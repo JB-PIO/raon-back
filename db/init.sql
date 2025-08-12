@@ -126,6 +126,19 @@ CREATE TABLE message
     FOREIGN KEY (sender_id) REFERENCES user (user_id) ON DELETE RESTRICT
 );
 
+CREATE TABLE trade
+(
+    trade_id   BIGINT   NOT NULL AUTO_INCREMENT COMMENT '거래 고유 ID',
+    product_id BIGINT   NOT NULL UNIQUE COMMENT '상품 ID',
+    buyer_id   BIGINT   NULL COMMENT '구매자 ID',
+    seller_id  BIGINT   NOT NULL COMMENT '판매자 ID',
+    traded_at  DATETIME NOT NULL COMMENT '거래 일시',
+    PRIMARY KEY (trade_id),
+    FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE RESTRICT,
+    FOREIGN KEY (buyer_id) REFERENCES user (user_id) ON DELETE RESTRICT,
+    FOREIGN KEY (seller_id) REFERENCES user (user_id) ON DELETE RESTRICT
+);
+
 CREATE VIEW product_detail AS
 SELECT p.product_id,
        p.seller_id,
