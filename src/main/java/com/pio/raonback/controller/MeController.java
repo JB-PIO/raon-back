@@ -5,6 +5,7 @@ import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.me.GetFavoriteListResponseDto;
 import com.pio.raonback.dto.response.me.GetProductListResponseDto;
 import com.pio.raonback.dto.response.me.GetProfileResponseDto;
+import com.pio.raonback.dto.response.me.GetTradeListResponseDto;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.MeService;
 import jakarta.validation.Valid;
@@ -51,6 +52,15 @@ public class MeController {
       @AuthenticationPrincipal RaonUser principal
   ) {
     return meService.getFavoriteList(pageable, principal);
+  }
+
+  @GetMapping("/trade")
+  public ResponseEntity<? super GetTradeListResponseDto> getTradeList(
+      @RequestParam(defaultValue = "both") String type,
+      @PageableDefault(size = 20, sort = "tradedAt", direction = Sort.Direction.DESC) Pageable pageable,
+      @AuthenticationPrincipal RaonUser principal
+  ) {
+    return meService.getTradeList(type, pageable, principal);
   }
 
   @PatchMapping("")

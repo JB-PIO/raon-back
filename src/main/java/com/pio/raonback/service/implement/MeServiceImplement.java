@@ -5,14 +5,9 @@ import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.me.GetFavoriteListResponseDto;
 import com.pio.raonback.dto.response.me.GetProductListResponseDto;
 import com.pio.raonback.dto.response.me.GetProfileResponseDto;
-import com.pio.raonback.entity.Favorite;
-import com.pio.raonback.entity.Location;
-import com.pio.raonback.entity.ProductDetail;
-import com.pio.raonback.entity.User;
-import com.pio.raonback.repository.FavoriteRepository;
-import com.pio.raonback.repository.LocationRepository;
-import com.pio.raonback.repository.ProductDetailRepository;
-import com.pio.raonback.repository.UserRepository;
+import com.pio.raonback.dto.response.me.GetTradeListResponseDto;
+import com.pio.raonback.entity.*;
+import com.pio.raonback.repository.*;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.MeService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +26,7 @@ public class MeServiceImplement implements MeService {
   private final ProductDetailRepository productDetailRepository;
   private final FavoriteRepository favoriteRepository;
   private final LocationRepository locationRepository;
+  private final TradeRepository tradeRepository;
 
   @Override
   public ResponseEntity<? super GetProfileResponseDto> getProfile(RaonUser principal) {
@@ -50,6 +46,17 @@ public class MeServiceImplement implements MeService {
     User user = principal.getUser();
     Page<Favorite> favoritePage = favoriteRepository.findAllByUserAndProductIsActiveTrue(user, pageable);
     return GetFavoriteListResponseDto.ok(favoritePage);
+  }
+
+  @Override
+  public ResponseEntity<? super GetTradeListResponseDto> getTradeList(String type, Pageable pageable, RaonUser principal) {
+    User user = principal.getUser();
+    Page<Trade> tradePage = switch (type) {
+      case "buy" -> tradeRepository.findAllByBuyer(user, pageable);
+      case "sell" -> tradeRepository.findAllBySeller(user, pageable);
+      default -> tradeRepository.findAllByBuyerOrSeller(user, user, pageable);
+    };
+    return GetTradeListResponseDto.ok(tradePage);
   }
 
   @Override
