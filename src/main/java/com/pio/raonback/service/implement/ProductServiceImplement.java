@@ -8,12 +8,12 @@ import com.pio.raonback.entity.enums.ProductStatus;
 import com.pio.raonback.repository.*;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ProductService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -257,6 +257,7 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
+  @Transactional
   public ResponseEntity<ResponseDto> deleteProduct(Long productId, RaonUser principal) {
     User seller = principal.getUser();
 
@@ -266,6 +267,7 @@ public class ProductServiceImplement implements ProductService {
 
     if (!product.getSeller().equals(seller)) return ResponseDto.noPermission();
 
+    favoriteRepository.deleteAllByProduct(product);
     product.delete();
     productRepository.save(product);
     return ResponseDto.ok();
