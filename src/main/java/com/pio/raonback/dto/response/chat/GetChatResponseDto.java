@@ -34,7 +34,6 @@ public class GetChatResponseDto extends ResponseDto {
       private String title;
       private Long price;
       private ProductStatus status;
-      private Boolean isActive;
       private Boolean isDeleted;
 
       @Getter
@@ -57,7 +56,6 @@ public class GetChatResponseDto extends ResponseDto {
         this.title = product.getTitle();
         this.price = product.getPrice();
         this.status = product.getStatus();
-        this.isActive = product.getIsActive();
         this.isDeleted = product.getIsDeleted();
       }
 

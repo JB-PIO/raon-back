@@ -33,7 +33,6 @@ public class ChatListItem {
     private String thumbnail;
     private String title;
     private ProductStatus status;
-    private Boolean isActive;
     private Boolean isDeleted;
 
     private ProductData(Product product) {
@@ -41,7 +40,6 @@ public class ChatListItem {
       this.thumbnail = product.getImages().get(0).getImageUrl();
       this.title = product.getTitle();
       this.status = product.getStatus();
-      this.isActive = product.getIsActive();
       this.isDeleted = product.getIsDeleted();
     }
 

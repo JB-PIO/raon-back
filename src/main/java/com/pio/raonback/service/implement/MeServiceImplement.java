@@ -37,14 +37,14 @@ public class MeServiceImplement implements MeService {
   @Override
   public ResponseEntity<? super GetProductListResponseDto> getProductList(Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
-    Page<ProductDetail> productDetailPage = productDetailRepository.findAllBySellerAndIsActiveTrue(user, pageable);
+    Page<ProductDetail> productDetailPage = productDetailRepository.findAllBySellerAndIsDeletedFalse(user, pageable);
     return GetProductListResponseDto.ok(productDetailPage);
   }
 
   @Override
   public ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
-    Page<Favorite> favoritePage = favoriteRepository.findAllByUserAndProductIsActiveTrue(user, pageable);
+    Page<Favorite> favoritePage = favoriteRepository.findAllByUserAndProductIsDeletedFalse(user, pageable);
     return GetFavoriteListResponseDto.ok(favoritePage);
   }
 

@@ -57,7 +57,7 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   public ResponseEntity<? super GetProductResponseDto> getProduct(Long productId) {
-    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsDeletedFalse(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
     return GetProductResponseDto.ok(product);
@@ -85,14 +85,14 @@ public class ProductServiceImplement implements ProductService {
   public ResponseEntity<? super GetBuyerListResponseDto> getBuyerList(Long productId, Pageable pageable, RaonUser principal) {
     User seller = principal.getUser();
 
-    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsDeletedFalse(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
 
     if (!product.getSeller().equals(seller)) return ResponseDto.noPermission();
 
     Page<Chat> chatPage =
-        chatRepository.findAllByProductAndBuyerIsDeletedFalseAndBuyerIsSuspendedFalseAndLastMessageAtNotNull(product, pageable);
+        chatRepository.findAllByProductAndBuyerIsDeletedFalseAndLastMessageAtNotNull(product, pageable);
     return GetBuyerListResponseDto.ok(chatPage);
   }
 
@@ -131,7 +131,7 @@ public class ProductServiceImplement implements ProductService {
   public ResponseEntity<? super CreateChatResponseDto> createChat(Long productId, RaonUser principal) {
     User buyer = principal.getUser();
 
-    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsDeletedFalse(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
 
@@ -152,7 +152,7 @@ public class ProductServiceImplement implements ProductService {
   public ResponseEntity<? super UpdateProductResponseDto> updateProduct(Long productId, UpdateProductRequestDto dto, RaonUser principal) {
     User seller = principal.getUser();
 
-    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsDeletedFalse(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
 
@@ -191,7 +191,7 @@ public class ProductServiceImplement implements ProductService {
   public ResponseEntity<ResponseDto> putFavorite(Long productId, PutFavoriteRequestDto dto, RaonUser principal) {
     User user = principal.getUser();
 
-    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsDeletedFalse(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
     if (product.getSeller().equals(user)) return ResponseDto.ownProduct();
@@ -215,7 +215,7 @@ public class ProductServiceImplement implements ProductService {
   public ResponseEntity<ResponseDto> updateStatus(Long productId, UpdateStatusRequestDto dto, RaonUser principal) {
     User seller = principal.getUser();
 
-    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsDeletedFalse(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
 
@@ -229,7 +229,7 @@ public class ProductServiceImplement implements ProductService {
       User buyer = null;
 
       if (buyerId != null) {
-        Optional<User> optionalBuyer = userRepository.findByUserIdAndIsDeletedFalseAndIsSuspendedFalse(buyerId);
+        Optional<User> optionalBuyer = userRepository.findByUserIdAndIsDeletedFalse(buyerId);
         if (optionalBuyer.isEmpty()) return ResponseDto.userNotFound();
         buyer = optionalBuyer.get();
 
@@ -248,7 +248,7 @@ public class ProductServiceImplement implements ProductService {
 
   @Override
   public ResponseEntity<ResponseDto> increaseViewCount(Long productId) {
-    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsDeletedFalse(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
     product.increaseViewCount();
@@ -260,7 +260,7 @@ public class ProductServiceImplement implements ProductService {
   public ResponseEntity<ResponseDto> deleteProduct(Long productId, RaonUser principal) {
     User seller = principal.getUser();
 
-    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsActiveTrue(productId);
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsDeletedFalse(productId);
     if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
     Product product = optionalProduct.get();
 

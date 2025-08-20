@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductDetailRepository extends JpaRepository<ProductDetail, Long>, QProductDetailRepository {
 
-  Page<ProductDetail> findAllBySellerAndIsActiveTrue(User seller, Pageable pageable);
+  Page<ProductDetail> findAllBySellerAndIsDeletedFalse(User seller, Pageable pageable);
 
 }

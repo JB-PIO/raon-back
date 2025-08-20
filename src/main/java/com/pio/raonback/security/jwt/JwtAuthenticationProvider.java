@@ -8,7 +8,6 @@ import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,7 +27,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     try {
       String email = jwtUtil.validateAccessToken(token);
       RaonUser principal = (RaonUser) userDetailsService.loadUserByUsername(email);
-      if (principal.getUser().getIsSuspended()) throw new LockedException("정지된 계정입니다.");
       return new RaonAuthenticationToken(principal);
     } catch (io.jsonwebtoken.ExpiredJwtException exception) {
       if (exception.getClaims().get("type", String.class).equals("access")) {

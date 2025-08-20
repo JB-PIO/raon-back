@@ -56,8 +56,6 @@ public class ProductDetail {
   @Enumerated(EnumType.STRING)
   private ProductStatus status;
 
-  private Boolean isActive;
-
   private Boolean isDeleted;
 
   private LocalDateTime createdAt;

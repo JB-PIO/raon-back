@@ -43,9 +43,6 @@ public class User {
   @Column(name = "is_deleted", nullable = false)
   private Boolean isDeleted = false;
 
-  @Column(name = "is_suspended", nullable = false)
-  private Boolean isSuspended = false;
-
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
 
@@ -54,9 +51,6 @@ public class User {
 
   @Column(name = "deleted_at")
   private LocalDateTime deletedAt;
-
-  @Column(name = "suspended_at")
-  private LocalDateTime suspendedAt;
 
   public User(String nickname, String email, String password, Location location) {
     this.nickname = nickname;

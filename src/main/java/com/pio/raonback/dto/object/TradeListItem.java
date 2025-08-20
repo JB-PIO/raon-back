@@ -28,7 +28,6 @@ public class TradeListItem {
     private String thumbnail;
     private String title;
     private Long price;
-    private Boolean isActive;
     private Boolean isDeleted;
 
     private ProductData(Product product) {
@@ -36,7 +35,6 @@ public class TradeListItem {
       this.thumbnail = product.getImages().get(0).getImageUrl();
       this.title = product.getTitle();
       this.price = product.getPrice();
-      this.isActive = product.getIsActive();
       this.isDeleted = product.getIsDeleted();
     }
 

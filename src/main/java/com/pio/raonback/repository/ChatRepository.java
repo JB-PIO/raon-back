@@ -19,7 +19,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
   Page<Chat> findAllByBuyerOrSellerAndLastMessageAtNotNull(User buyer, User seller, Pageable pageable);
 
-  Page<Chat> findAllByProductAndBuyerIsDeletedFalseAndBuyerIsSuspendedFalseAndLastMessageAtNotNull(Product product, Pageable pageable);
+  Page<Chat> findAllByProductAndBuyerIsDeletedFalseAndLastMessageAtNotNull(Product product, Pageable pageable);
 
   Optional<Chat> findByProductAndBuyerAndSeller(Product product, User buyer, User seller);
 

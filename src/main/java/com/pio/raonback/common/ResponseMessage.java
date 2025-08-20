@@ -16,7 +16,6 @@ public interface ResponseMessage {
 
   // HTTP Status 403 - Forbidden
   String NO_PERMISSION = "권한이 없습니다.";
-  String SUSPENDED_USER = "정지된 계정입니다.";
   String OWN_PRODUCT = "본인의 상품입니다.";
   String SOLD_PRODUCT = "판매 완료된 상품입니다.";
 

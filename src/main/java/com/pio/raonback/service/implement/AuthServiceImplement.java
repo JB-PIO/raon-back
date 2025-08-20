@@ -83,7 +83,6 @@ public class AuthServiceImplement implements AuthService {
     String storedPassword = user.getPassword();
     boolean isPasswordValid = passwordEncoder.matches(inputPassword, storedPassword);
     if (!isPasswordValid) return ResponseDto.signInFailed();
-    if (user.getIsSuspended()) return ResponseDto.suspendedUser();
 
     refreshTokenRepository.deleteByUser(user);
     refreshTokenRepository.flush();

@@ -31,7 +31,7 @@ public class QProductDetailRepositoryImpl extends QuerydslRepositorySupport impl
     BooleanBuilder builder = new BooleanBuilder();
 
     builder.and(productDetail.status.ne(ProductStatus.SOLD))
-           .and(productDetail.isActive.eq(true));
+           .and(productDetail.isDeleted.eq(false));
 
     if (category != null) builder.and(productDetail.category.path.startsWith(category.getPath()));
     if (locations != null) builder.and(productDetail.location.in(locations));

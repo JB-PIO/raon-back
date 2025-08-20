@@ -5,6 +5,7 @@ import com.pio.raonback.entity.User;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -21,7 +22,7 @@ public class UserListItem {
   }
 
   public static List<UserListItem> fromChatPage(Page<Chat> chatPage) {
-    List<UserListItem> list = new java.util.ArrayList<>();
+    List<UserListItem> list = new ArrayList<>();
     for (Chat chat : chatPage.getContent()) {
       UserListItem userListItem = new UserListItem(chat.getBuyer());
       list.add(userListItem);

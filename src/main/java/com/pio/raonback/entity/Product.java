@@ -60,9 +60,6 @@ public class Product {
   @Column(name = "status", nullable = false)
   private ProductStatus status = ProductStatus.AVAILABLE;
 
-  @Column(name = "is_active", nullable = false)
-  private Boolean isActive = true;
-
   @Column(name = "is_deleted", nullable = false)
   private Boolean isDeleted = false;
 
@@ -109,7 +106,6 @@ public class Product {
   }
 
   public void delete() {
-    this.isActive = false;
     this.isDeleted = true;
     this.deletedAt = LocalDateTime.now();
   }

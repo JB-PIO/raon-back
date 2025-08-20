@@ -16,7 +16,6 @@ public interface ResponseCode {
 
   // HTTP Status 403 - Forbidden
   String NO_PERMISSION = "NO_PER";
-  String SUSPENDED_USER = "SUS_ACC";
   String OWN_PRODUCT = "OWN_PRD";
   String SOLD_PRODUCT = "SOLD_PRD";
 

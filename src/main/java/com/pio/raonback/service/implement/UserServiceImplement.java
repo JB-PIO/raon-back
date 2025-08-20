@@ -25,7 +25,7 @@ public class UserServiceImplement implements UserService {
 
   @Override
   public ResponseEntity<? super GetProfileResponseDto> getProfile(Long userId) {
-    Optional<User> optionalUser = userRepository.findByUserIdAndIsDeletedFalseAndIsSuspendedFalse(userId);
+    Optional<User> optionalUser = userRepository.findByUserIdAndIsDeletedFalse(userId);
     if (optionalUser.isEmpty()) return ResponseDto.userNotFound();
     User user = optionalUser.get();
     return GetProfileResponseDto.ok(user);
@@ -33,11 +33,11 @@ public class UserServiceImplement implements UserService {
 
   @Override
   public ResponseEntity<? super GetProductListResponseDto> getProductList(Long userId, Pageable pageable) {
-    Optional<User> optionalUser = userRepository.findByUserIdAndIsDeletedFalseAndIsSuspendedFalse(userId);
+    Optional<User> optionalUser = userRepository.findByUserIdAndIsDeletedFalse(userId);
     if (optionalUser.isEmpty()) return ResponseDto.userNotFound();
     User user = optionalUser.get();
 
-    Page<ProductDetail> productDetailPage = productDetailRepository.findAllBySellerAndIsActiveTrue(user, pageable);
+    Page<ProductDetail> productDetailPage = productDetailRepository.findAllBySellerAndIsDeletedFalse(user, pageable);
     return GetProductListResponseDto.ok(productDetailPage);
   }
 

@@ -13,7 +13,6 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
@@ -37,8 +36,6 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         accessor.setUser((Principal) authResponse.getPrincipal());
       } catch (ExpiredJwtException exception) {
         throw new MessageDeliveryException(ResponseCode.EXPIRED_TOKEN);
-      } catch (LockedException exception) {
-        throw new MessageDeliveryException(ResponseCode.SUSPENDED_USER);
       } catch (UsernameCannotFoundException exception) {
         throw new MessageDeliveryException(ResponseCode.SERVER_ERROR);
       } catch (AuthenticationException exception) {

@@ -9,7 +9,6 @@ import com.pio.raonback.security.exception.UsernameCannotFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -28,9 +27,6 @@ public class JwtAuthenticationFailureHandler implements AuthenticationFailureHan
     if (exception instanceof ExpiredJwtException) {
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       responseBody = new ResponseDto(ResponseCode.EXPIRED_TOKEN, ResponseMessage.EXPIRED_TOKEN);
-    } else if (exception instanceof LockedException) {
-      response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-      responseBody = new ResponseDto(ResponseCode.SUSPENDED_USER, ResponseMessage.SUSPENDED_USER);
     } else if (exception instanceof UsernameCannotFoundException) {
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       responseBody = new ResponseDto(ResponseCode.SERVER_ERROR, ResponseMessage.SERVER_ERROR);
