@@ -15,7 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,10 +25,12 @@ import java.util.Optional;
 public class MeServiceImplement implements MeService {
 
   private final UserRepository userRepository;
+  private final ProductRepository productRepository;
   private final ProductDetailRepository productDetailRepository;
   private final FavoriteRepository favoriteRepository;
   private final LocationRepository locationRepository;
   private final TradeRepository tradeRepository;
+  private final RefreshTokenRepository refreshTokenRepository;
 
   @Override
   public ResponseEntity<? super GetProfileResponseDto> getProfile(RaonUser principal) {
@@ -81,6 +85,28 @@ public class MeServiceImplement implements MeService {
       user.updateLocation(location);
     }
     userRepository.save(user);
+    return ResponseDto.ok();
+  }
+
+  @Override
+  @Transactional
+  public ResponseEntity<ResponseDto> deleteAccount(RaonUser principal) {
+    User user = principal.getUser();
+
+    favoriteRepository.deleteAllByUser(user);
+    refreshTokenRepository.deleteByUser(user);
+    tradeRepository.deleteAllByBuyerNullAndSeller(user);
+
+    List<Product> products = productRepository.findAllBySellerAndIsDeletedFalse(user);
+    for (Product product : products) {
+      favoriteRepository.deleteAllByProduct(product);
+      product.delete();
+      productRepository.save(product);
+    }
+
+    user.delete();
+    userRepository.save(user);
+
     return ResponseDto.ok();
   }
 

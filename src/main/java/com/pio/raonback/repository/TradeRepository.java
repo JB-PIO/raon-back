@@ -16,4 +16,6 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 
   Page<Trade> findAllByBuyerOrSeller(User buyer, User seller, Pageable pageable);
 
+  void deleteAllByBuyerNullAndSeller(User seller);
+
 }

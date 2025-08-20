@@ -15,4 +15,8 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
   Page<Favorite> findAllByUserAndProductIsDeletedFalse(User user, Pageable pageable);
 
+  void deleteAllByUser(User user);
+
+  void deleteAllByProduct(Product product);
+
 }

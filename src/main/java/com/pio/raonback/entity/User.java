@@ -23,7 +23,7 @@ public class User {
   @Column(name = "nickname", nullable = false, unique = true, length = 30)
   private String nickname;
 
-  @Column(name = "email", nullable = false, unique = true, length = 80)
+  @Column(name = "email", unique = true, length = 80)
   private String email;
 
   @Column(name = "password", length = 255)
@@ -33,7 +33,7 @@ public class User {
   private String profileImage;
 
   @ManyToOne
-  @JoinColumn(name = "location_id", nullable = false)
+  @JoinColumn(name = "location_id")
   private Location location;
 
   @Enumerated(EnumType.STRING)
@@ -73,6 +73,15 @@ public class User {
   public void updateLocation(Location location) {
     this.location = location;
     this.updatedAt = LocalDateTime.now();
+  }
+
+  public void delete() {
+    this.email = null;
+    this.password = null;
+    this.profileImage = null;
+    this.location = null;
+    this.isDeleted = true;
+    this.deletedAt = LocalDateTime.now();
   }
 
   @Override

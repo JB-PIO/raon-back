@@ -69,4 +69,9 @@ public class MeController {
     return meService.updateProfile(requestBody, principal);
   }
 
+  @DeleteMapping("")
+  public ResponseEntity<ResponseDto> deleteAccount(@AuthenticationPrincipal RaonUser principal) {
+    return meService.deleteAccount(principal);
+  }
+
 }

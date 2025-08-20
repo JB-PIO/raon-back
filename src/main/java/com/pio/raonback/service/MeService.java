@@ -22,4 +22,6 @@ public interface MeService {
 
   ResponseEntity<ResponseDto> updateProfile(UpdateProfileRequestDto dto, RaonUser principal);
 
+  ResponseEntity<ResponseDto> deleteAccount(RaonUser principal);
+
 }

@@ -12,10 +12,10 @@ CREATE TABLE user
 (
     user_id       BIGINT                 NOT NULL AUTO_INCREMENT COMMENT '사용자 고유 ID',
     nickname      VARCHAR(30)            NOT NULL UNIQUE COMMENT '닉네임',
-    email         VARCHAR(80)            NOT NULL UNIQUE COMMENT '이메일',
+    email         VARCHAR(80)            NULL UNIQUE COMMENT '이메일',
     password      VARCHAR(255)           NULL COMMENT '해시된 비밀번호',
     profile_image VARCHAR(255)           NULL COMMENT '프로필 사진 URL',
-    location_id   BIGINT                 NOT NULL COMMENT '사용자 기본 지역',
+    location_id   BIGINT                 NULL COMMENT '사용자 기본 지역',
     role          ENUM ('USER', 'ADMIN') NOT NULL DEFAULT 'USER' COMMENT '접근 권한',
     is_deleted    BOOLEAN                NOT NULL DEFAULT FALSE COMMENT '계정 삭제 여부',
     created_at    DATETIME               NOT NULL COMMENT '가입 일시',
