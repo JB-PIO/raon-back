@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
@@ -22,5 +23,9 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
   Page<Chat> findAllByProductAndBuyerIsDeletedFalseAndLastMessageAtNotNull(Product product, Pageable pageable);
 
   Optional<Chat> findByProductAndBuyerAndSeller(Product product, User buyer, User seller);
+
+  void deleteAllByBuyerIsDeletedTrueAndSellerIsDeletedTrue();
+
+  void deleteAllByCreatedAtBeforeAndLastMessageAtNull(LocalDateTime createdAt);
 
 }

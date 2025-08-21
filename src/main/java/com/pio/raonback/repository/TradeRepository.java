@@ -18,4 +18,6 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 
   void deleteAllByBuyerNullAndSeller(User seller);
 
+  void deleteAllByBuyerIsDeletedTrueAndSellerIsDeletedTrue();
+
 }
