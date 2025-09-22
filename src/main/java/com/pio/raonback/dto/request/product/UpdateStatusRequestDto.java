@@ -1,6 +1,6 @@
 package com.pio.raonback.dto.request.product;
 
-import com.pio.raonback.entity.enums.ProductStatus;
+import com.pio.raonback.common.enums.ProductStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 

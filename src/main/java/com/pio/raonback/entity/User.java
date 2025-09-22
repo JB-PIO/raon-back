@@ -1,6 +1,6 @@
 package com.pio.raonback.entity;
 
-import com.pio.raonback.entity.enums.Role;
+import com.pio.raonback.common.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

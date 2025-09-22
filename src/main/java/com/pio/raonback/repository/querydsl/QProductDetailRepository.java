@@ -1,10 +1,10 @@
 package com.pio.raonback.repository.querydsl;
 
+import com.pio.raonback.common.enums.Condition;
+import com.pio.raonback.common.enums.TradeType;
 import com.pio.raonback.entity.Category;
 import com.pio.raonback.entity.Location;
 import com.pio.raonback.entity.ProductDetail;
-import com.pio.raonback.entity.enums.Condition;
-import com.pio.raonback.entity.enums.TradeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

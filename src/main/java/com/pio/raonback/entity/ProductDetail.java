@@ -1,8 +1,8 @@
 package com.pio.raonback.entity;
 
-import com.pio.raonback.entity.enums.Condition;
-import com.pio.raonback.entity.enums.ProductStatus;
-import com.pio.raonback.entity.enums.TradeType;
+import com.pio.raonback.common.enums.Condition;
+import com.pio.raonback.common.enums.ProductStatus;
+import com.pio.raonback.common.enums.TradeType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

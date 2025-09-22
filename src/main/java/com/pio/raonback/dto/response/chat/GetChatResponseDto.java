@@ -2,12 +2,12 @@ package com.pio.raonback.dto.response.chat;
 
 import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;
+import com.pio.raonback.common.enums.ProductStatus;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.entity.Chat;
 import com.pio.raonback.entity.Location;
 import com.pio.raonback.entity.Product;
 import com.pio.raonback.entity.User;
-import com.pio.raonback.entity.enums.ProductStatus;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

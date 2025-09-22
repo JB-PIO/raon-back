@@ -1,10 +1,10 @@
 package com.pio.raonback.dto.object;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pio.raonback.common.enums.Condition;
+import com.pio.raonback.common.enums.ProductStatus;
+import com.pio.raonback.common.enums.TradeType;
 import com.pio.raonback.entity.*;
-import com.pio.raonback.entity.enums.Condition;
-import com.pio.raonback.entity.enums.ProductStatus;
-import com.pio.raonback.entity.enums.TradeType;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 

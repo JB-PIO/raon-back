@@ -1,11 +1,11 @@
 package com.pio.raonback.repository.querydsl.implement;
 
+import com.pio.raonback.common.enums.Condition;
+import com.pio.raonback.common.enums.ProductStatus;
+import com.pio.raonback.common.enums.TradeType;
 import com.pio.raonback.entity.Category;
 import com.pio.raonback.entity.Location;
 import com.pio.raonback.entity.ProductDetail;
-import com.pio.raonback.entity.enums.Condition;
-import com.pio.raonback.entity.enums.ProductStatus;
-import com.pio.raonback.entity.enums.TradeType;
 import com.pio.raonback.repository.querydsl.QProductDetailRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;

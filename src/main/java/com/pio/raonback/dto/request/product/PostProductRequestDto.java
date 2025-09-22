@@ -1,7 +1,7 @@
 package com.pio.raonback.dto.request.product;
 
-import com.pio.raonback.entity.enums.Condition;
-import com.pio.raonback.entity.enums.TradeType;
+import com.pio.raonback.common.enums.Condition;
+import com.pio.raonback.common.enums.TradeType;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import org.hibernate.validator.constraints.URL;

@@ -1,11 +1,11 @@
 package com.pio.raonback.dto.object;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pio.raonback.common.enums.ProductStatus;
 import com.pio.raonback.entity.Chat;
 import com.pio.raonback.entity.Message;
 import com.pio.raonback.entity.Product;
 import com.pio.raonback.entity.User;
-import com.pio.raonback.entity.enums.ProductStatus;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
