@@ -2,10 +2,7 @@ package com.pio.raonback.controller;
 
 import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.dto.response.chat.GetChatListResponseDto;
-import com.pio.raonback.dto.response.chat.GetChatResponseDto;
-import com.pio.raonback.dto.response.chat.GetMessageListResponseDto;
-import com.pio.raonback.dto.response.chat.SendMessageResponseDto;
+import com.pio.raonback.dto.response.chat.*;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.ChatService;
 import jakarta.validation.Valid;
@@ -48,6 +45,13 @@ public class ChatController {
                                                                     @RequestBody @Valid SendMessageRequestDto requestBody,
                                                                     @AuthenticationPrincipal RaonUser principal) {
     return chatService.sendMessage(chatId, requestBody, principal);
+  }
+
+  @PostMapping("/{chatId}/fraud-detection")
+  public ResponseEntity<? super DetectFraudResponseDto> detectFraud(@PathVariable("chatId") Long chatId,
+                                                                    @RequestParam(defaultValue = "50") int size,
+                                                                    @AuthenticationPrincipal RaonUser principal) {
+    return chatService.detectFraud(chatId, size, principal);
   }
 
   @PutMapping("/{chatId}/read")

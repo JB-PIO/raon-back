@@ -1,34 +1,34 @@
 package com.pio.raonback.service.implement;
 
+import com.pio.raonback.dto.external.response.DetectFraudExternalResponseDto;
 import com.pio.raonback.dto.object.MessageListItem;
 import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.dto.response.chat.GetChatListResponseDto;
-import com.pio.raonback.dto.response.chat.GetChatResponseDto;
-import com.pio.raonback.dto.response.chat.GetMessageListResponseDto;
-import com.pio.raonback.dto.response.chat.SendMessageResponseDto;
+import com.pio.raonback.dto.response.chat.*;
 import com.pio.raonback.entity.Chat;
 import com.pio.raonback.entity.Message;
 import com.pio.raonback.entity.User;
 import com.pio.raonback.repository.ChatRepository;
 import com.pio.raonback.repository.MessageRepository;
 import com.pio.raonback.security.RaonUser;
+import com.pio.raonback.service.AiService;
 import com.pio.raonback.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class ChatServiceImplement implements ChatService {
+
+  private final AiService aiService;
 
   private final ChatRepository chatRepository;
   private final MessageRepository messageRepository;
@@ -94,6 +94,25 @@ public class ChatServiceImplement implements ChatService {
     messagingTemplate.convertAndSend("/user/" + receiver.getUserId() + "/chat", messageListItem);
 
     return SendMessageResponseDto.ok(message);
+  }
+
+  @Override
+  public ResponseEntity<? super DetectFraudResponseDto> detectFraud(Long chatId, int size, RaonUser principal) {
+    User requester = principal.getUser();
+
+    Optional<Chat> optionalChat = chatRepository.findById(chatId);
+    if (optionalChat.isEmpty()) return ResponseDto.chatNotFound();
+    Chat chat = optionalChat.get();
+    if (!chat.getSeller().equals(requester) && !chat.getBuyer().equals(requester)) return ResponseDto.noPermission();
+
+    Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "sentAt"));
+    Page<Message> messagePage = messageRepository.findAllByChatAndIsDeletedFalse(chat, pageable);
+    List<Message> messages = new ArrayList<>(messagePage.getContent());
+    Collections.reverse(messages);
+
+    DetectFraudExternalResponseDto responseBody = aiService.analyzeMessages(requester.getUserId(), messages);
+
+    return DetectFraudResponseDto.ok(responseBody);
   }
 
   @Override
