@@ -2,7 +2,7 @@ package com.pio.raonback.dto.response.chat;
 
 import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;
-import com.pio.raonback.common.enums.FraudRiskLevel;
+import com.pio.raonback.common.enums.RiskLevel;
 import com.pio.raonback.dto.external.response.DetectFraudExternalResponseDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public class DetectFraudResponseDto extends ResponseDto {
   @Getter
   private static class Data {
 
-    private FraudRiskLevel result;
+    private RiskLevel result;
     private String message;
 
     private Data(DetectFraudExternalResponseDto dto) {

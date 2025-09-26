@@ -1,5 +1,5 @@
 package com.pio.raonback.common.enums;
 
-public enum FraudRiskLevel {
+public enum RiskLevel {
   SAFE, WARNING, DANGER
 }
