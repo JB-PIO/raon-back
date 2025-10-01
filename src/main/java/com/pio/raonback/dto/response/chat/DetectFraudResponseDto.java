@@ -2,7 +2,6 @@ package com.pio.raonback.dto.response.chat;
 
 import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;
-import com.pio.raonback.common.enums.RiskLevel;
 import com.pio.raonback.dto.external.response.DetectFraudExternalResponseDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import lombok.Getter;
@@ -12,24 +11,11 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class DetectFraudResponseDto extends ResponseDto {
 
-  private Data data;
-
-  @Getter
-  private static class Data {
-
-    private RiskLevel result;
-    private String message;
-
-    private Data(DetectFraudExternalResponseDto dto) {
-      this.result = dto.getResult();
-      this.message = dto.getMessage();
-    }
-
-  }
+  private DetectFraudExternalResponseDto data;
 
   private DetectFraudResponseDto(DetectFraudExternalResponseDto dto) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.data = new Data(dto);
+    this.data = dto;
   }
 
   public static ResponseEntity<DetectFraudResponseDto> ok(DetectFraudExternalResponseDto dto) {
