@@ -54,6 +54,12 @@ public class ChatController {
     return chatService.detectFraud(chatId, size, principal);
   }
 
+  @PostMapping("/{chatId}/image-analysis")
+  public ResponseEntity<? super AnalyzeImagesResponseDto> analyzeImages(@PathVariable("chatId") Long chatId,
+                                                                        @AuthenticationPrincipal RaonUser principal) {
+    return chatService.analyzeImages(chatId, principal);
+  }
+
   @PutMapping("/{chatId}/read")
   public ResponseEntity<ResponseDto> readMessages(@PathVariable("chatId") Long chatId,
                                                   @AuthenticationPrincipal RaonUser principal) {

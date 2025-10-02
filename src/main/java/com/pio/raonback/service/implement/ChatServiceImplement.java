@@ -1,5 +1,6 @@
 package com.pio.raonback.service.implement;
 
+import com.pio.raonback.dto.external.response.AnalyzeImagesExternalResponseDto;
 import com.pio.raonback.dto.external.response.DetectFraudExternalResponseDto;
 import com.pio.raonback.dto.object.MessageListItem;
 import com.pio.raonback.dto.request.chat.SendMessageRequestDto;
@@ -7,6 +8,7 @@ import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.chat.*;
 import com.pio.raonback.entity.Chat;
 import com.pio.raonback.entity.Message;
+import com.pio.raonback.entity.ProductImage;
 import com.pio.raonback.entity.User;
 import com.pio.raonback.repository.ChatRepository;
 import com.pio.raonback.repository.MessageRepository;
@@ -113,6 +115,24 @@ public class ChatServiceImplement implements ChatService {
     DetectFraudExternalResponseDto responseBody = aiService.analyzeMessages(requester.getUserId(), messages);
 
     return DetectFraudResponseDto.ok(responseBody);
+  }
+
+  @Override
+  public ResponseEntity<? super AnalyzeImagesResponseDto> analyzeImages(Long chatId, RaonUser principal) {
+    User buyer = principal.getUser();
+
+    Optional<Chat> optionalChat = chatRepository.findById(chatId);
+    if (optionalChat.isEmpty()) return ResponseDto.chatNotFound();
+    Chat chat = optionalChat.get();
+    if (!chat.getBuyer().equals(buyer)) return ResponseDto.noPermission();
+
+    List<ProductImage> productImages = chat.getProduct().getImages();
+    for (ProductImage productImage : productImages) {
+      System.out.println(productImage.getImageId() + ": " + productImage.getImageUrl());
+    }
+    AnalyzeImagesExternalResponseDto responseBody = aiService.analyzeImages(productImages);
+
+    return AnalyzeImagesResponseDto.ok(responseBody);
   }
 
   @Override

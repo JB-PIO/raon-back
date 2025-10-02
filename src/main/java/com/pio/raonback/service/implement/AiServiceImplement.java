@@ -1,8 +1,11 @@
 package com.pio.raonback.service.implement;
 
+import com.pio.raonback.dto.external.request.AnalyzeImagesExternalRequestDto;
 import com.pio.raonback.dto.external.request.DetectFraudExternalRequestDto;
+import com.pio.raonback.dto.external.response.AnalyzeImagesExternalResponseDto;
 import com.pio.raonback.dto.external.response.DetectFraudExternalResponseDto;
 import com.pio.raonback.entity.Message;
+import com.pio.raonback.entity.ProductImage;
 import com.pio.raonback.service.AiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -20,14 +23,23 @@ public class AiServiceImplement implements AiService {
   @Override
   public DetectFraudExternalResponseDto analyzeMessages(Long requesterId, List<Message> messages) {
     DetectFraudExternalRequestDto requestBody = new DetectFraudExternalRequestDto(requesterId, messages);
-    DetectFraudExternalResponseDto responseBody =
-        aiRestClient.post()
-                    .uri("/check-fraud")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(requestBody)
-                    .retrieve()
-                    .body(DetectFraudExternalResponseDto.class);
-    return responseBody;
+    return aiRestClient.post()
+                       .uri("/check-fraud")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .body(requestBody)
+                       .retrieve()
+                       .body(DetectFraudExternalResponseDto.class);
+  }
+
+  @Override
+  public AnalyzeImagesExternalResponseDto analyzeImages(List<ProductImage> productImages) {
+    AnalyzeImagesExternalRequestDto requestBody = new AnalyzeImagesExternalRequestDto(productImages);
+    return aiRestClient.post()
+                       .uri("/image-analysis")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .body(requestBody)
+                       .retrieve()
+                       .body(AnalyzeImagesExternalResponseDto.class);
   }
 
 }

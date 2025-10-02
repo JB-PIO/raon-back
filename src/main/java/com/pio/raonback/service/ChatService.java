@@ -19,6 +19,8 @@ public interface ChatService {
 
   ResponseEntity<? super DetectFraudResponseDto> detectFraud(Long chatId, int size, RaonUser principal);
 
+  ResponseEntity<? super AnalyzeImagesResponseDto> analyzeImages(Long chatId, RaonUser principal);
+
   ResponseEntity<ResponseDto> readMessages(Long chatId, RaonUser principal);
 
 }
