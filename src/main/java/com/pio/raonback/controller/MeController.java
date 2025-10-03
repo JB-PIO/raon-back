@@ -1,6 +1,8 @@
 package com.pio.raonback.controller;
 
-import com.pio.raonback.dto.request.me.UpdateProfileRequestDto;
+import com.pio.raonback.dto.request.me.UpdateLocationRequestDto;
+import com.pio.raonback.dto.request.me.UpdateNicknameRequestDto;
+import com.pio.raonback.dto.request.me.UpdateProfileImageRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.dto.response.me.GetFavoriteListResponseDto;
 import com.pio.raonback.dto.response.me.GetProductListResponseDto;
@@ -63,10 +65,22 @@ public class MeController {
     return meService.getTradeList(type, pageable, principal);
   }
 
-  @PatchMapping("")
-  public ResponseEntity<ResponseDto> updateProfile(@RequestBody @Valid UpdateProfileRequestDto requestBody,
-                                                   @AuthenticationPrincipal RaonUser principal) {
-    return meService.updateProfile(requestBody, principal);
+  @PatchMapping("/nickname")
+  public ResponseEntity<ResponseDto> updateNickname(@RequestBody @Valid UpdateNicknameRequestDto requestBody,
+                                                    @AuthenticationPrincipal RaonUser principal) {
+    return meService.updateNickname(requestBody, principal);
+  }
+
+  @PatchMapping("/profile-image")
+  public ResponseEntity<ResponseDto> updateProfileImage(@RequestBody @Valid UpdateProfileImageRequestDto requestBody,
+                                                        @AuthenticationPrincipal RaonUser principal) {
+    return meService.updateProfileImage(requestBody, principal);
+  }
+
+  @PatchMapping("/location")
+  public ResponseEntity<ResponseDto> updateLocation(@RequestBody @Valid UpdateLocationRequestDto requestBody,
+                                                    @AuthenticationPrincipal RaonUser principal) {
+    return meService.updateLocation(requestBody, principal);
   }
 
   @DeleteMapping("")
