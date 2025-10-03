@@ -124,4 +124,13 @@ public class MeServiceImplement implements MeService {
     return ResponseDto.ok();
   }
 
+  @Override
+  public ResponseEntity<ResponseDto> deleteProfileImage(RaonUser principal) {
+    User user = principal.getUser();
+
+    user.updateProfileImage(null);
+    userRepository.save(user);
+    return ResponseDto.ok();
+  }
+
 }

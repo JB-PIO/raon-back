@@ -88,4 +88,9 @@ public class MeController {
     return meService.deleteAccount(principal);
   }
 
+  @DeleteMapping("/profile-image")
+  public ResponseEntity<ResponseDto> deleteProfileImage(@AuthenticationPrincipal RaonUser principal) {
+    return meService.deleteProfileImage(principal);
+  }
+
 }

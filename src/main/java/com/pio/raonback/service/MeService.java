@@ -30,4 +30,6 @@ public interface MeService {
 
   ResponseEntity<ResponseDto> deleteAccount(RaonUser principal);
 
+  ResponseEntity<ResponseDto> deleteProfileImage(RaonUser principal);
+
 }
