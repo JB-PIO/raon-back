@@ -16,6 +16,8 @@ public class AnalyzeImagesExternalResponseDto {
     private Long imageId;
     private String imageUrl;
     private RiskLevel result;
+    private Double maxScore;
+    private List<String> similarImageUrls;
 
   }
 
