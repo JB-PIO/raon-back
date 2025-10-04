@@ -11,6 +11,8 @@ spring:
     url:
     username:
     password:
+ai:
+  url:
 jwt:
   secret:
   access-token-expiration-time:
