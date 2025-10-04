@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pio.raonback.entity.Message;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +20,8 @@ public class DetectFraudExternalRequestDto {
     private Long messageId;
     private Long senderId;
     private String content;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime sentAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private ZonedDateTime sentAt;
 
     private MessageListItem(Message message) {
       this.messageId = message.getMessageId();

@@ -9,7 +9,7 @@ import com.pio.raonback.entity.User;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +23,8 @@ public class ChatListItem {
   private UserData seller;
   private MessageData lastMessage;
   private Long unreadCount;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDateTime createdAt;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
+  private ZonedDateTime createdAt;
 
   @Getter
   private static class ProductData {
@@ -69,7 +69,7 @@ public class ChatListItem {
     private String content;
     private String imageUrl;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime sentAt;
+    private ZonedDateTime sentAt;
 
     private MessageData(Message message) {
       this.messageId = message.getMessageId();

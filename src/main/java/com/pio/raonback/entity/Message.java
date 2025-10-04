@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -40,17 +40,17 @@ public class Message {
   private Boolean isDeleted = false;
 
   @Column(name = "sent_at", nullable = false)
-  private LocalDateTime sentAt;
+  private ZonedDateTime sentAt;
 
   @Column(name = "deleted_at")
-  private LocalDateTime deletedAt;
+  private ZonedDateTime deletedAt;
 
   public Message(Chat chat, User sender, String content, String imageUrl) {
     this.chat = chat;
     this.sender = sender;
     this.content = content;
     this.imageUrl = imageUrl;
-    this.sentAt = LocalDateTime.now();
+    this.sentAt = ZonedDateTime.now();
   }
 
   public void read() {

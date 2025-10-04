@@ -15,7 +15,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,10 +41,10 @@ public class GetProductResponseDto extends ResponseDto {
     private Condition condition;
     private TradeType tradeType;
     private ProductStatus status;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updatedAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private ZonedDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private ZonedDateTime updatedAt;
 
     @Getter
     private static class UserData {

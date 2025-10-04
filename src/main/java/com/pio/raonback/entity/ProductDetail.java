@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -58,10 +58,10 @@ public class ProductDetail {
 
   private Boolean isDeleted;
 
-  private LocalDateTime createdAt;
+  private ZonedDateTime createdAt;
 
-  private LocalDateTime updatedAt;
+  private ZonedDateTime updatedAt;
 
-  private LocalDateTime deletedAt;
+  private ZonedDateTime deletedAt;
 
 }

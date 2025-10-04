@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -28,12 +28,12 @@ public class Favorite {
   private Product product;
 
   @Column(name = "created_at", nullable = false)
-  private LocalDateTime createdAt;
+  private ZonedDateTime createdAt;
 
   public Favorite(User user, Product product) {
     this.user = user;
     this.product = product;
-    this.createdAt = LocalDateTime.now();
+    this.createdAt = ZonedDateTime.now();
   }
 
   @Override

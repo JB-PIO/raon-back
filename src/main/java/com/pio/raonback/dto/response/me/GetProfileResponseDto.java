@@ -10,7 +10,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 public class GetProfileResponseDto extends ResponseDto {
@@ -25,8 +25,8 @@ public class GetProfileResponseDto extends ResponseDto {
     private String email;
     private String profileImage;
     private LocationData location;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private ZonedDateTime createdAt;
 
     @Getter
     private static class LocationData {

@@ -11,8 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
@@ -84,7 +84,7 @@ public class JwtUtil {
     }
   }
 
-  public LocalDateTime getExpirationFromToken(String token) {
+  public ZonedDateTime getExpirationFromToken(String token) {
     SecretKey key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
     return Jwts.parser()
                .verifyWith(key)
@@ -93,8 +93,7 @@ public class JwtUtil {
                .getPayload()
                .getExpiration()
                .toInstant()
-               .atZone(ZoneId.systemDefault())
-               .toLocalDateTime();
+               .atZone(ZoneId.systemDefault());
   }
 
 }

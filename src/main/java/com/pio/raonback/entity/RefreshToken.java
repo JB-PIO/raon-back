@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -27,15 +27,15 @@ public class RefreshToken {
   private String token;
 
   @Column(name = "created_at", nullable = false)
-  private LocalDateTime createdAt;
+  private ZonedDateTime createdAt;
 
   @Column(name = "expires_at", nullable = false)
-  private LocalDateTime expiresAt;
+  private ZonedDateTime expiresAt;
 
-  public RefreshToken(User user, String tokenHash, LocalDateTime expiresAt) {
+  public RefreshToken(User user, String tokenHash, ZonedDateTime expiresAt) {
     this.user = user;
     this.token = tokenHash;
-    this.createdAt = LocalDateTime.now();
+    this.createdAt = ZonedDateTime.now();
     this.expiresAt = expiresAt;
   }
 

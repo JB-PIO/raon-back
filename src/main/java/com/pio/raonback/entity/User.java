@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -44,35 +44,35 @@ public class User {
   private Boolean isDeleted = false;
 
   @Column(name = "created_at", nullable = false)
-  private LocalDateTime createdAt;
+  private ZonedDateTime createdAt;
 
   @Column(name = "updated_at")
-  private LocalDateTime updatedAt;
+  private ZonedDateTime updatedAt;
 
   @Column(name = "deleted_at")
-  private LocalDateTime deletedAt;
+  private ZonedDateTime deletedAt;
 
   public User(String nickname, String email, String password, Location location) {
     this.nickname = nickname;
     this.email = email;
     this.password = password;
     this.location = location;
-    this.createdAt = LocalDateTime.now();
+    this.createdAt = ZonedDateTime.now();
   }
 
   public void updateNickname(String nickname) {
     this.nickname = nickname;
-    this.updatedAt = LocalDateTime.now();
+    this.updatedAt = ZonedDateTime.now();
   }
 
   public void updateProfileImage(String profileImage) {
     this.profileImage = profileImage;
-    this.updatedAt = LocalDateTime.now();
+    this.updatedAt = ZonedDateTime.now();
   }
 
   public void updateLocation(Location location) {
     this.location = location;
-    this.updatedAt = LocalDateTime.now();
+    this.updatedAt = ZonedDateTime.now();
   }
 
   public void delete() {
@@ -81,7 +81,7 @@ public class User {
     this.profileImage = null;
     this.location = null;
     this.isDeleted = true;
-    this.deletedAt = LocalDateTime.now();
+    this.deletedAt = ZonedDateTime.now();
   }
 
   @Override

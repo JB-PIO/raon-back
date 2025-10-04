@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,13 +64,13 @@ public class Product {
   private Boolean isDeleted = false;
 
   @Column(name = "created_at", nullable = false)
-  private LocalDateTime createdAt;
+  private ZonedDateTime createdAt;
 
   @Column(name = "updated_at")
-  private LocalDateTime updatedAt;
+  private ZonedDateTime updatedAt;
 
   @Column(name = "deleted_at")
-  private LocalDateTime deletedAt;
+  private ZonedDateTime deletedAt;
 
   @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Favorite> favorites = new ArrayList<>();
@@ -87,7 +87,7 @@ public class Product {
     this.price = price;
     this.condition = condition;
     this.tradeType = tradeType;
-    this.createdAt = LocalDateTime.now();
+    this.createdAt = ZonedDateTime.now();
   }
 
   public void update(Category category, Location location, String title, String description, Long price, Condition condition, TradeType tradeType) {
@@ -98,7 +98,7 @@ public class Product {
     this.price = price;
     this.condition = condition;
     this.tradeType = tradeType;
-    this.updatedAt = LocalDateTime.now();
+    this.updatedAt = ZonedDateTime.now();
   }
 
   public void updateStatus(ProductStatus status) {
@@ -107,7 +107,7 @@ public class Product {
 
   public void delete() {
     this.isDeleted = true;
-    this.deletedAt = LocalDateTime.now();
+    this.deletedAt = ZonedDateTime.now();
   }
 
   public void increaseViewCount() {

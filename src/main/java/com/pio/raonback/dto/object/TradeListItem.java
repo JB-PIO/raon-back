@@ -7,7 +7,7 @@ import com.pio.raonback.entity.User;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +18,8 @@ public class TradeListItem {
   private ProductData product;
   private UserData buyer;
   private UserData seller;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDateTime tradedAt;
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
+  private ZonedDateTime tradedAt;
 
   @Getter
   private static class ProductData {

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -32,13 +32,13 @@ public class Trade {
   private User seller;
 
   @Column(name = "traded_at", nullable = false)
-  private LocalDateTime tradedAt;
+  private ZonedDateTime tradedAt;
 
   public Trade(Product product, User buyer, User seller) {
     this.product = product;
     this.buyer = buyer;
     this.seller = seller;
-    this.tradedAt = LocalDateTime.now();
+    this.tradedAt = ZonedDateTime.now();
   }
 
   @Override

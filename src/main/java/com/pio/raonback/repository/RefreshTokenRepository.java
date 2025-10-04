@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 @Repository
@@ -21,6 +21,6 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
   void deleteByToken(String tokenHash);
 
   @Transactional
-  void deleteAllByExpiresAtBefore(LocalDateTime expiresAt);
+  void deleteAllByExpiresAtBefore(ZonedDateTime expiresAt);
 
 }

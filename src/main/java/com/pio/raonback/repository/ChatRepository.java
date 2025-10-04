@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 @Repository
@@ -26,6 +26,6 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
   void deleteAllByBuyerIsDeletedTrueAndSellerIsDeletedTrue();
 
-  void deleteAllByCreatedAtBeforeAndLastMessageAtNull(LocalDateTime createdAt);
+  void deleteAllByCreatedAtBeforeAndLastMessageAtNull(ZonedDateTime createdAt);
 
 }

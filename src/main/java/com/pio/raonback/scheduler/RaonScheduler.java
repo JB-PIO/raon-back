@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -26,7 +26,7 @@ public class RaonScheduler {
 
   private void deleteUselessChats() {
     chatRepository.deleteAllByBuyerIsDeletedTrueAndSellerIsDeletedTrue();
-    chatRepository.deleteAllByCreatedAtBeforeAndLastMessageAtNull(LocalDateTime.now().minusMinutes(30));
+    chatRepository.deleteAllByCreatedAtBeforeAndLastMessageAtNull(ZonedDateTime.now().minusMinutes(30));
   }
 
   private void deleteUselessTrades() {
@@ -34,7 +34,7 @@ public class RaonScheduler {
   }
 
   private void deleteExpiredRefreshTokens() {
-    refreshTokenRepository.deleteAllByExpiresAtBefore(LocalDateTime.now());
+    refreshTokenRepository.deleteAllByExpiresAtBefore(ZonedDateTime.now());
   }
 
 }

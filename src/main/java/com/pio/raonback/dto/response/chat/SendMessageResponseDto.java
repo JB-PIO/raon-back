@@ -10,7 +10,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 public class SendMessageResponseDto extends ResponseDto {
@@ -27,8 +27,8 @@ public class SendMessageResponseDto extends ResponseDto {
     private String imageUrl;
     private Boolean isRead;
     private Boolean isDeleted;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime sentAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private ZonedDateTime sentAt;
 
     @Getter
     private static class UserData {
