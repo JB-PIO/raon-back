@@ -20,13 +20,13 @@ public class GetTradeListResponseDto extends ResponseDto {
   @Getter
   private static class Data {
 
-    private List<TradeListItem> tradeList;
+    private List<TradeListItem> trades;
     private int currentPage;
     private int totalPages;
     private long totalElements;
 
     private Data(Page<Trade> tradePage) {
-      this.tradeList = TradeListItem.fromTradePage(tradePage);
+      this.trades = TradeListItem.fromTradePage(tradePage);
       this.currentPage = tradePage.getNumber();
       this.totalPages = tradePage.getTotalPages();
       this.totalElements = tradePage.getTotalElements();

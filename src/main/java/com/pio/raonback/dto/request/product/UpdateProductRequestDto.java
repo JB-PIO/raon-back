@@ -35,6 +35,6 @@ public class UpdateProductRequestDto {
   private TradeType tradeType;
 
   @NotEmpty(message = "한 개 이상의 이미지 주소를 입력해주세요.")
-  private List<@NotBlank(message = "이미지 주소를 입력해주세요.") @URL(message = "올바른 URL 형식이 아닙니다.") String> imageUrlList;
+  private List<@NotBlank(message = "이미지 주소를 입력해주세요.") @URL(message = "올바른 URL 형식이 아닙니다.") String> imageUrls;
 
 }

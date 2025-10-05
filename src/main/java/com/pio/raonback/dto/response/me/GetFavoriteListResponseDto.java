@@ -20,13 +20,13 @@ public class GetFavoriteListResponseDto extends ResponseDto {
   @Getter
   private static class Data {
 
-    private List<ProductListItem> productList;
+    private List<ProductListItem> products;
     private int currentPage;
     private int totalPages;
     private long totalElements;
 
     private Data(Page<Favorite> favoritePage) {
-      this.productList = ProductListItem.fromFavoritePage(favoritePage);
+      this.products = ProductListItem.fromFavoritePage(favoritePage);
       this.currentPage = favoritePage.getNumber();
       this.totalPages = favoritePage.getTotalPages();
       this.totalElements = favoritePage.getTotalElements();

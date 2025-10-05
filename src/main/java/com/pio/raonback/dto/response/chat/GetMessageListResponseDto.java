@@ -20,13 +20,13 @@ public class GetMessageListResponseDto extends ResponseDto {
   @Getter
   private static class Data {
 
-    private List<MessageListItem> messageList;
+    private List<MessageListItem> messages;
     private int currentPage;
     private int totalPages;
     private long totalElements;
 
     private Data(Page<Message> messagePage) {
-      this.messageList = MessageListItem.fromMessagePage(messagePage);
+      this.messages = MessageListItem.fromMessagePage(messagePage);
       this.currentPage = messagePage.getNumber();
       this.totalPages = messagePage.getTotalPages();
       this.totalElements = messagePage.getTotalElements();

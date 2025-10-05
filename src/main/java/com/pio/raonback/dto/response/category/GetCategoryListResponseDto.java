@@ -19,10 +19,10 @@ public class GetCategoryListResponseDto extends ResponseDto {
   @Getter
   private static class Data {
 
-    private List<CategoryListItem> categoryList;
+    private List<CategoryListItem> categories;
 
     private Data(List<Category> parentCategories) {
-      this.categoryList = CategoryListItem.fromParentCategories(parentCategories);
+      this.categories = CategoryListItem.fromParentCategories(parentCategories);
     }
 
   }

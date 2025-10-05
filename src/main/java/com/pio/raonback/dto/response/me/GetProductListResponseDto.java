@@ -20,13 +20,13 @@ public class GetProductListResponseDto extends ResponseDto {
   @Getter
   private static class Data {
 
-    private List<ProductListItem> productList;
+    private List<ProductListItem> products;
     private int currentPage;
     private int totalPages;
     private long totalElements;
 
     private Data(Page<ProductDetail> productDetailPage) {
-      this.productList = ProductListItem.fromProductDetailPage(productDetailPage);
+      this.products = ProductListItem.fromProductDetailPage(productDetailPage);
       this.currentPage = productDetailPage.getNumber();
       this.totalPages = productDetailPage.getTotalPages();
       this.totalElements = productDetailPage.getTotalElements();

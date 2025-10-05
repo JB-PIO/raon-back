@@ -20,13 +20,13 @@ public class GetBuyerListResponseDto extends ResponseDto {
   @Getter
   private static class Data {
 
-    private List<UserListItem> userList;
+    private List<UserListItem> users;
     private int currentPage;
     private int totalPages;
     private long totalElements;
 
     private Data(Page<Chat> chatPage) {
-      this.userList = UserListItem.fromChatPage(chatPage);
+      this.users = UserListItem.fromChatPage(chatPage);
       this.currentPage = chatPage.getNumber();
       this.totalPages = chatPage.getTotalPages();
       this.totalElements = chatPage.getTotalElements();

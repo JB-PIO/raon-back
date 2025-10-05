@@ -21,13 +21,13 @@ public class GetChatListResponseDto extends ResponseDto {
   @Getter
   private static class Data {
 
-    private List<ChatListItem> chatList;
+    private List<ChatListItem> chats;
     private int currentPage;
     private int totalPages;
     private long totalElements;
 
     private Data(Page<Chat> chatPage, Map<Long, Long> unreadCounts) {
-      this.chatList = ChatListItem.fromChatPage(chatPage, unreadCounts);
+      this.chats = ChatListItem.fromChatPage(chatPage, unreadCounts);
       this.currentPage = chatPage.getNumber();
       this.totalPages = chatPage.getTotalPages();
       this.totalElements = chatPage.getTotalElements();

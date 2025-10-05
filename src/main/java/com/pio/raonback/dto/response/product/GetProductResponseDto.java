@@ -30,9 +30,9 @@ public class GetProductResponseDto extends ResponseDto {
 
     private Long productId;
     private UserData seller;
-    private List<CategoryData> categoryList;
+    private List<CategoryData> categories;
     private LocationData location;
-    private List<String> imageUrlList;
+    private List<String> imageUrls;
     private String title;
     private String description;
     private Long price;
@@ -102,9 +102,9 @@ public class GetProductResponseDto extends ResponseDto {
     private Data(Product product) {
       this.productId = product.getProductId();
       this.seller = new UserData(product.getSeller());
-      this.categoryList = CategoryData.toParentList(product.getCategory());
+      this.categories = CategoryData.toParentList(product.getCategory());
       this.location = new LocationData(product.getLocation());
-      this.imageUrlList = product.getImages().stream().map(productImage -> productImage.getImageUrl()).toList();
+      this.imageUrls = product.getImages().stream().map(productImage -> productImage.getImageUrl()).toList();
       this.title = product.getTitle();
       this.description = product.getDescription();
       this.price = product.getPrice();

@@ -20,13 +20,13 @@ public class GetLocationListResponseDto extends ResponseDto {
   @Getter
   private static class Data {
 
-    private List<LocationListItem> locationList;
+    private List<LocationListItem> locations;
     private int currentPage;
     private int totalPages;
     private long totalElements;
 
     private Data(Page<Location> locationPage) {
-      this.locationList = LocationListItem.fromLocationPage(locationPage);
+      this.locations = LocationListItem.fromLocationPage(locationPage);
       this.currentPage = locationPage.getNumber();
       this.totalPages = locationPage.getTotalPages();
       this.totalElements = locationPage.getTotalElements();
