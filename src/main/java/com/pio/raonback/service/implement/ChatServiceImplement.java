@@ -38,7 +38,7 @@ public class ChatServiceImplement implements ChatService {
   private final SimpMessagingTemplate messagingTemplate;
 
   @Override
-  public ResponseEntity<? super GetChatListResponseDto> getChatList(Pageable pageable, RaonUser principal) {
+  public ResponseEntity<? super GetChatListResponseDto> getChats(Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
 
     Page<Chat> chatPage = chatRepository.findAllByBuyerOrSellerAndLastMessageAtNotNull(user, user, pageable);
@@ -65,7 +65,7 @@ public class ChatServiceImplement implements ChatService {
   }
 
   @Override
-  public ResponseEntity<? super GetMessageListResponseDto> getMessageList(Long chatId, Pageable pageable, RaonUser principal) {
+  public ResponseEntity<? super GetMessageListResponseDto> getMessages(Long chatId, Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
 
     Optional<Chat> optionalChat = chatRepository.findById(chatId);

@@ -9,11 +9,11 @@ import org.springframework.http.ResponseEntity;
 
 public interface ChatService {
 
-  ResponseEntity<? super GetChatListResponseDto> getChatList(Pageable pageable, RaonUser principal);
+  ResponseEntity<? super GetChatListResponseDto> getChats(Pageable pageable, RaonUser principal);
 
   ResponseEntity<? super GetChatResponseDto> getChat(Long chatId, RaonUser principal);
 
-  ResponseEntity<? super GetMessageListResponseDto> getMessageList(Long chatId, Pageable pageable, RaonUser principal);
+  ResponseEntity<? super GetMessageListResponseDto> getMessages(Long chatId, Pageable pageable, RaonUser principal);
 
   ResponseEntity<? super SendMessageResponseDto> sendMessage(Long chatId, SendMessageRequestDto dto, RaonUser principal);
 

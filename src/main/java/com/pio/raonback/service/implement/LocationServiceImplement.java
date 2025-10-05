@@ -17,7 +17,7 @@ public class LocationServiceImplement implements LocationService {
   private final LocationRepository locationRepository;
 
   @Override
-  public ResponseEntity<? super GetLocationListResponseDto> getLocationList(String keyword, Pageable pageable) {
+  public ResponseEntity<? super GetLocationListResponseDto> getLocations(String keyword, Pageable pageable) {
     Page<Location> locationPage;
     if (keyword != null) locationPage = locationRepository.findAllByAddressContains(keyword, pageable);
     else locationPage = locationRepository.findAll(pageable);

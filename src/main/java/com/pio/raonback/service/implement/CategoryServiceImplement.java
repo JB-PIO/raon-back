@@ -17,7 +17,7 @@ public class CategoryServiceImplement implements CategoryService {
   private final CategoryRepository categoryRepository;
 
   @Override
-  public ResponseEntity<? super GetCategoryListResponseDto> getCategoryList() {
+  public ResponseEntity<? super GetCategoryListResponseDto> getCategories() {
     List<Category> rootCategories = categoryRepository.findAllByParentNull();
     return GetCategoryListResponseDto.ok(rootCategories);
   }

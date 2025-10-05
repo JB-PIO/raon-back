@@ -16,11 +16,11 @@ public interface MeService {
 
   ResponseEntity<? super GetProfileResponseDto> getProfile(RaonUser principal);
 
-  ResponseEntity<? super GetProductListResponseDto> getProductList(Pageable pageable, RaonUser principal);
+  ResponseEntity<? super GetProductListResponseDto> getProducts(Pageable pageable, RaonUser principal);
 
-  ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(Pageable pageable, RaonUser principal);
+  ResponseEntity<? super GetFavoriteListResponseDto> getFavorites(Pageable pageable, RaonUser principal);
 
-  ResponseEntity<? super GetTradeListResponseDto> getTradeList(String type, Pageable pageable, RaonUser principal);
+  ResponseEntity<? super GetTradeListResponseDto> getTrades(String type, Pageable pageable, RaonUser principal);
 
   ResponseEntity<ResponseDto> updateNickname(UpdateNicknameRequestDto dto, RaonUser principal);
 

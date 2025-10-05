@@ -23,7 +23,7 @@ public class ProductController {
   private final ProductService productService;
 
   @GetMapping("")
-  public ResponseEntity<? super GetProductListResponseDto> getProductList(
+  public ResponseEntity<? super GetProductListResponseDto> getProducts(
       @ModelAttribute @Valid GetProductListRequestDto requestParam,
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
@@ -31,7 +31,7 @@ public class ProductController {
           @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
       }) Pageable pageable
   ) {
-    return productService.getProductList(requestParam, pageable);
+    return productService.getProducts(requestParam, pageable);
   }
 
   @GetMapping("/{productId}")
@@ -46,12 +46,12 @@ public class ProductController {
   }
 
   @GetMapping("/{productId}/buyer")
-  public ResponseEntity<? super GetBuyerListResponseDto> getBuyerList(
+  public ResponseEntity<? super GetBuyerListResponseDto> getBuyers(
       @PathVariable("productId") Long productId,
       @PageableDefault(size = 10, sort = "lastMessageAt", direction = Sort.Direction.DESC) Pageable pageable,
       @AuthenticationPrincipal RaonUser principal
   ) {
-    return productService.getBuyerList(productId, pageable, principal);
+    return productService.getBuyers(productId, pageable, principal);
   }
 
   @PostMapping("")

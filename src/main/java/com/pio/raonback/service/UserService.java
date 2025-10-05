@@ -9,6 +9,6 @@ public interface UserService {
 
   ResponseEntity<? super GetProfileResponseDto> getProfile(Long userId);
 
-  ResponseEntity<? super GetProductListResponseDto> getProductList(Long userId, Pageable pageable);
+  ResponseEntity<? super GetProductListResponseDto> getProducts(Long userId, Pageable pageable);
 
 }

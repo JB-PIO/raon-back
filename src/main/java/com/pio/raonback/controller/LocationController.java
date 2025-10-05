@@ -19,9 +19,9 @@ public class LocationController {
   private final LocationService locationService;
 
   @GetMapping("")
-  public ResponseEntity<? super GetLocationListResponseDto> getLocationList(@RequestParam(required = false) String keyword,
-                                                                            @PageableDefault(size = 50) Pageable pageable) {
-    return locationService.getLocationList(keyword, pageable);
+  public ResponseEntity<? super GetLocationListResponseDto> getLocations(@RequestParam(required = false) String keyword,
+                                                                         @PageableDefault(size = 50) Pageable pageable) {
+    return locationService.getLocations(keyword, pageable);
   }
 
 }

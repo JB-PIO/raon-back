@@ -18,8 +18,8 @@ public class CategoryController {
 
   @GetMapping("")
   @Cacheable(cacheNames = "categories")
-  public ResponseEntity<? super GetCategoryListResponseDto> getCategoryList() {
-    return categoryService.getCategoryList();
+  public ResponseEntity<? super GetCategoryListResponseDto> getCategories() {
+    return categoryService.getCategories();
   }
 
 }

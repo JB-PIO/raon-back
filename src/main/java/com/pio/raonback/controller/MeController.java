@@ -33,7 +33,7 @@ public class MeController {
   }
 
   @GetMapping("/product")
-  public ResponseEntity<? super GetProductListResponseDto> getProductList(
+  public ResponseEntity<? super GetProductListResponseDto> getProducts(
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
           @SortDefault(sort = "status", direction = Sort.Direction.ASC),
@@ -41,11 +41,11 @@ public class MeController {
       }) Pageable pageable,
       @AuthenticationPrincipal RaonUser principal
   ) {
-    return meService.getProductList(pageable, principal);
+    return meService.getProducts(pageable, principal);
   }
 
   @GetMapping("/favorite")
-  public ResponseEntity<? super GetFavoriteListResponseDto> getFavoriteList(
+  public ResponseEntity<? super GetFavoriteListResponseDto> getFavorites(
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
           @SortDefault(sort = "product.status", direction = Sort.Direction.ASC),
@@ -53,16 +53,16 @@ public class MeController {
       }) Pageable pageable,
       @AuthenticationPrincipal RaonUser principal
   ) {
-    return meService.getFavoriteList(pageable, principal);
+    return meService.getFavorites(pageable, principal);
   }
 
   @GetMapping("/trade")
-  public ResponseEntity<? super GetTradeListResponseDto> getTradeList(
+  public ResponseEntity<? super GetTradeListResponseDto> getTrades(
       @RequestParam(defaultValue = "both") String type,
       @PageableDefault(size = 20, sort = "tradedAt", direction = Sort.Direction.DESC) Pageable pageable,
       @AuthenticationPrincipal RaonUser principal
   ) {
-    return meService.getTradeList(type, pageable, principal);
+    return meService.getTrades(type, pageable, principal);
   }
 
   @PatchMapping("/nickname")

@@ -27,7 +27,7 @@ public class UserController {
   }
 
   @GetMapping("/{userId}/product")
-  public ResponseEntity<? super GetProductListResponseDto> getProductList(
+  public ResponseEntity<? super GetProductListResponseDto> getProducts(
       @PathVariable("userId") Long userId,
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
@@ -35,7 +35,7 @@ public class UserController {
           @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
       }) Pageable pageable
   ) {
-    return userService.getProductList(userId, pageable);
+    return userService.getProducts(userId, pageable);
   }
 
 }

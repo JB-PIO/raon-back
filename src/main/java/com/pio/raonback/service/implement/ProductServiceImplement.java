@@ -34,7 +34,7 @@ public class ProductServiceImplement implements ProductService {
   private final TradeRepository tradeRepository;
 
   @Override
-  public ResponseEntity<? super GetProductListResponseDto> getProductList(GetProductListRequestDto dto, Pageable pageable) {
+  public ResponseEntity<? super GetProductListResponseDto> getProducts(GetProductListRequestDto dto, Pageable pageable) {
     Category category = null;
     List<Location> nearbyLocations = null;
 
@@ -82,7 +82,7 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
-  public ResponseEntity<? super GetBuyerListResponseDto> getBuyerList(Long productId, Pageable pageable, RaonUser principal) {
+  public ResponseEntity<? super GetBuyerListResponseDto> getBuyers(Long productId, Pageable pageable, RaonUser principal) {
     User seller = principal.getUser();
 
     Optional<Product> optionalProduct = productRepository.findByProductIdAndIsDeletedFalse(productId);

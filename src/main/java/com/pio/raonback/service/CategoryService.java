@@ -5,6 +5,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface CategoryService {
 
-  ResponseEntity<? super GetCategoryListResponseDto> getCategoryList();
+  ResponseEntity<? super GetCategoryListResponseDto> getCategories();
 
 }

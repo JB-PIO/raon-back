@@ -6,6 +6,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface LocationService {
 
-  ResponseEntity<? super GetLocationListResponseDto> getLocationList(String keyword, Pageable pageable);
+  ResponseEntity<? super GetLocationListResponseDto> getLocations(String keyword, Pageable pageable);
 
 }
