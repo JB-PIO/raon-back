@@ -16,7 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/product")
+@RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -39,13 +39,13 @@ public class ProductController {
     return productService.getProduct(productId);
   }
 
-  @GetMapping("/{productId}/chat")
+  @GetMapping("/{productId}/chats")
   public ResponseEntity<? super GetChatResponseDto> getChat(@PathVariable("productId") Long productId,
                                                             @AuthenticationPrincipal RaonUser principal) {
     return productService.getChat(productId, principal);
   }
 
-  @GetMapping("/{productId}/buyer")
+  @GetMapping("/{productId}/buyers")
   public ResponseEntity<? super GetBuyersResponseDto> getBuyers(
       @PathVariable("productId") Long productId,
       @PageableDefault(size = 10, sort = "lastMessageAt", direction = Sort.Direction.DESC) Pageable pageable,
@@ -60,7 +60,7 @@ public class ProductController {
     return productService.postProduct(requestBody, principal);
   }
 
-  @PostMapping("/{productId}/chat")
+  @PostMapping("/{productId}/chats")
   public ResponseEntity<? super CreateChatResponseDto> createChat(@PathVariable("productId") Long productId,
                                                                   @AuthenticationPrincipal RaonUser principal) {
     return productService.createChat(productId, principal);
@@ -73,7 +73,7 @@ public class ProductController {
     return productService.updateProduct(productId, requestBody, principal);
   }
 
-  @PutMapping("/{productId}/favorite")
+  @PutMapping("/{productId}/favorites")
   public ResponseEntity<ResponseDto> putFavorite(@PathVariable("productId") Long productId,
                                                  @RequestBody @Valid PutFavoriteRequestDto requestBody,
                                                  @AuthenticationPrincipal RaonUser principal) {
@@ -87,7 +87,7 @@ public class ProductController {
     return productService.updateStatus(productId, requestBody, principal);
   }
 
-  @PatchMapping("/{productId}/view")
+  @PatchMapping("/{productId}/views")
   public ResponseEntity<ResponseDto> increaseViewCount(@PathVariable("productId") Long productId) {
     return productService.increaseViewCount(productId);
   }

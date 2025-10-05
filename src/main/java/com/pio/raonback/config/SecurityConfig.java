@@ -36,12 +36,12 @@ public class SecurityConfig {
       PathPatternRequestMatcher.withDefaults().matcher("/api/v1/**");
   private static final OrRequestMatcher NON_JWT_BASED_AUTH_REQUEST_MATCHERS = new OrRequestMatcher(
       PathPatternRequestMatcher.withDefaults().matcher("/api/v1/auth/**"),
-      PathPatternRequestMatcher.withDefaults().matcher("/api/v1/location/**"),
-      PathPatternRequestMatcher.withDefaults().matcher("/api/v1/category/**"),
-      PathPatternRequestMatcher.withDefaults().matcher("/api/v1/user/**"),
-      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/product"),
-      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/product/{productId}"),
-      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.PATCH, "/api/v1/product/{productId}/view")
+      PathPatternRequestMatcher.withDefaults().matcher("/api/v1/locations/**"),
+      PathPatternRequestMatcher.withDefaults().matcher("/api/v1/categories/**"),
+      PathPatternRequestMatcher.withDefaults().matcher("/api/v1/users/**"),
+      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/products"),
+      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/products/{productId}"),
+      PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.PATCH, "/api/v1/products/{productId}/views")
   );
 
   private final AuthenticationFailureHandler failureHandler;

@@ -32,7 +32,7 @@ public class MeController {
     return meService.getProfile(principal);
   }
 
-  @GetMapping("/product")
+  @GetMapping("/products")
   public ResponseEntity<? super GetProductsResponseDto> getProducts(
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
@@ -44,7 +44,7 @@ public class MeController {
     return meService.getProducts(pageable, principal);
   }
 
-  @GetMapping("/favorite")
+  @GetMapping("/favorites")
   public ResponseEntity<? super GetFavoritesResponseDto> getFavorites(
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
@@ -56,7 +56,7 @@ public class MeController {
     return meService.getFavorites(pageable, principal);
   }
 
-  @GetMapping("/trade")
+  @GetMapping("/trades")
   public ResponseEntity<? super GetTradesResponseDto> getTrades(
       @RequestParam(defaultValue = "both") String type,
       @PageableDefault(size = 20, sort = "tradedAt", direction = Sort.Direction.DESC) Pageable pageable,

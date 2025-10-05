@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -26,7 +26,7 @@ public class UserController {
     return userService.getProfile(userId);
   }
 
-  @GetMapping("/{userId}/product")
+  @GetMapping("/{userId}/products")
   public ResponseEntity<? super GetProductsResponseDto> getProducts(
       @PathVariable("userId") Long userId,
       @PageableDefault(size = 20)

@@ -15,7 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/chat")
+@RequestMapping("/api/v1/chats")
 @RequiredArgsConstructor
 public class ChatController {
 
@@ -33,14 +33,14 @@ public class ChatController {
     return chatService.getChat(chatId, principal);
   }
 
-  @GetMapping("/{chatId}/message")
+  @GetMapping("/{chatId}/messages")
   public ResponseEntity<? super GetMessagesResponseDto> getMessages(@PathVariable("chatId") Long chatId,
                                                                     @PageableDefault(size = 20, sort = "sentAt", direction = Sort.Direction.DESC) Pageable pageable,
                                                                     @AuthenticationPrincipal RaonUser principal) {
     return chatService.getMessages(chatId, pageable, principal);
   }
 
-  @PostMapping("/{chatId}/message")
+  @PostMapping("/{chatId}/messages")
   public ResponseEntity<? super SendMessageResponseDto> sendMessage(@PathVariable("chatId") Long chatId,
                                                                     @RequestBody @Valid SendMessageRequestDto requestBody,
                                                                     @AuthenticationPrincipal RaonUser principal) {
@@ -60,7 +60,7 @@ public class ChatController {
     return chatService.analyzeImages(chatId, principal);
   }
 
-  @PutMapping("/{chatId}/read")
+  @PutMapping("/{chatId}/messages/read")
   public ResponseEntity<ResponseDto> readMessages(@PathVariable("chatId") Long chatId,
                                                   @AuthenticationPrincipal RaonUser principal) {
     return chatService.readMessages(chatId, principal);
