@@ -1,6 +1,6 @@
 package com.pio.raonback.controller;
 
-import com.pio.raonback.dto.response.category.GetCategoryListResponseDto;
+import com.pio.raonback.dto.response.category.GetCategoriesResponseDto;
 import com.pio.raonback.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,7 +18,7 @@ public class CategoryController {
 
   @GetMapping("")
   @Cacheable(cacheNames = "categories")
-  public ResponseEntity<? super GetCategoryListResponseDto> getCategories() {
+  public ResponseEntity<? super GetCategoriesResponseDto> getCategories() {
     return categoryService.getCategories();
   }
 

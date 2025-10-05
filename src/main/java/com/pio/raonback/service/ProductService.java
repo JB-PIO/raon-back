@@ -9,13 +9,13 @@ import org.springframework.http.ResponseEntity;
 
 public interface ProductService {
 
-  ResponseEntity<? super GetProductListResponseDto> getProducts(GetProductListRequestDto dto, Pageable pageable);
+  ResponseEntity<? super GetProductsResponseDto> getProducts(GetProductsRequestDto dto, Pageable pageable);
 
   ResponseEntity<? super GetProductResponseDto> getProduct(Long productId);
 
   ResponseEntity<? super GetChatResponseDto> getChat(Long productId, RaonUser principal);
 
-  ResponseEntity<? super GetBuyerListResponseDto> getBuyers(Long productId, Pageable pageable, RaonUser principal);
+  ResponseEntity<? super GetBuyersResponseDto> getBuyers(Long productId, Pageable pageable, RaonUser principal);
 
   ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, RaonUser principal);
 

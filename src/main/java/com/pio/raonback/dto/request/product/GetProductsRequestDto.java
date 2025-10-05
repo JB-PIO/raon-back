@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class GetProductListRequestDto {
+public class GetProductsRequestDto {
 
   private Long categoryId;
 

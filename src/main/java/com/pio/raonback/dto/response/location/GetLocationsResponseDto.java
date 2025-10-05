@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Getter
-public class GetLocationListResponseDto extends ResponseDto {
+public class GetLocationsResponseDto extends ResponseDto {
 
   private Data data;
 
@@ -34,13 +34,13 @@ public class GetLocationListResponseDto extends ResponseDto {
 
   }
 
-  private GetLocationListResponseDto(Page<Location> locationPage) {
+  private GetLocationsResponseDto(Page<Location> locationPage) {
     super(ResponseCode.OK, ResponseMessage.OK);
     this.data = new Data(locationPage);
   }
 
-  public static ResponseEntity<GetLocationListResponseDto> ok(Page<Location> locationPage) {
-    GetLocationListResponseDto responseBody = new GetLocationListResponseDto(locationPage);
+  public static ResponseEntity<GetLocationsResponseDto> ok(Page<Location> locationPage) {
+    GetLocationsResponseDto responseBody = new GetLocationsResponseDto(locationPage);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

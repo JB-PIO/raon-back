@@ -1,6 +1,6 @@
 package com.pio.raonback.service.implement;
 
-import com.pio.raonback.dto.response.category.GetCategoryListResponseDto;
+import com.pio.raonback.dto.response.category.GetCategoriesResponseDto;
 import com.pio.raonback.entity.Category;
 import com.pio.raonback.repository.CategoryRepository;
 import com.pio.raonback.service.CategoryService;
@@ -17,9 +17,9 @@ public class CategoryServiceImplement implements CategoryService {
   private final CategoryRepository categoryRepository;
 
   @Override
-  public ResponseEntity<? super GetCategoryListResponseDto> getCategories() {
+  public ResponseEntity<? super GetCategoriesResponseDto> getCategories() {
     List<Category> rootCategories = categoryRepository.findAllByParentNull();
-    return GetCategoryListResponseDto.ok(rootCategories);
+    return GetCategoriesResponseDto.ok(rootCategories);
   }
 
 }

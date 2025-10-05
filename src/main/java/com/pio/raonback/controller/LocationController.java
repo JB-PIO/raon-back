@@ -1,6 +1,6 @@
 package com.pio.raonback.controller;
 
-import com.pio.raonback.dto.response.location.GetLocationListResponseDto;
+import com.pio.raonback.dto.response.location.GetLocationsResponseDto;
 import com.pio.raonback.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +19,8 @@ public class LocationController {
   private final LocationService locationService;
 
   @GetMapping("")
-  public ResponseEntity<? super GetLocationListResponseDto> getLocations(@RequestParam(required = false) String keyword,
-                                                                         @PageableDefault(size = 50) Pageable pageable) {
+  public ResponseEntity<? super GetLocationsResponseDto> getLocations(@RequestParam(required = false) String keyword,
+                                                                      @PageableDefault(size = 50) Pageable pageable) {
     return locationService.getLocations(keyword, pageable);
   }
 

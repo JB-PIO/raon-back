@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Getter
-public class GetTradeListResponseDto extends ResponseDto {
+public class GetTradesResponseDto extends ResponseDto {
 
   private Data data;
 
@@ -34,13 +34,13 @@ public class GetTradeListResponseDto extends ResponseDto {
 
   }
 
-  private GetTradeListResponseDto(Page<Trade> tradePage) {
+  private GetTradesResponseDto(Page<Trade> tradePage) {
     super(ResponseCode.OK, ResponseMessage.OK);
     this.data = new Data(tradePage);
   }
 
-  public static ResponseEntity<GetTradeListResponseDto> ok(Page<Trade> tradePage) {
-    GetTradeListResponseDto responseBody = new GetTradeListResponseDto(tradePage);
+  public static ResponseEntity<GetTradesResponseDto> ok(Page<Trade> tradePage) {
+    GetTradesResponseDto responseBody = new GetTradesResponseDto(tradePage);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

@@ -1,6 +1,6 @@
 package com.pio.raonback.service.implement;
 
-import com.pio.raonback.dto.response.location.GetLocationListResponseDto;
+import com.pio.raonback.dto.response.location.GetLocationsResponseDto;
 import com.pio.raonback.entity.Location;
 import com.pio.raonback.repository.LocationRepository;
 import com.pio.raonback.service.LocationService;
@@ -17,11 +17,11 @@ public class LocationServiceImplement implements LocationService {
   private final LocationRepository locationRepository;
 
   @Override
-  public ResponseEntity<? super GetLocationListResponseDto> getLocations(String keyword, Pageable pageable) {
+  public ResponseEntity<? super GetLocationsResponseDto> getLocations(String keyword, Pageable pageable) {
     Page<Location> locationPage;
     if (keyword != null) locationPage = locationRepository.findAllByAddressContains(keyword, pageable);
     else locationPage = locationRepository.findAll(pageable);
-    return GetLocationListResponseDto.ok(locationPage);
+    return GetLocationsResponseDto.ok(locationPage);
   }
 
 }

@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Getter
-public class GetCategoryListResponseDto extends ResponseDto {
+public class GetCategoriesResponseDto extends ResponseDto {
 
   private Data data;
 
@@ -27,13 +27,13 @@ public class GetCategoryListResponseDto extends ResponseDto {
 
   }
 
-  private GetCategoryListResponseDto(List<Category> parentCategories) {
+  private GetCategoriesResponseDto(List<Category> parentCategories) {
     super(ResponseCode.OK, ResponseMessage.OK);
     this.data = new Data(parentCategories);
   }
 
-  public static ResponseEntity<GetCategoryListResponseDto> ok(List<Category> parentCategories) {
-    GetCategoryListResponseDto responseBody = new GetCategoryListResponseDto(parentCategories);
+  public static ResponseEntity<GetCategoriesResponseDto> ok(List<Category> parentCategories) {
+    GetCategoriesResponseDto responseBody = new GetCategoriesResponseDto(parentCategories);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

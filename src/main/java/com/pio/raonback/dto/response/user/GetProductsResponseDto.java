@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Getter
-public class GetProductListResponseDto extends ResponseDto {
+public class GetProductsResponseDto extends ResponseDto {
 
   private Data data;
 
@@ -34,13 +34,13 @@ public class GetProductListResponseDto extends ResponseDto {
 
   }
 
-  private GetProductListResponseDto(Page<ProductDetail> productDetailPage) {
+  private GetProductsResponseDto(Page<ProductDetail> productDetailPage) {
     super(ResponseCode.OK, ResponseMessage.OK);
     this.data = new Data(productDetailPage);
   }
 
-  public static ResponseEntity<GetProductListResponseDto> ok(Page<ProductDetail> productDetailPage) {
-    GetProductListResponseDto responseBody = new GetProductListResponseDto(productDetailPage);
+  public static ResponseEntity<GetProductsResponseDto> ok(Page<ProductDetail> productDetailPage) {
+    GetProductsResponseDto responseBody = new GetProductsResponseDto(productDetailPage);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

@@ -4,10 +4,10 @@ import com.pio.raonback.dto.request.me.UpdateLocationRequestDto;
 import com.pio.raonback.dto.request.me.UpdateNicknameRequestDto;
 import com.pio.raonback.dto.request.me.UpdateProfileImageRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.dto.response.me.GetFavoriteListResponseDto;
-import com.pio.raonback.dto.response.me.GetProductListResponseDto;
+import com.pio.raonback.dto.response.me.GetFavoritesResponseDto;
+import com.pio.raonback.dto.response.me.GetProductsResponseDto;
 import com.pio.raonback.dto.response.me.GetProfileResponseDto;
-import com.pio.raonback.dto.response.me.GetTradeListResponseDto;
+import com.pio.raonback.dto.response.me.GetTradesResponseDto;
 import com.pio.raonback.security.RaonUser;
 import com.pio.raonback.service.MeService;
 import jakarta.validation.Valid;
@@ -33,7 +33,7 @@ public class MeController {
   }
 
   @GetMapping("/product")
-  public ResponseEntity<? super GetProductListResponseDto> getProducts(
+  public ResponseEntity<? super GetProductsResponseDto> getProducts(
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
           @SortDefault(sort = "status", direction = Sort.Direction.ASC),
@@ -45,7 +45,7 @@ public class MeController {
   }
 
   @GetMapping("/favorite")
-  public ResponseEntity<? super GetFavoriteListResponseDto> getFavorites(
+  public ResponseEntity<? super GetFavoritesResponseDto> getFavorites(
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
           @SortDefault(sort = "product.status", direction = Sort.Direction.ASC),
@@ -57,7 +57,7 @@ public class MeController {
   }
 
   @GetMapping("/trade")
-  public ResponseEntity<? super GetTradeListResponseDto> getTrades(
+  public ResponseEntity<? super GetTradesResponseDto> getTrades(
       @RequestParam(defaultValue = "both") String type,
       @PageableDefault(size = 20, sort = "tradedAt", direction = Sort.Direction.DESC) Pageable pageable,
       @AuthenticationPrincipal RaonUser principal

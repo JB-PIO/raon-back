@@ -1,8 +1,8 @@
-package com.pio.raonback.dto.response.chat;
+package com.pio.raonback.dto.response.product;
 
 import com.pio.raonback.common.ResponseCode;
 import com.pio.raonback.common.ResponseMessage;
-import com.pio.raonback.dto.object.ChatListItem;
+import com.pio.raonback.dto.object.UserListItem;
 import com.pio.raonback.dto.response.ResponseDto;
 import com.pio.raonback.entity.Chat;
 import lombok.Getter;
@@ -11,23 +11,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Map;
 
 @Getter
-public class GetChatListResponseDto extends ResponseDto {
+public class GetBuyersResponseDto extends ResponseDto {
 
   private Data data;
 
   @Getter
   private static class Data {
 
-    private List<ChatListItem> chats;
+    private List<UserListItem> users;
     private int currentPage;
     private int totalPages;
     private long totalElements;
 
-    private Data(Page<Chat> chatPage, Map<Long, Long> unreadCounts) {
-      this.chats = ChatListItem.fromChatPage(chatPage, unreadCounts);
+    private Data(Page<Chat> chatPage) {
+      this.users = UserListItem.fromChatPage(chatPage);
       this.currentPage = chatPage.getNumber();
       this.totalPages = chatPage.getTotalPages();
       this.totalElements = chatPage.getTotalElements();
@@ -35,13 +34,13 @@ public class GetChatListResponseDto extends ResponseDto {
 
   }
 
-  private GetChatListResponseDto(Page<Chat> chatPage, Map<Long, Long> unreadCounts) {
+  private GetBuyersResponseDto(Page<Chat> chatPage) {
     super(ResponseCode.OK, ResponseMessage.OK);
-    this.data = new Data(chatPage, unreadCounts);
+    this.data = new Data(chatPage);
   }
 
-  public static ResponseEntity<GetChatListResponseDto> ok(Page<Chat> chatPage, Map<Long, Long> unreadCounts) {
-    GetChatListResponseDto responseBody = new GetChatListResponseDto(chatPage, unreadCounts);
+  public static ResponseEntity<GetBuyersResponseDto> ok(Page<Chat> chatPage) {
+    GetBuyersResponseDto responseBody = new GetBuyersResponseDto(chatPage);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 

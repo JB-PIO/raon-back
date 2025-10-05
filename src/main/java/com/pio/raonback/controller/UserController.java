@@ -1,6 +1,6 @@
 package com.pio.raonback.controller;
 
-import com.pio.raonback.dto.response.user.GetProductListResponseDto;
+import com.pio.raonback.dto.response.user.GetProductsResponseDto;
 import com.pio.raonback.dto.response.user.GetProfileResponseDto;
 import com.pio.raonback.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class UserController {
   }
 
   @GetMapping("/{userId}/product")
-  public ResponseEntity<? super GetProductListResponseDto> getProducts(
+  public ResponseEntity<? super GetProductsResponseDto> getProducts(
       @PathVariable("userId") Long userId,
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({

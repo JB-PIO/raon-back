@@ -22,8 +22,8 @@ public class ChatController {
   private final ChatService chatService;
 
   @GetMapping("")
-  public ResponseEntity<? super GetChatListResponseDto> getChats(@PageableDefault(size = 10, sort = "lastMessageAt", direction = Sort.Direction.DESC) Pageable pageable,
-                                                                 @AuthenticationPrincipal RaonUser principal) {
+  public ResponseEntity<? super GetChatsResponseDto> getChats(@PageableDefault(size = 10, sort = "lastMessageAt", direction = Sort.Direction.DESC) Pageable pageable,
+                                                              @AuthenticationPrincipal RaonUser principal) {
     return chatService.getChats(pageable, principal);
   }
 
@@ -34,9 +34,9 @@ public class ChatController {
   }
 
   @GetMapping("/{chatId}/message")
-  public ResponseEntity<? super GetMessageListResponseDto> getMessages(@PathVariable("chatId") Long chatId,
-                                                                       @PageableDefault(size = 20, sort = "sentAt", direction = Sort.Direction.DESC) Pageable pageable,
-                                                                       @AuthenticationPrincipal RaonUser principal) {
+  public ResponseEntity<? super GetMessagesResponseDto> getMessages(@PathVariable("chatId") Long chatId,
+                                                                    @PageableDefault(size = 20, sort = "sentAt", direction = Sort.Direction.DESC) Pageable pageable,
+                                                                    @AuthenticationPrincipal RaonUser principal) {
     return chatService.getMessages(chatId, pageable, principal);
   }
 

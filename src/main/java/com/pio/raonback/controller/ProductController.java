@@ -23,8 +23,8 @@ public class ProductController {
   private final ProductService productService;
 
   @GetMapping("")
-  public ResponseEntity<? super GetProductListResponseDto> getProducts(
-      @ModelAttribute @Valid GetProductListRequestDto requestParam,
+  public ResponseEntity<? super GetProductsResponseDto> getProducts(
+      @ModelAttribute @Valid GetProductsRequestDto requestParam,
       @PageableDefault(size = 20)
       @SortDefault.SortDefaults({
           @SortDefault(sort = "status", direction = Sort.Direction.ASC),
@@ -46,7 +46,7 @@ public class ProductController {
   }
 
   @GetMapping("/{productId}/buyer")
-  public ResponseEntity<? super GetBuyerListResponseDto> getBuyers(
+  public ResponseEntity<? super GetBuyersResponseDto> getBuyers(
       @PathVariable("productId") Long productId,
       @PageableDefault(size = 10, sort = "lastMessageAt", direction = Sort.Direction.DESC) Pageable pageable,
       @AuthenticationPrincipal RaonUser principal

@@ -38,7 +38,7 @@ public class ChatServiceImplement implements ChatService {
   private final SimpMessagingTemplate messagingTemplate;
 
   @Override
-  public ResponseEntity<? super GetChatListResponseDto> getChats(Pageable pageable, RaonUser principal) {
+  public ResponseEntity<? super GetChatsResponseDto> getChats(Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
 
     Page<Chat> chatPage = chatRepository.findAllByBuyerOrSellerAndLastMessageAtNotNull(user, user, pageable);
@@ -49,7 +49,7 @@ public class ChatServiceImplement implements ChatService {
       unreadCounts.put(chat.getChatId(), unreadMessageCount);
     }
 
-    return GetChatListResponseDto.ok(chatPage, unreadCounts);
+    return GetChatsResponseDto.ok(chatPage, unreadCounts);
   }
 
   @Override
@@ -65,7 +65,7 @@ public class ChatServiceImplement implements ChatService {
   }
 
   @Override
-  public ResponseEntity<? super GetMessageListResponseDto> getMessages(Long chatId, Pageable pageable, RaonUser principal) {
+  public ResponseEntity<? super GetMessagesResponseDto> getMessages(Long chatId, Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
 
     Optional<Chat> optionalChat = chatRepository.findById(chatId);
@@ -74,7 +74,7 @@ public class ChatServiceImplement implements ChatService {
     if (!chat.getSeller().equals(user) && !chat.getBuyer().equals(user)) return ResponseDto.noPermission();
 
     Page<Message> messagePage = messageRepository.findAllByChatAndIsDeletedFalse(chat, pageable);
-    return GetMessageListResponseDto.ok(messagePage);
+    return GetMessagesResponseDto.ok(messagePage);
   }
 
   @Override

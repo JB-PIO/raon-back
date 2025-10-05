@@ -4,10 +4,10 @@ import com.pio.raonback.dto.request.me.UpdateLocationRequestDto;
 import com.pio.raonback.dto.request.me.UpdateNicknameRequestDto;
 import com.pio.raonback.dto.request.me.UpdateProfileImageRequestDto;
 import com.pio.raonback.dto.response.ResponseDto;
-import com.pio.raonback.dto.response.me.GetFavoriteListResponseDto;
-import com.pio.raonback.dto.response.me.GetProductListResponseDto;
+import com.pio.raonback.dto.response.me.GetFavoritesResponseDto;
+import com.pio.raonback.dto.response.me.GetProductsResponseDto;
 import com.pio.raonback.dto.response.me.GetProfileResponseDto;
-import com.pio.raonback.dto.response.me.GetTradeListResponseDto;
+import com.pio.raonback.dto.response.me.GetTradesResponseDto;
 import com.pio.raonback.entity.*;
 import com.pio.raonback.repository.*;
 import com.pio.raonback.security.RaonUser;
@@ -41,28 +41,28 @@ public class MeServiceImplement implements MeService {
   }
 
   @Override
-  public ResponseEntity<? super GetProductListResponseDto> getProducts(Pageable pageable, RaonUser principal) {
+  public ResponseEntity<? super GetProductsResponseDto> getProducts(Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
     Page<ProductDetail> productDetailPage = productDetailRepository.findAllBySellerAndIsDeletedFalse(user, pageable);
-    return GetProductListResponseDto.ok(productDetailPage);
+    return GetProductsResponseDto.ok(productDetailPage);
   }
 
   @Override
-  public ResponseEntity<? super GetFavoriteListResponseDto> getFavorites(Pageable pageable, RaonUser principal) {
+  public ResponseEntity<? super GetFavoritesResponseDto> getFavorites(Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
     Page<Favorite> favoritePage = favoriteRepository.findAllByUserAndProductIsDeletedFalse(user, pageable);
-    return GetFavoriteListResponseDto.ok(favoritePage);
+    return GetFavoritesResponseDto.ok(favoritePage);
   }
 
   @Override
-  public ResponseEntity<? super GetTradeListResponseDto> getTrades(String type, Pageable pageable, RaonUser principal) {
+  public ResponseEntity<? super GetTradesResponseDto> getTrades(String type, Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
     Page<Trade> tradePage = switch (type) {
       case "buy" -> tradeRepository.findAllByBuyer(user, pageable);
       case "sell" -> tradeRepository.findAllBySeller(user, pageable);
       default -> tradeRepository.findAllByBuyerOrSeller(user, user, pageable);
     };
-    return GetTradeListResponseDto.ok(tradePage);
+    return GetTradesResponseDto.ok(tradePage);
   }
 
   @Override

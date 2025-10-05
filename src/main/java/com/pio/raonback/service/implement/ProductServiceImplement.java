@@ -34,7 +34,7 @@ public class ProductServiceImplement implements ProductService {
   private final TradeRepository tradeRepository;
 
   @Override
-  public ResponseEntity<? super GetProductListResponseDto> getProducts(GetProductListRequestDto dto, Pageable pageable) {
+  public ResponseEntity<? super GetProductsResponseDto> getProducts(GetProductsRequestDto dto, Pageable pageable) {
     Category category = null;
     List<Location> nearbyLocations = null;
 
@@ -52,7 +52,7 @@ public class ProductServiceImplement implements ProductService {
     Page<ProductDetail> productDetailPage =
         productDetailRepository.findAllWithFilters(category, nearbyLocations, dto.getMinPrice(), dto.getMaxPrice(),
             dto.getKeyword(), dto.getCondition(), dto.getTradeType(), pageable);
-    return GetProductListResponseDto.ok(productDetailPage);
+    return GetProductsResponseDto.ok(productDetailPage);
   }
 
   @Override
@@ -82,7 +82,7 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
-  public ResponseEntity<? super GetBuyerListResponseDto> getBuyers(Long productId, Pageable pageable, RaonUser principal) {
+  public ResponseEntity<? super GetBuyersResponseDto> getBuyers(Long productId, Pageable pageable, RaonUser principal) {
     User seller = principal.getUser();
 
     Optional<Product> optionalProduct = productRepository.findByProductIdAndIsDeletedFalse(productId);
@@ -93,7 +93,7 @@ public class ProductServiceImplement implements ProductService {
 
     Page<Chat> chatPage =
         chatRepository.findAllByProductAndBuyerIsDeletedFalseAndLastMessageAtNotNull(product, pageable);
-    return GetBuyerListResponseDto.ok(chatPage);
+    return GetBuyersResponseDto.ok(chatPage);
   }
 
   @Override
