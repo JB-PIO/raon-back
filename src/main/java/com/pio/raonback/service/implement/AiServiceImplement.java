@@ -35,7 +35,7 @@ public class AiServiceImplement implements AiService {
   public AnalyzeImagesExternalResponseDto analyzeImages(List<ProductImage> productImages) {
     AnalyzeImagesExternalRequestDto requestBody = new AnalyzeImagesExternalRequestDto(productImages);
     return aiRestClient.post()
-                       .uri("/image-analysis")
+                       .uri("/check-fraud-images")
                        .contentType(MediaType.APPLICATION_JSON)
                        .body(requestBody)
                        .retrieve()
