@@ -39,6 +39,12 @@ public class ProductController {
     return productService.getProduct(productId);
   }
 
+  @GetMapping("/{productId}/favorites/me")
+  public ResponseEntity<? super GetFavoriteStatusResponseDto> getFavoriteStatus(@PathVariable("productId") Long productId,
+                                                                                @AuthenticationPrincipal RaonUser principal) {
+    return productService.getFavoriteStatus(productId, principal);
+  }
+
   @GetMapping("/{productId}/chats")
   public ResponseEntity<? super GetChatResponseDto> getChat(@PathVariable("productId") Long productId,
                                                             @AuthenticationPrincipal RaonUser principal) {

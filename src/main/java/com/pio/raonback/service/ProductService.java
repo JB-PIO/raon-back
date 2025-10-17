@@ -13,6 +13,8 @@ public interface ProductService {
 
   ResponseEntity<? super GetProductResponseDto> getProduct(Long productId);
 
+  ResponseEntity<? super GetFavoriteStatusResponseDto> getFavoriteStatus(Long productId, RaonUser principal);
+
   ResponseEntity<? super GetChatResponseDto> getChat(Long productId, RaonUser principal);
 
   ResponseEntity<? super GetBuyersResponseDto> getBuyers(Long productId, Pageable pageable, RaonUser principal);

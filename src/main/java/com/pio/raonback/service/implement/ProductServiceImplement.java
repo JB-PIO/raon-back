@@ -64,6 +64,18 @@ public class ProductServiceImplement implements ProductService {
   }
 
   @Override
+  public ResponseEntity<? super GetFavoriteStatusResponseDto> getFavoriteStatus(Long productId, RaonUser principal) {
+    User user = principal.getUser();
+
+    Optional<Product> optionalProduct = productRepository.findByProductIdAndIsDeletedFalse(productId);
+    if (optionalProduct.isEmpty()) return ResponseDto.productNotFound();
+    Product product = optionalProduct.get();
+
+    boolean isFavorite = favoriteRepository.existsByUserAndProduct(user, product);
+    return GetFavoriteStatusResponseDto.ok(isFavorite);
+  }
+
+  @Override
   public ResponseEntity<? super GetChatResponseDto> getChat(Long productId, RaonUser principal) {
     User buyer = principal.getUser();
 
