@@ -41,7 +41,7 @@ public class ChatServiceImplement implements ChatService {
   public ResponseEntity<? super GetChatsResponseDto> getChats(Pageable pageable, RaonUser principal) {
     User user = principal.getUser();
 
-    Page<Chat> chatPage = chatRepository.findAllByBuyerOrSellerAndLastMessageAtNotNull(user, user, pageable);
+    Page<Chat> chatPage = chatRepository.findAllByUserAndLastMessageAtNotNull(user, pageable);
 
     Map<Long, Long> unreadCounts = new HashMap<>();
     for (Chat chat : chatPage.getContent()) {

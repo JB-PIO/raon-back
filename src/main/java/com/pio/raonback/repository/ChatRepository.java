@@ -6,6 +6,8 @@ import com.pio.raonback.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.ZonedDateTime;
@@ -18,7 +20,8 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
   boolean existsByProductAndBuyerAndLastMessageAtNotNull(Product product, User buyer);
 
-  Page<Chat> findAllByBuyerOrSellerAndLastMessageAtNotNull(User buyer, User seller, Pageable pageable);
+  @Query("SELECT c FROM chat c WHERE (c.buyer = :user OR c.seller = :user) AND c.lastMessageAt IS NOT NULL")
+  Page<Chat> findAllByUserAndLastMessageAtNotNull(@Param("user") User user, Pageable pageable);
 
   Page<Chat> findAllByProductAndBuyerIsDeletedFalseAndLastMessageAtNotNull(Product product, Pageable pageable);
 
