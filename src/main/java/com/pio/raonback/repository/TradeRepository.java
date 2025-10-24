@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface TradeRepository extends JpaRepository<Trade, Long> {
@@ -18,6 +19,7 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 
   void deleteAllByBuyerNullAndSeller(User seller);
 
+  @Transactional
   void deleteAllByBuyerIsDeletedTrueAndSellerIsDeletedTrue();
 
 }

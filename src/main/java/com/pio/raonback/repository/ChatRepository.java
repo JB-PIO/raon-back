@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -27,8 +28,10 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
   Optional<Chat> findByProductAndBuyerAndSeller(Product product, User buyer, User seller);
 
+  @Transactional
   void deleteAllByBuyerIsDeletedTrueAndSellerIsDeletedTrue();
 
+  @Transactional
   void deleteAllByCreatedAtBeforeAndLastMessageAtNull(ZonedDateTime createdAt);
 
 }

@@ -132,6 +132,7 @@ public class AuthServiceImplement implements AuthService {
   }
 
   @Override
+  @Transactional
   public ResponseEntity<ResponseDto> signOut(String refreshToken) {
     String refreshTokenHash = jwtUtil.generateTokenHash(refreshToken);
     refreshTokenRepository.deleteByToken(refreshTokenHash);

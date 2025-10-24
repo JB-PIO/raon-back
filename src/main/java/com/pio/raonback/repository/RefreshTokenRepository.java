@@ -14,10 +14,8 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
 
   Optional<RefreshToken> findByToken(String tokenHash);
 
-  @Transactional
   void deleteByUser(User user);
 
-  @Transactional
   void deleteByToken(String tokenHash);
 
   @Transactional
